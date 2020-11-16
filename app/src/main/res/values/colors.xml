@@ -7,4 +7,10 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+    <!--Add as cores de acordo com o nosso projeto no adobeXd-->
+    <color name="redBackground">#710505</color>
+    <color name="blueBackground">#473682</color>
+    <color name="yellowBackground">#896A1A</color>
+    <color name="greenBackground">#1E2E05</color>
 </resources>
