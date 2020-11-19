@@ -1,11 +1,91 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".HomeActivity">
+<ScrollView
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/tvCharacter"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="CHARACTERS"
+            android:textSize="25dp"
+            android:textColor="@color/white"
+            android:background="@color/redBackground">
+        </TextView>
+
+        <com.synnapps.carouselview.CarouselView
+            android:id="@+id/cvCharacter"
+            android:layout_width="match_parent"
+            android:layout_height="240dp"
+            app:disableAutoPlayOnUserInteraction="true"
+            app:pageTransformer="depth">
+        </com.synnapps.carouselview.CarouselView>
+        <TextView
+            android:id="@+id/tvMovies"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="MOVIES"
+            android:textSize="25dp"
+            android:textColor="@color/white"
+            android:background="@color/greenBackground">
+        </TextView>
+
+        <com.synnapps.carouselview.CarouselView
+            android:id="@+id/cvMovies"
+            android:layout_width="match_parent"
+            android:layout_height="240dp"
+            app:disableAutoPlayOnUserInteraction="true"
+            app:pageTransformer="depth">
+        </com.synnapps.carouselview.CarouselView>
+        <TextView
+            android:id="@+id/tvComics"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="COMICS"
+            android:textSize="25dp"
+            android:textColor="@color/white"
+            android:background="@color/yellowBackground">
+        </TextView>
+
+        <com.synnapps.carouselview.CarouselView
+            android:id="@+id/cvComics"
+            android:layout_width="match_parent"
+            android:layout_height="240dp"
+            app:disableAutoPlayOnUserInteraction="true"
+            app:pageTransformer="depth">
+        </com.synnapps.carouselview.CarouselView>
+
+        <TextView
+            android:id="@+id/tvSeries"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="SERIES"
+            android:textSize="25dp"
+            android:textColor="@color/white"
+            android:background="@color/blueBackground">
+        </TextView>
+
+        <com.synnapps.carouselview.CarouselView
+            android:id="@+id/cvSeries"
+            android:layout_width="match_parent"
+            android:layout_height="240dp"
+            app:disableAutoPlayOnUserInteraction="true"
+            app:pageTransformer="depth">
+        </com.synnapps.carouselview.CarouselView>
+
+    </LinearLayout>
+</ScrollView>
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -13,6 +93,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+        />
 
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
