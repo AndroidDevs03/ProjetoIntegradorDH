@@ -5,20 +5,27 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    tools:context=".ChipSearch">
+    tools:context=".view.ChipSearchActivity">
+
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/cs_searchField"
+        style="@style/search_field"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:endIconMode="custom"
+        android:backgroundTintMode="multiply"
+        app:boxBackgroundColor="@color/redBackground"
         app:endIconDrawable="@drawable/ic_mjolnifier_blank"
+        app:endIconMode="custom"
         app:hintEnabled="false">
-    <com.google.android.material.textfield.TextInputEditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Search"
-        android:textIsSelectable="false"
-        android:inputType="text"/>
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/marvel"
+            android:inputType="text"
+            android:text="Search"
+            android:textIsSelectable="false"
+            android:textSize="20sp" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.chip.ChipGroup

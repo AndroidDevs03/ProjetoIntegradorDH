@@ -23,4 +23,11 @@
         <item name="itemIconSize">46dp</item>
         <item name="android:layout_height">100dp</item>
     </style>
+    <style name="search_field">
+        <item name="android:layout_gravity">top</item>
+        <item name="backgroundTint">@color/black</item>
+        <item name="itemIconTint">@color/white</item>
+        <item name="itemIconSize">30dp</item>
+        <item name="android:layout_height">100dp</item>
+    </style>
 </resources>
