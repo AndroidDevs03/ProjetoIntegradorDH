@@ -59,7 +59,7 @@ class CharacterActivity : AppCompatActivity() {
         }
 
         findViewById<ImageButton>(R.id.ibCharacterSearch).setOnClickListener {
-            startActivity(Intent(this,ChipSearch::class.java))
+            startActivity(Intent(this,ChipSearchActivity::class.java))
         }
 
         findViewById<ImageButton>(R.id.ibCharacterFavoriteNO).setOnClickListener {
@@ -80,7 +80,7 @@ class CharacterActivity : AppCompatActivity() {
 //                    startActivity(this, FavoriteActivity::class.java)
                 }
                 R.id.page_3 ->{
-                    startActivity(Intent(this,ChipSearch::class.java))
+                    startActivity(Intent(this,ChipSearchActivity::class.java))
                 }
                 R.id.page_4 -> {
 //                    startActivity(this, ProfileActivity::class.java)
