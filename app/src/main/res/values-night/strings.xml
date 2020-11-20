@@ -1,4 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="label_search_bar">SEARCH</string>
+    <string name="character_text_Description">In Spider-Man\'s first story, in Marvel Comics\' Amazing Fantasy, no. 15 (1962), American teenager Peter Parker, a poor sickly orphan, is bitten by a radioactive spider. As a result of the bite, he gains superhuman strength, speed, and agility along with the ability to cling to walls</string>
+    <string name="label_comics_list">COMICS</string>
+    <string name="label_text_series_list">SERIES</string>
+    <string name="label_text_movies_list">MOVIES</string>
 </resources>
