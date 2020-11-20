@@ -23,6 +23,34 @@
         <item name="itemIconSize">30dp</item>
         <item name="android:layout_height">100dp</item>
     </style>
+    <style name="share_button">
+        <item name="android:layout_width">64dp</item>
+        <item name="android:layout_height">64dp</item>
+        <item name="itemIconTint">@color/white</item>
+        <item name="srcCompat">@drawable/share_icon</item>
+        <item name="android:background">@color/redBackground</item>
+    </style>
+    <style name="favorite_button_NO">
+        <item name="android:layout_width">64dp</item>
+        <item name="android:layout_height">64dp</item>
+        <item name="itemIconTint">@color/white</item>
+        <item name="srcCompat">@drawable/star_outline_icon</item>
+        <item name="android:background">@color/redBackground</item>
+    </style>
+    <style name="favorite_button_YES">
+        <item name="android:layout_width">64dp</item>
+        <item name="android:layout_height">64dp</item>
+        <item name="itemIconTint">@color/white</item>
+        <item name="srcCompat">@drawable/star_icon</item>
+        <item name="android:background">@color/redBackground</item>
+    </style>
+    <style name="search_button">
+        <item name="android:layout_width">64dp</item>
+        <item name="android:layout_height">64dp</item>
+        <item name="itemIconTint">@color/white</item>
+        <item name="srcCompat">@drawable/search_icon</item>
+        <item name="android:background">@color/redBackground</item>
+    </style>
     <style name="search_field" parent="Widget.Design.TextInputLayout">
         <item name="android:layout_gravity">top</item>
         <item name="backgroundTint">#333333</item>
