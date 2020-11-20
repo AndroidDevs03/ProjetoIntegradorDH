@@ -1,10 +1,11 @@
-package com.example.projetointegradordigitalhouse
+package com.example.projetointegradordigitalhouse.view
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.ImageButton
+import com.example.projetointegradordigitalhouse.R
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.synnapps.carouselview.CarouselView
 

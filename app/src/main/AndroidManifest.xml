@@ -10,7 +10,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ProjetoIntegradorDigitalHouse">
 <<<<<<< HEAD
-        <activity android:name=".CharacterActivity">
+        <activity android:name=".view.CharacterActivity">
 =======
         <activity android:name=".view.ChipSearchActivity"
             android:theme="@style/Theme.MaterialComponents.DayNight.NoActionBar">
