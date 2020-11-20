@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:cardCornerRadius="10dp"
+    android:backgroundTint="@color/redBackground"
+    android:layout_margin="5dp">
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="@dimen/dim_card_thumb_width"
+        android:layout_height="wrap_content"
+        >
+    <ImageView
+        android:id="@+id/cv_character_thumb"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dim_card_thumb_height"
+        android:scaleType="fitStart"
+        android:src="@drawable/ex_character_thumb"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        />
+           <TextView
+                android:id="@+id/cv_character_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="24sp"
+                android:textColor="@color/white"
+                android:gravity="center"
+                android:text="Spider Man"
+               android:padding="5dp"
+                android:fontFamily="@font/marvel"
+                android:shadowColor="@color/black"
+                android:shadowRadius="10"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/cv_character_thumb"/>
+
+        <ImageButton
+            android:id="@+id/cv_character_favorite"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="5dp"
+            android:layout_marginRight="5dp"
+            android:background="#00FFFFFF"
+            android:elevation="10dp"
+            android:outlineAmbientShadowColor="@color/black"
+            android:scaleType="fitCenter"
+            android:src="@drawable/star_outline_icon"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageButton
+            android:id="@+id/cv_character_search"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginTop="6dp"
+            android:layout_marginEnd="5dp"
+            android:layout_marginRight="5dp"
+            android:background="#00FFFFFF"
+            android:elevation="10dp"
+            android:outlineAmbientShadowColor="@color/black"
+            android:scaleType="fitCenter"
+            android:src="@drawable/search_icon"
+            android:visibility="gone"
+            app:layout_constraintEnd_toStartOf="@id/cv_character_favorite"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.cardview.widget.CardView>

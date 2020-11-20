@@ -2,8 +2,8 @@
     <!-- Base application theme. -->
     <style name="Theme.ProjetoIntegradorDigitalHouse" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/purple_500</item>
-        <item name="colorPrimaryVariant">@color/purple_700</item>
+        <item name="colorPrimary">@color/black</item>
+        <item name="colorPrimaryVariant">@color/black</item>
         <item name="colorOnPrimary">@color/white</item>
         <!-- Secondary brand color. -->
         <item name="colorSecondary">@color/teal_200</item>
@@ -20,14 +20,44 @@
         <item name="menu">@menu/bottom_navigation_default</item>
         <item name="backgroundTint">@color/black</item>
         <item name="itemIconTint">@color/white</item>
-        <item name="itemIconSize">46dp</item>
-        <item name="android:layout_height">100dp</item>
-    </style>
-    <style name="search_field">
-        <item name="android:layout_gravity">top</item>
-        <item name="backgroundTint">@color/black</item>
-        <item name="itemIconTint">@color/white</item>
         <item name="itemIconSize">30dp</item>
         <item name="android:layout_height">100dp</item>
+    </style>
+    <style name="search_field" parent="Widget.Design.TextInputLayout">
+        <item name="android:layout_gravity">top</item>
+        <item name="backgroundTint">#333333</item>
+        <item name="itemIconTint">@color/white</item>
+        <item name="android:layout_height">100dp</item>
+        <item name="endIconTint">@color/white</item>
+        <item name="endIconDrawable">@drawable/ic_baseline_search_24</item>
+        <item name="endIconMode">custom</item>
+        <item name="endIconTintMode">src_atop</item>
+        <item name="hintEnabled">false</item>
+        <item name="colorControlActivated">#FFFFFF</item>
+    </style>
+    <style name="search_input">
+        <item name="android:textCursorDrawable">@null</item>
+        <item name="android:fontFamily">@font/marvel</item>
+        <item name="android:inputType">text</item>
+        <item name="android:paddingStart">20dp</item>
+        <item name="android:paddingLeft">20dp</item>
+        <item name="android:paddingTop">20dp</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textIsSelectable">false</item>
+        <item name="android:textSize">30sp</item>
+    </style>
+    <style name="arrow_navigation">
+        <item name="android:scaleType">fitXY</item>
+        <item name="android:background">#00957373</item>
+        <item name="android:tint">@color/white</item>
+        <item name="android:visibility">gone</item>
+    </style>
+    <style name="theme_title">
+        <item name="android:fontFamily">@font/marvel</item>
+        <item name="android:textSize">24sp</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:paddingTop">5dp</item>
+        <item name="android:paddingBottom">5dp</item>
+        <item name="android:paddingStart">20dp</item>
     </style>
 </resources>
