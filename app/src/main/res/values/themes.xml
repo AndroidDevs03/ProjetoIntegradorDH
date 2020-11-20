@@ -51,7 +51,7 @@
         <item name="srcCompat">@drawable/search_icon</item>
         <item name="android:background">@color/redBackground</item>
     </style>
-    <style name="search_field" parent="Widget.Design.TextInputLayout">
+    <style name="search_field">
         <item name="android:layout_gravity">top</item>
         <item name="backgroundTint">#333333</item>
         <item name="itemIconTint">@color/white</item>
