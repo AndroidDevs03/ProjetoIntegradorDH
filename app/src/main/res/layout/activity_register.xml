@@ -5,49 +5,48 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".LoginActivity"
-    android:background="@color/redBackground">
+    tools:context=".LoginActivity">
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@color/redBackground">
 
-        <ImageView
-            android:layout_width="384dp"
-            android:layout_height="520dp"
-            android:src="@drawable/login_retangule"
-            android:layout_marginLeft="14dp"
-            android:layout_marginStart="14dp"
-            android:layout_marginTop="14dp"/>
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_horizontal">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_marginTop="14dp"
             android:layout_marginStart="14dp"
-            android:layout_marginEnd="14dp">
+            android:layout_marginTop="14dp"
+            android:layout_marginEnd="14dp"
+            android:orientation="vertical"
+            android:background="@drawable/background_login">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/sign_up"
-                android:textColor="@color/black"
-                android:textSize="30sp"
-                android:textAllCaps="true"
                 android:layout_gravity="center_horizontal"
-                android:layout_marginTop="14dp"/>
+                android:layout_marginTop="14dp"
+                android:text="@string/sign_up"
+                android:textAllCaps="true"
+                android:textColor="@color/black"
+                android:textSize="27sp" />
 
             <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="340dp"
                 android:layout_height="wrap_content"
-                android:hint="@string/full_name"
-                android:layout_marginTop="10dp"
                 android:layout_marginStart="24dp"
+                android:layout_marginTop="10dp"
                 android:layout_marginEnd="24dp"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+                android:hint="@string/full_name">
 
                 <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etFullName"
                     android:layout_width="340dp"
                     android:layout_height="wrap_content"
                     android:inputType="text">
@@ -56,15 +55,16 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="340dp"
                 android:layout_height="wrap_content"
-                android:hint="@string/birth_date"
-                android:layout_marginTop="10dp"
                 android:layout_marginStart="24dp"
+                android:layout_marginTop="10dp"
                 android:layout_marginEnd="24dp"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+                android:hint="@string/birth_date">
 
                 <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etBithDate"
                     android:layout_width="340dp"
                     android:layout_height="wrap_content"
                     android:inputType="date">
@@ -73,15 +73,16 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="340dp"
                 android:layout_height="wrap_content"
-                android:hint="@string/e_mail"
-                android:layout_marginTop="10dp"
                 android:layout_marginStart="24dp"
+                android:layout_marginTop="10dp"
                 android:layout_marginEnd="24dp"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+                android:hint="@string/e_mail">
 
                 <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etEmailSU"
                     android:layout_width="340dp"
                     android:layout_height="wrap_content"
                     android:inputType="textEmailAddress">
@@ -90,15 +91,16 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="340dp"
                 android:layout_height="wrap_content"
-                android:hint="@string/password"
-                android:layout_marginTop="10dp"
                 android:layout_marginStart="24dp"
+                android:layout_marginTop="10dp"
                 android:layout_marginEnd="24dp"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+                android:hint="@string/password">
 
                 <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etPasswordSU"
                     android:layout_width="340dp"
                     android:layout_height="wrap_content"
                     android:inputType="textPassword">
@@ -107,46 +109,46 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="340dp"
                 android:layout_height="wrap_content"
-                android:hint="@string/confirm_password"
-                android:layout_marginTop="10dp"
                 android:layout_marginStart="24dp"
+                android:layout_marginTop="10dp"
                 android:layout_marginEnd="24dp"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+                android:hint="@string/confirm_password">
 
                 <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etConfirmPassword"
                     android:layout_width="340dp"
                     android:layout_height="wrap_content"
-                    android:inputType="textEmailAddress">
+                    android:inputType="textPassword">
 
                 </com.google.android.material.textfield.TextInputEditText>
             </com.google.android.material.textfield.TextInputLayout>
 
             <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btRegister"
+                style="@style/button_default"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                style="@style/button_default"
-                android:text="Register"
-                android:layout_marginTop="30dp"
                 android:layout_marginStart="24dp"
-                android:layout_marginEnd="24dp"/>
+                android:layout_marginTop="30dp"
+                android:layout_marginEnd="24dp"
+                android:layout_marginBottom="24dp"
+                android:text="@string/register" />
 
         </LinearLayout>
+        </ScrollView>
 
         <com.google.android.material.bottomnavigation.BottomNavigationView
             style="@style/bottom_navigation"
             android:layout_width="match_parent"
-            android:layout_height="80dp"
+            android:layout_height="70dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"/>
 
     </FrameLayout>
-
-
-
-
 
 </LinearLayout>
