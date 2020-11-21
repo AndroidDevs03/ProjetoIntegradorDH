@@ -1,5 +1,6 @@
 package com.example.projetointegradordigitalhouse.view
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.example.projetointegradordigitalhouse.R
@@ -40,6 +41,11 @@ class HomeActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        initComponents()
+    }
+
+    private fun initComponents() {
+
         findViewById<CarouselView>(R.id.cvCharacter).pageCount = imgsCharacters.size
         findViewById<CarouselView>(R.id.cvCharacter).setImageListener {
                 position, imageView ->
@@ -62,6 +68,14 @@ class HomeActivity : AppCompatActivity() {
         findViewById<CarouselView>(R.id.cvSeries).setImageListener {
                 position, imageView ->
             imageView.setImageResource(imgsSeries[position])
+        }
+
+        findViewById<CarouselView>(R.id.cvCharacter).setImageClickListener {
+            startActivity(Intent(this,CharacterActivity::class.java))
+        }
+
+        findViewById<CarouselView>(R.id.cvComics).setImageClickListener {
+            startActivity(Intent(this,ComicActivity::class.java))
         }
     }
 

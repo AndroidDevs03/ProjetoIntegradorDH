@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -14,36 +15,47 @@
 
         <!--   Search Bar -->
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/tilCharacterSearch"
+        android:id="@+id/tilCharacterSearch"
+        android:theme="@style/search_field"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:endIconTint="@color/white"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+        <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:endIconDrawable="@drawable/ic_mjolnifier_blank"
-            app:endIconMode="custom"
-            app:hintEnabled="false"
+            style="@style/search_input"
+            android:background="@color/redBackgroundBar"
+            android:text="Search" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+        <!--  Character Title   -->
+        <TextView
+            android:id="@+id/tvCharacterTitle"
+            android:layout_width="match_parent"
+            android:layout_height="64dp"
+            android:gravity="center_vertical"
+            android:text="Spider Man"
+            android:textAlignment="viewStart"
+            android:textColor="@color/white"
+            android:textSize="28sp"
+            android:textStyle="bold"
+            android:layout_marginStart="10dp"
+            app:layout_constraintEnd_toStartOf="@id/ibCharacterSearch"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/redBackground"
-                android:inputType="text"
-                android:text="@string/label_search_bar"
-                android:textAllCaps="true"
-                android:textColor="@color/white"
-                android:textIsSelectable="false"
-                android:textSize="25sp" />
-
-        </com.google.android.material.textfield.TextInputLayout>
+            app:layout_constraintTop_toBottomOf="@id/tilCharacterSearch"
+            tools:ignore="RtlCompat" />
 
         <!--Search Button            -->
         <ImageButton
             android:id="@+id/ibCharacterSearch"
             style="@style/search_button"
             android:contentDescription="TODO"
-            app:layout_constraintBottom_toTopOf="@id/tvCharacterTitle"
+            app:layout_constraintTop_toBottomOf="@+id/tilCharacterSearch"
+            app:layout_constraintBottom_toTopOf="@id/ivCharacterPicture"
             app:layout_constraintEnd_toStartOf="@id/ibCharacterFavoriteYes"
-            app:layout_constraintTop_toBottomOf="@+id/tilCharacterSearch" />
+             android:background="@color/redBackground"/>
 
         <!--Favorite 'Yes' Button            -->
         <ImageButton
@@ -51,9 +63,10 @@
             style="@style/favorite_button_YES"
             android:contentDescription="TODO"
             android:visibility="invisible"
-            app:layout_constraintBottom_toTopOf="@id/tvCharacterTitle"
+            app:layout_constraintTop_toBottomOf="@+id/tilCharacterSearch"
+            app:layout_constraintBottom_toTopOf="@id/ivCharacterPicture"
             app:layout_constraintStart_toEndOf="@id/ibCharacterSearch"
-            app:layout_constraintTop_toTopOf="@+id/ibCharacterSearch" />
+            android:background="@color/redBackground"/>
 
         <!--Favorite 'No' Button            -->
         <ImageButton
@@ -61,41 +74,28 @@
             style="@style/favorite_button_NO"
             android:contentDescription="TODO"
             android:visibility="visible"
-            app:layout_constraintBottom_toTopOf="@id/tvCharacterTitle"
+            app:layout_constraintTop_toBottomOf="@+id/tilCharacterSearch"
+            app:layout_constraintBottom_toTopOf="@id/ivCharacterPicture"
             app:layout_constraintEnd_toStartOf="@id/ibCharacterShare"
             app:layout_constraintStart_toEndOf="@id/ibCharacterSearch"
-            app:layout_constraintTop_toTopOf="@+id/ibCharacterSearch" />
+            android:background="@color/redBackground"/>
 
         <!--Share Button            -->
         <ImageButton
             android:id="@+id/ibCharacterShare"
             style="@style/share_button"
             android:contentDescription="TODO"
-            app:layout_constraintBottom_toTopOf="@id/tvCharacterTitle"
+            app:layout_constraintTop_toBottomOf="@+id/tilCharacterSearch"
+            app:layout_constraintBottom_toTopOf="@id/ivCharacterPicture"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/ibCharacterFavoriteNO"
-            app:layout_constraintTop_toTopOf="@+id/ibCharacterSearch" />
-
-        <!--  Character Title   -->
-        <TextView
-            android:id="@+id/tvCharacterTitle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
-            android:text="Spider Man"
-            android:textAlignment="center"
-            android:textColor="@color/white"
-            android:textSize="28sp"
-            android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/ibCharacterSearch" />
+            android:background="@color/redBackground"/>
 
         <!-- Character's Picture        -->
         <ImageView
             android:id="@+id/ivCharacterPicture"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="360dp"
+            android:layout_height="300dp"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
             android:src="@drawable/spider_man"
@@ -203,9 +203,6 @@
             app:layout_constraintTop_toBottomOf="@id/tvCharacterMoviesList"
             app:pageTransformer="depth" />
 
-
-
-
         <!--  Menu - Bottom Navigation       -->
         <com.google.android.material.bottomnavigation.BottomNavigationView
             android:id="@+id/bnvCharacter"
@@ -217,7 +214,6 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent" />
-
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>
