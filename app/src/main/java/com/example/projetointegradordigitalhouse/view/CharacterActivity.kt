@@ -71,6 +71,10 @@ class CharacterActivity : AppCompatActivity() {
             findViewById<ImageButton>(R.id.ibCharacterFavoriteYes).visibility = View.INVISIBLE
         }
 
+        findViewById<CarouselView>(R.id.cvCharacterComics).setImageClickListener {
+            startActivity(Intent(this,ComicActivity::class.java))
+        }
+
         BottomNavigationView.OnNavigationItemReselectedListener {
             when (it.itemId){
                 R.id.page_1 -> {

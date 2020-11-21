@@ -9,36 +9,24 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.ProjetoIntegradorDigitalHouse">
-<<<<<<< HEAD
+        <activity android:name=".view.ComicActivity"></activity>
         <activity android:name=".view.CharacterActivity">
-=======
-        <activity android:name=".view.ChipSearchActivity"
-            android:theme="@style/Theme.MaterialComponents.DayNight.NoActionBar">
-        </activity>
-        <activity android:name=".view.SplashActivity">
->>>>>>> 89b390c957813147f8ab710057e46f4e85d2f657
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-
         </activity>
         <activity
-            android:name=".ChipSearch"
-            android:theme="@style/Theme.MaterialComponents.DayNight.NoActionBar">
+            android:name=".view.ChipSearchActivity"
+            android:theme="@style/Theme.MaterialComponents.DayNight.NoActionBar"></activity>
+        <activity android:name=".view.SplashActivity">
         </activity>
-        <activity android:name=".SplashActivity" />
-        <activity android:name=".HomeActivity">
+        <activity android:name=".view.HomeActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
-<<<<<<< HEAD
-
-=======
-        <activity android:name=".view.HomeActivity" />
-
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
->>>>>>> 89b390c957813147f8ab710057e46f4e85d2f657
     </application>
 
 </manifest>

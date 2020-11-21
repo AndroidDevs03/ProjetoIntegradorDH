@@ -5,4 +5,5 @@
     <string name="label_comics_list">COMICS</string>
     <string name="label_text_series_list">SERIES</string>
     <string name="label_text_movies_list">MOVIES</string>
+    <string name="label_text_characters">Characters</string>
 </resources>
