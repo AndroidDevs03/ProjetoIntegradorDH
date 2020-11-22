@@ -48,26 +48,22 @@ class HomeActivity : AppCompatActivity() {
 
         findViewById<CarouselView>(R.id.cvCharacter).pageCount = imgsCharacters.size
         findViewById<CarouselView>(R.id.cvCharacter).setImageListener {
-                position, imageView ->
-            imageView.setImageResource(imgsCharacters[position])
+                position, imageView -> imageView.setImageResource(imgsCharacters[position])
         }
 
         findViewById<CarouselView>(R.id.cvComics).pageCount = imgsComics.size
         findViewById<CarouselView>(R.id.cvComics).setImageListener {
-                position, imageView ->
-            imageView.setImageResource(imgsComics[position])
+                position, imageView -> imageView.setImageResource(imgsComics[position])
         }
 
         findViewById<CarouselView>(R.id.cvMovies).pageCount = imgFilmes.size
         findViewById<CarouselView>(R.id.cvMovies).setImageListener {
-                position, imageView ->
-            imageView.setImageResource(imgFilmes[position])
+                position, imageView -> imageView.setImageResource(imgFilmes[position])
         }
 
         findViewById<CarouselView>(R.id.cvSeries).pageCount = imgsSeries.size
         findViewById<CarouselView>(R.id.cvSeries).setImageListener {
-                position, imageView ->
-            imageView.setImageResource(imgsSeries[position])
+                position, imageView -> imageView.setImageResource(imgsSeries[position])
         }
 
         findViewById<CarouselView>(R.id.cvCharacter).setImageClickListener {
@@ -80,6 +76,9 @@ class HomeActivity : AppCompatActivity() {
 
         findViewById<CarouselView>(R.id.cvSeries).setImageClickListener {
             startActivity(Intent(this,SeriesActivity::class.java))
+        }
+        findViewById<CarouselView>(R.id.cvMovies).setImageClickListener {
+            startActivity(Intent(this,MovieActivity::class.java))
         }
     }
 
