@@ -10,10 +10,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ProjetoIntegradorDigitalHouse">
 
-        <activity android:name=".view.RegisterSplash"></activity>
+        <activity android:name=".view.RegisterSplash" />
         <activity android:name=".view.RegisterActivity" />
-        <activity android:name=".view.LoginActivity">
-        <activity android:name=".view.MovieActivity"></activity>
+        <activity android:name=".view.LoginActivity" />
+        <activity android:name=".view.MovieActivity" />
         <activity android:name=".view.SeriesActivity" />
         <activity android:name=".view.ComicActivity" />
         <activity android:name=".view.CharacterActivity" />
@@ -28,8 +28,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".SplashActivity" />
-        <activity android:name=".HomeActivity" />
 
         <meta-data
             android:name="preloaded_fonts"

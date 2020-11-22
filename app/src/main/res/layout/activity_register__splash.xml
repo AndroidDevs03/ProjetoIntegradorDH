@@ -34,9 +34,10 @@
                     android:layout_gravity="center_horizontal"
                     android:layout_marginTop="40dp"
                     android:text="@string/register_sucessful"
+                    android:fontFamily="@font/marvel"
                     android:textAllCaps="true"
                     android:textColor="@color/black"
-                    android:textSize="45sp"
+                    android:textSize="51sp"
                     android:textAlignment="center"/>
 
 
@@ -48,6 +49,7 @@
                     android:text="@string/welcome_to_the_marvel_community"
                     android:textAllCaps="true"
                     android:textColor="@color/black"
+                    android:fontFamily="@font/marvel"
                     android:textSize="20sp"
                     android:textAlignment="center"/>
 
@@ -60,6 +62,7 @@
                     android:layout_marginTop="40dp"
                     android:layout_marginEnd="24dp"
                     android:layout_marginBottom="40dp"
+                    android:fontFamily="@font/marvel"
                     android:text="@string/home"
                     android:textAllCaps="true"
                     android:layout_gravity="center_horizontal"/>

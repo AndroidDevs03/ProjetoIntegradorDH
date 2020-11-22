@@ -30,6 +30,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
+                android:fontFamily="@font/marvel"
                 android:layout_marginTop="14dp"
                 android:text="@string/sign_in"
                 android:textAllCaps="true"
@@ -80,6 +81,7 @@
                 android:layout_marginStart="24dp"
                 android:layout_marginTop="30dp"
                 android:layout_marginEnd="24dp"
+                android:fontFamily="@font/marvel"
                 android:text="@string/sign_in" />
 
             <TextView
@@ -88,6 +90,7 @@
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="28dp"
                 android:text="@string/or"
+                android:fontFamily="@font/marvel"
                 android:textAllCaps="true"
                 android:textColor="@color/black"
                 android:textSize="18sp" />
@@ -116,6 +119,7 @@
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="28dp"
                 android:text="@string/not_on_marvel_app_yet"
+                android:fontFamily="@font/marvel"
                 android:textColor="@color/black"
                 android:textSize="12sp" />
 
@@ -128,6 +132,7 @@
                 android:layout_marginTop="10dp"
                 android:layout_marginEnd="24dp"
                 android:layout_marginBottom="24dp"
+                android:fontFamily="@font/marvel"
                 android:text="@string/sign_up" />
 
 
