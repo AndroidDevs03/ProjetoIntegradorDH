@@ -5,5 +5,7 @@
     <string name="label_comics_list">COMICS</string>
     <string name="label_text_series_list">SERIES</string>
     <string name="label_text_movies_list">MOVIES</string>
-    <string name="label_text_characters">Characters</string>
+    <string name="label_text_characters">CHARACTERS</string>
+    <string name="series_text_title">A + X</string>
+    <string name="series_text_description">Get ready for action-packed stories featuring team-ups from your favorite Marvel heroes every month! First, a story where Wolverine and Hulk come together, and then Captain America and Cable meet up! But will each partner\'s combined strength be enough?</string>
 </resources>

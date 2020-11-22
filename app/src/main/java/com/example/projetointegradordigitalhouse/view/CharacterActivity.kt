@@ -74,6 +74,9 @@ class CharacterActivity : AppCompatActivity() {
         findViewById<CarouselView>(R.id.cvCharacterComics).setImageClickListener {
             startActivity(Intent(this,ComicActivity::class.java))
         }
+        findViewById<CarouselView>(R.id.cvCharacterSeries).setImageClickListener {
+            startActivity(Intent(this, SeriesActivity::class.java))
+        }
 
         BottomNavigationView.OnNavigationItemReselectedListener {
             when (it.itemId){
