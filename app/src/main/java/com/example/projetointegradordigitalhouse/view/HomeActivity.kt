@@ -77,6 +77,10 @@ class HomeActivity : AppCompatActivity() {
         findViewById<CarouselView>(R.id.cvComics).setImageClickListener {
             startActivity(Intent(this,ComicActivity::class.java))
         }
+
+        findViewById<CarouselView>(R.id.cvSeries).setImageClickListener {
+            startActivity(Intent(this,SeriesActivity::class.java))
+        }
     }
 
 }

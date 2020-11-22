@@ -257,7 +257,7 @@
 
         <!--  Menu - Bottom Navigation       -->
         <com.google.android.material.bottomnavigation.BottomNavigationView
-            android:id="@+id/bnvCharacter"
+            android:id="@+id/bnvComic"
             style="@style/bottom_navigation"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

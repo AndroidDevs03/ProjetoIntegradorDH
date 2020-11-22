@@ -110,6 +110,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="25dp"
             android:layout_marginRight="25dp"
+            android:layout_marginTop="10dp"
             android:autoSizeTextType="uniform"
             android:text="@string/character_text_Description"
             android:textColor="@color/white"
