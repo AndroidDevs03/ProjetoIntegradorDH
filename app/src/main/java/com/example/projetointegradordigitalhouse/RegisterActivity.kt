@@ -21,6 +21,11 @@ class RegisterActivity() : AppCompatActivity() {
         initEdit()
     }
 
+    override fun onStop() {
+        clearEditText()
+        super.onStop()
+    }
+
     private fun validatePassword() : Boolean {
         return binding.etPasswordSU.text.toString().equals(binding.etConfirmPassword.text.toString())
     }
@@ -67,8 +72,7 @@ class RegisterActivity() : AppCompatActivity() {
                         Toast.makeText(this, "Password e Confirm Password devem ser iguais", Toast.LENGTH_SHORT).show()
                     }else{
                         if (binding.etFullName.length() > 0 && validateBirthday() && binding.etEmailSU.validateEmailFormat() && validatePassword()){
-                            clearEditText()
-                            startActivity(Intent(this, Register_Splash::class.java))
+                            startActivity(Intent(this, RegisterSplash::class.java))
                         }else{
                             Toast.makeText(this, "Obrigatótio o preenchimento correto de todos os campos", Toast.LENGTH_LONG).show()
                         }

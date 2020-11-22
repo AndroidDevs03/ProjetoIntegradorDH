@@ -18,6 +18,11 @@ class LoginActivity : AppCompatActivity(){
         initItems()
     }
 
+    override fun onStop() {
+        clearItems()
+        super.onStop()
+    }
+
 
     private fun initItems (){
         binding.etPasswordSI.addTextChangedListener(MaskWatcher(binding.etPasswordSI, "########"))
@@ -31,10 +36,6 @@ class LoginActivity : AppCompatActivity(){
         }
 
         binding.btGoogle.setOnClickListener {
-            startActivity(Intent(this, HomeActivity::class.java))
-        }
-
-        binding.btSignUpNoAccount.setOnClickListener {
             startActivity(Intent(this, HomeActivity::class.java))
         }
 
@@ -57,5 +58,10 @@ class LoginActivity : AppCompatActivity(){
                 }
             }
         }
+    }
+
+    private fun clearItems(){
+        binding.etPasswordSI.text?.clear()
+        binding.etEmailSI.text?.clear()
     }
 }

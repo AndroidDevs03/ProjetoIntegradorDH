@@ -130,16 +130,6 @@
                 android:layout_marginBottom="24dp"
                 android:text="@string/sign_up" />
 
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/btSignUpNoAccount"
-                style="@style/button_default"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="24dp"
-                android:layout_marginTop="28dp"
-                android:layout_marginEnd="24dp"
-                android:layout_marginBottom="24dp"
-                android:text="@string/sign_in_no_account" />
 
         </LinearLayout>
         </ScrollView>
