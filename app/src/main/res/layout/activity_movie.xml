@@ -1,0 +1,314 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/greenBackground"
+    android:orientation="vertical"
+    tools:context=".view.MovieActivity">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <!--   Search Bar -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/tilMovieSearch"
+            android:theme="@style/search_field"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:endIconTint="@color/white"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="@style/search_input"
+                android:background="@color/greenBackground"
+                android:text="Search" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!--  Movie Title   -->
+        <TextView
+            android:id="@+id/tvMovieTitle"
+            android:layout_width="match_parent"
+            android:layout_height="64dp"
+            android:gravity="center_vertical"
+            android:text="@string/text_movie_title"
+            android:textAlignment="viewStart"
+            android:textColor="@color/white"
+            android:textSize="28sp"
+            android:textStyle="bold"
+            android:layout_marginStart="10dp"
+            app:layout_constraintEnd_toStartOf="@id/ibMovieSearch"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tilMovieSearch"
+            tools:ignore="RtlCompat" />
+
+        <!--Search Button            -->
+        <ImageButton
+            android:id="@+id/ibMovieSearch"
+            style="@style/search_button"
+            android:contentDescription="TODO"
+            app:layout_constraintTop_toBottomOf="@+id/tilMovieSearch"
+            app:layout_constraintBottom_toTopOf="@id/ivMoviePicture"
+            app:layout_constraintEnd_toStartOf="@id/ibMovieFavoriteYes"
+            android:background="@color/greenBackground"/>
+
+        <!--Favorite 'Yes' Button            -->
+        <ImageButton
+            android:id="@+id/ibMovieFavoriteYes"
+            style="@style/favorite_button_YES"
+            android:contentDescription="TODO"
+            android:visibility="invisible"
+            app:layout_constraintTop_toBottomOf="@+id/tilMovieSearch"
+            app:layout_constraintBottom_toTopOf="@id/ivMoviePicture"
+            app:layout_constraintStart_toEndOf="@id/ibMovieSearch"
+            android:background="@color/greenBackground"/>
+
+        <!--Favorite 'No' Button            -->
+        <ImageButton
+            android:id="@+id/ibMovieFavoriteNO"
+            style="@style/favorite_button_NO"
+            android:contentDescription="TODO"
+            android:visibility="visible"
+            app:layout_constraintTop_toBottomOf="@+id/tilMovieSearch"
+            app:layout_constraintBottom_toTopOf="@id/ivMoviePicture"
+            app:layout_constraintEnd_toStartOf="@id/ibMovieShare"
+            app:layout_constraintStart_toEndOf="@id/ibMovieSearch"
+            android:background="@color/greenBackground"/>
+
+        <!--Share Button            -->
+        <ImageButton
+            android:id="@+id/ibMovieShare"
+            style="@style/share_button"
+            android:contentDescription="TODO"
+            app:layout_constraintTop_toBottomOf="@+id/tilCharacterSearch"
+            app:layout_constraintBottom_toTopOf="@id/ivMoviePicture"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/ibMovieFavoriteNO"
+            android:background="@color/greenBackground"/>
+
+        <!-- Movie's Picture        -->
+        <ImageView
+            android:id="@+id/ivMoviePicture"
+            android:layout_width="360dp"
+            android:layout_height="300dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:src="@drawable/filme_black_widow"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvMovieTitle" />
+
+        <!-- Movies's Description        -->
+        <TextView
+            android:id="@+id/tvMovieDescription"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="25dp"
+            android:layout_marginRight="25dp"
+            android:layout_marginTop="10dp"
+            android:autoSizeTextType="uniform"
+            android:text="@string/movie_text_description"
+            android:textColor="@color/white"
+            android:textSize="14sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/ivMoviePicture" />
+
+        <!-- Movie's Directors label       -->
+        <TextView
+            android:id="@+id/tvMovieDirectorLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:text="@string/text_label_movie_director"
+            android:textAlignment="viewStart"
+            android:textColor="@color/white"
+            android:textSize="18sp"
+            android:layout_marginTop="10dp"
+            app:layout_constraintTop_toBottomOf="@id/tvMovieDescription"
+            app:layout_constraintStart_toStartOf="@id/tvMovieDescription"
+            tools:ignore="RtlCompat" />
+
+        <!-- Movie's Director   01    -->
+        <TextView
+            android:id="@+id/tvMovieDirector1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:text="Cate Shortland"
+            android:textAlignment="viewStart"
+            android:textColor="@color/white"
+            android:textSize="18sp"
+            android:layout_marginTop="5dp"
+            app:layout_constraintTop_toBottomOf="@id/tvMovieDirectorLabel"
+            app:layout_constraintStart_toStartOf="@id/tvMovieDirectorLabel"
+            tools:ignore="RtlCompat" />
+
+        <!-- Movie's Director   02    -->
+        <TextView
+            android:id="@+id/tvMovieDirector2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:text="Jim Starlin"
+            android:textAlignment="viewStart"
+            android:textColor="@color/white"
+            android:textSize="18sp"
+            android:visibility="invisible"
+            android:layout_marginTop="5dp"
+            app:layout_constraintTop_toBottomOf="@id/tvMovieDirector1"
+            app:layout_constraintStart_toStartOf="@id/tvMovieDirector1"
+            tools:ignore="RtlCompat" />
+
+        <!-- Movie's Release Date label       -->
+        <TextView
+            android:id="@+id/tvMovieReleaseDateLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:text="@string/text_label_movie_release_date"
+            android:textAlignment="viewStart"
+            android:textColor="@color/white"
+            android:textSize="18sp"
+            android:layout_marginTop="10dp"
+            app:layout_constraintTop_toBottomOf="@id/tvMovieDirector2"
+            app:layout_constraintStart_toStartOf="@id/tvMovieDirector2"
+            tools:ignore="RtlCompat" />
+
+        <!-- Movie's Release Date       -->
+        <TextView
+            android:id="@+id/tvMovieReleaseDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:text="@string/text_movie_release_date"
+            android:textAlignment="viewStart"
+            android:textColor="@color/white"
+            android:textSize="18sp"
+            android:layout_marginTop="5dp"
+            app:layout_constraintTop_toBottomOf="@id/tvMovieReleaseDateLabel"
+            app:layout_constraintStart_toStartOf="@id/tvMovieReleaseDateLabel"
+            tools:ignore="RtlCompat" />
+
+        <!-- Movie Cast label       -->
+        <TextView
+            android:id="@+id/tvMovieCastLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:text="Cast:"
+            android:textAlignment="viewStart"
+            android:textColor="@color/white"
+            android:textSize="18sp"
+            android:layout_marginRight="130dp"
+            app:layout_constraintTop_toTopOf="@id/tvMovieDirectorLabel"
+            app:layout_constraintEnd_toEndOf="parent"
+            tools:ignore="RtlCompat" />
+
+        <!-- Movie Cast 01       -->
+        <TextView
+            android:id="@+id/tvMovieCast01"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:text="Scarlett Johansson"
+            android:textAlignment="viewStart"
+            android:textColor="@color/white"
+            android:textSize="18sp"
+            android:layout_marginTop="5dp"
+            app:layout_constraintTop_toBottomOf="@id/tvMovieCastLabel"
+            app:layout_constraintStart_toStartOf="@id/tvMovieCastLabel"
+            tools:ignore="RtlCompat" />
+
+        <!-- Movie Cast 02       -->
+        <TextView
+            android:id="@+id/tvMovieCast02"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:text="David Harbour"
+            android:textAlignment="viewStart"
+            android:textColor="@color/white"
+            android:textSize="18sp"
+            android:layout_marginTop="5dp"
+            app:layout_constraintTop_toBottomOf="@id/tvMovieCast01"
+            app:layout_constraintStart_toStartOf="@id/tvMovieCast01"
+            tools:ignore="RtlCompat" />
+
+        <!-- Movie Cast 03       -->
+        <TextView
+            android:id="@+id/tvMovieCast03"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:text="Florence Pugh"
+            android:textAlignment="viewStart"
+            android:textColor="@color/white"
+            android:textSize="18sp"
+            android:layout_marginTop="5dp"
+            app:layout_constraintTop_toBottomOf="@id/tvMovieCast02"
+            app:layout_constraintStart_toStartOf="@id/tvMovieCast02"
+            tools:ignore="RtlCompat" />
+
+        <!-- Movie Cast 04       -->
+        <TextView
+            android:id="@+id/tvMovieCast04"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:text="Rachel Weisz"
+            android:textAlignment="viewStart"
+            android:textColor="@color/white"
+            android:textSize="18sp"
+            android:layout_marginTop="5dp"
+            app:layout_constraintTop_toBottomOf="@id/tvMovieCast03"
+            app:layout_constraintStart_toStartOf="@id/tvMovieCast03"
+            tools:ignore="RtlCompat" />
+
+        <!-- Label Character's list            -->
+        <TextView
+            android:id="@+id/tvMovieCharactersList"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="25dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="25dp"
+            android:text="@string/label_text_characters"
+            android:textColor="@color/white"
+            android:textSize="20sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@id/tvMovieTitle"
+            app:layout_constraintTop_toBottomOf="@id/tvMovieReleaseDate"/>
+
+        <!-- Character List            -->
+        <com.synnapps.carouselview.CarouselView
+            android:id="@+id/cvMovieCharacters"
+            android:layout_width="match_parent"
+            android:layout_height="180dp"
+            android:layout_marginLeft="25dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginRight="25dp"
+            app:disableAutoPlayOnUserInteraction="true"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvMovieCharactersList"
+            app:pageTransformer="depth" />
+
+        <!--  Menu - Bottom Navigation       -->
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:id="@+id/bnvMovie"
+            style="@style/bottom_navigation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="25dp"
+            app:layout_constraintTop_toBottomOf="@+id/cvMovieCharacters"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

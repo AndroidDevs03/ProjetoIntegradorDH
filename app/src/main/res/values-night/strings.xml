@@ -8,4 +8,9 @@
     <string name="label_text_characters">CHARACTERS</string>
     <string name="series_text_title">A + X</string>
     <string name="series_text_description">Get ready for action-packed stories featuring team-ups from your favorite Marvel heroes every month! First, a story where Wolverine and Hulk come together, and then Captain America and Cable meet up! But will each partner\'s combined strength be enough?</string>
+    <string name="text_movie_title">Black Widow</string>
+    <string name="movie_text_description">In Marvel Studios’ action-packed spy thriller “Black Widow,” Natasha Romanoff aka Black Widow confronts the darker parts of her ledger when a dangerous conspiracy with ties to her past arises. Pursued by a force that will stop at nothing to bring her down, Natasha must deal with her history as a spy and the broken relationships left in her wake long before she became an Avenger.</string>
+    <string name="text_label_movie_director">Directed by:</string>
+    <string name="text_label_movie_release_date">Release date:</string>
+    <string name="text_movie_release_date">May 7, 2021</string>
 </resources>

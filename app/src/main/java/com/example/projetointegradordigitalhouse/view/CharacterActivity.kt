@@ -78,6 +78,10 @@ class CharacterActivity : AppCompatActivity() {
             startActivity(Intent(this, SeriesActivity::class.java))
         }
 
+        findViewById<CarouselView>(R.id.cvCharacterMovies).setImageClickListener {
+            startActivity(Intent(this, MovieActivity::class.java))
+        }
+
         BottomNavigationView.OnNavigationItemReselectedListener {
             when (it.itemId){
                 R.id.page_1 -> {
