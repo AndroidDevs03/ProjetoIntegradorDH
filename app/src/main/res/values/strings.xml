@@ -13,4 +13,5 @@
     <string name="register_sucessful">Register sucessful</string>
     <string name="welcome_to_the_marvel_community">welcome to the marvel community</string>
     <string name="home">home</string>
+    <string name="sign_in_no_account">Sign In no account</string>
 </resources>

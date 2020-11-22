@@ -3,15 +3,12 @@ package com.example.projetointegradordigitalhouse
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.MenuItem
 import android.widget.Toast
 import com.example.digitalhousefoods_desafio2.utils.MaskWatcher
 import com.example.projetointegradordigitalhouse.databinding.ActivityLoginBinding
-import com.google.android.material.bottomnavigation.BottomNavigationView
 
 @Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
-class LoginActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemSelectedListener,
-    BottomNavigationView.OnNavigationItemReselectedListener {
+class LoginActivity : AppCompatActivity(){
     private lateinit var binding:ActivityLoginBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -19,8 +16,6 @@ class LoginActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItem
         setContentView(binding.root)
 
         initItems()
-
-        initBottomNavigation()
     }
 
 
@@ -36,6 +31,10 @@ class LoginActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItem
         }
 
         binding.btGoogle.setOnClickListener {
+            startActivity(Intent(this, HomeActivity::class.java))
+        }
+
+        binding.btSignUpNoAccount.setOnClickListener {
             startActivity(Intent(this, HomeActivity::class.java))
         }
 
@@ -58,17 +57,5 @@ class LoginActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItem
                 }
             }
         }
-    }
-
-    private fun initBottomNavigation(){
-        binding.bottomNav.setOnNavigationItemSelectedListener(this)
-        binding.bottomNav.setOnNavigationItemReselectedListener(this)
-    }
-
-    override fun onNavigationItemSelected(item: MenuItem): Boolean {
-        return true
-    }
-
-    override fun onNavigationItemReselected(item: MenuItem) {
     }
 }

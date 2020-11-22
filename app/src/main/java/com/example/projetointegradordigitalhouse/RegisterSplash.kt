@@ -7,7 +7,7 @@ import android.os.Handler
 import com.example.projetointegradordigitalhouse.databinding.ActivityRegisterSplashBinding
 
 @Suppress("DEPRECATION")
-class Register_Splash : AppCompatActivity() {
+class RegisterSplash : AppCompatActivity() {
     private val SPLASH_TIME_OUT: Long = 3000
     private lateinit var binding: ActivityRegisterSplashBinding
     override fun onCreate(savedInstanceState: Bundle?) {
