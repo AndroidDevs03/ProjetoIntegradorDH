@@ -15,12 +15,12 @@
         <activity android:name=".view.CharacterActivity" />
         <activity
             android:name=".view.ChipSearchActivity"
-            android:theme="@style/Theme.MaterialComponents.DayNight.NoActionBar" />
+            android:theme="@style/Theme.MaterialComponents.DayNight.NoActionBar">
+        </activity>
         <activity android:name=".view.SplashActivity" />
         <activity android:name=".view.HomeActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
