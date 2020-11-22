@@ -1,11 +1,12 @@
-package com.example.projetointegradordigitalhouse
+package com.example.projetointegradordigitalhouse.view
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
-import com.example.digitalhousefoods_desafio2.utils.MaskWatcher
+import com.example.projetointegradordigitalhouse.util.MaskWatcher
 import com.example.projetointegradordigitalhouse.databinding.ActivityLoginBinding
+import com.example.projetointegradordigitalhouse.validateEmailFormat
 
 @Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
 class LoginActivity : AppCompatActivity(){

@@ -1,4 +1,4 @@
-package com.example.projetointegradordigitalhouse
+package com.example.projetointegradordigitalhouse.view
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity

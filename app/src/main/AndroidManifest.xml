@@ -10,9 +10,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ProjetoIntegradorDigitalHouse">
 
-        <activity android:name=".RegisterSplash"></activity>
-        <activity android:name=".RegisterActivity" />
-        <activity android:name=".LoginActivity">
+        <activity android:name=".view.RegisterSplash"></activity>
+        <activity android:name=".view.RegisterActivity" />
+        <activity android:name=".view.LoginActivity">
         <activity android:name=".view.MovieActivity"></activity>
         <activity android:name=".view.SeriesActivity" />
         <activity android:name=".view.ComicActivity" />

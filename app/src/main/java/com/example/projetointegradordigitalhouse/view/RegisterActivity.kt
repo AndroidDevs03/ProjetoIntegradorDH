@@ -1,12 +1,13 @@
-package com.example.projetointegradordigitalhouse
+package com.example.projetointegradordigitalhouse.view
 
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
-import com.example.digitalhousefoods_desafio2.utils.MaskWatcher
+import com.example.projetointegradordigitalhouse.util.MaskWatcher
 import com.example.projetointegradordigitalhouse.databinding.ActivityRegisterBinding
+import com.example.projetointegradordigitalhouse.validateEmailFormat
 import java.util.*
 
 
