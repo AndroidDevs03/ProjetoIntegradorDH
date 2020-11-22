@@ -13,6 +13,7 @@
     <color name="blueBackground">#473682</color>
     <color name="yellowBackground">#896A1A</color>
     <color name="greenBackground">#1E2E05</color>
+    <color name="greenBackgroundBar">#131C03</color>
     <color name="pinkBackgound">#F8F2F2</color>
     <color name="greenCheck">#1C5713</color>
 </resources>
