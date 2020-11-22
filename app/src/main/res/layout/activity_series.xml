@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/blueBackground"
+    android:orientation="vertical"
+    tools:context=".view.SeriesActivity">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <!--   Search Bar -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/tilSeriesSearch"
+            android:theme="@style/search_field"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:endIconTint="@color/white"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="@style/search_input"
+                android:background="@color/blueBackground"
+                android:text="Search" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!--  Series Title   -->
+        <TextView
+            android:id="@+id/tvSeriesTitle"
+            android:layout_width="match_parent"
+            android:layout_height="64dp"
+            android:gravity="center_vertical"
+            android:text="@string/series_text_title"
+            android:textAlignment="viewStart"
+            android:textColor="@color/white"
+            android:textSize="28sp"
+            android:textStyle="bold"
+            android:layout_marginStart="10dp"
+            app:layout_constraintEnd_toStartOf="@id/ibSeriesSearch"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tilSeriesSearch"
+            tools:ignore="RtlCompat" />
+
+        <!--Search Button            -->
+        <ImageButton
+            android:id="@+id/ibSeriesSearch"
+            style="@style/search_button"
+            android:contentDescription="TODO"
+            app:layout_constraintTop_toBottomOf="@+id/tilSeriesSearch"
+            app:layout_constraintBottom_toTopOf="@id/ivSeriesPicture"
+            app:layout_constraintEnd_toStartOf="@id/ibSeriesFavoriteYes"
+            android:background="@color/blueBackground"/>
+
+        <!--Favorite 'Yes' Button            -->
+        <ImageButton
+            android:id="@+id/ibSeriesFavoriteYes"
+            style="@style/favorite_button_YES"
+            android:contentDescription="TODO"
+            android:visibility="invisible"
+            app:layout_constraintTop_toBottomOf="@+id/tilSeriesSearch"
+            app:layout_constraintBottom_toTopOf="@id/ivSeriesPicture"
+            app:layout_constraintStart_toEndOf="@id/ibSeriesSearch"
+            android:background="@color/blueBackground"/>
+
+        <!--Favorite 'No' Button            -->
+        <ImageButton
+            android:id="@+id/ibSeriesFavoriteNO"
+            style="@style/favorite_button_NO"
+            android:contentDescription="TODO"
+            android:visibility="visible"
+            app:layout_constraintTop_toBottomOf="@+id/tilSeriesSearch"
+            app:layout_constraintBottom_toTopOf="@id/ivSeriesPicture"
+            app:layout_constraintEnd_toStartOf="@id/ibSeriesShare"
+            app:layout_constraintStart_toEndOf="@id/ibSeriesSearch"
+            android:background="@color/blueBackground"/>
+
+        <!--Share Button            -->
+        <ImageButton
+            android:id="@+id/ibSeriesShare"
+            style="@style/share_button"
+            android:contentDescription="TODO"
+            app:layout_constraintTop_toBottomOf="@+id/tilSeriesSearch"
+            app:layout_constraintBottom_toTopOf="@id/ivSeriesPicture"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/ibSeriesFavoriteNO"
+            android:background="@color/blueBackground"/>
+
+        <!-- Series's Picture        -->
+        <ImageView
+            android:id="@+id/ivSeriesPicture"
+            android:layout_width="360dp"
+            android:layout_height="300dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/serie_ax"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvSeriesTitle" />
+
+        <!-- Series's Desciption        -->
+        <TextView
+            android:id="@+id/tvSeriesDescription"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="25dp"
+            android:layout_marginRight="25dp"
+            android:layout_marginTop="10dp"
+            android:autoSizeTextType="uniform"
+            android:text="@string/series_text_description"
+            android:textColor="@color/white"
+            android:textSize="14sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/ivSeriesPicture" />
+
+        <!-- Label Character's list            -->
+        <TextView
+            android:id="@+id/tvSeriesCharactersList"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="25dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="25dp"
+            android:text="@string/label_text_characters"
+            android:textColor="@color/white"
+            android:textSize="20sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@id/tvSeriesTitle"
+            app:layout_constraintTop_toBottomOf="@id/tvSeriesDescription" />
+
+        <!-- Character List            -->
+        <com.synnapps.carouselview.CarouselView
+            android:id="@+id/cvSeriesCharacters"
+            android:layout_width="match_parent"
+            android:layout_height="180dp"
+            android:layout_marginLeft="25dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginRight="25dp"
+            app:disableAutoPlayOnUserInteraction="true"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvSeriesCharactersList"
+            app:pageTransformer="depth" />
+
+        <!-- Label Comics list            -->
+        <TextView
+            android:id="@+id/tvSeriesComicList"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="25dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginRight="25dp"
+            android:text="@string/label_comics_list"
+            android:textColor="@color/white"
+            android:textSize="20sp"
+            app:layout_constraintEnd_toEndOf="@id/tvSeriesDescription"
+            app:layout_constraintStart_toStartOf="@id/tvSeriesDescription"
+            app:layout_constraintTop_toBottomOf="@id/cvSeriesCharacters" />
+
+        <!-- Comics List            -->
+        <com.synnapps.carouselview.CarouselView
+            android:id="@+id/cvSeriesComics"
+            android:layout_width="match_parent"
+            android:layout_height="180dp"
+            android:layout_marginLeft="25dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginRight="25dp"
+            app:disableAutoPlayOnUserInteraction="true"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvSeriesComicList"
+            app:pageTransformer="depth" />
+
+        <!--  Menu - Bottom Navigation       -->
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:id="@+id/bnvSeries"
+            style="@style/bottom_navigation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="25dp"
+            app:layout_constraintTop_toBottomOf="@+id/cvSeriesComics"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</ScrollView>
