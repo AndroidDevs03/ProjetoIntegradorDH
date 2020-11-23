@@ -64,7 +64,7 @@ class HomeActivity : AppCompatActivity() {
         binding.hmBottomNavigation.setOnNavigationItemSelectedListener(){
             when(it.itemId){
                 R.id.page_1 -> {
-                    //startActivity(Intent(this, HomeActivity::class.java))
+                    startActivity(Intent(this, HomeActivity::class.java))
                     true
                 }
                 R.id.page_2 -> {
@@ -76,7 +76,7 @@ class HomeActivity : AppCompatActivity() {
                     true
                 }
                 R.id.page_4 -> {
-                    //startActivity(Intent(this, LoginActivity::class.java))
+                    startActivity(Intent(this, LoginActivity::class.java))
                     true
                 }
                 else -> {false}
