@@ -68,7 +68,7 @@ class HomeActivity : AppCompatActivity() {
                     true
                 }
                 R.id.page_2 -> {
-                    //startActivity(Intent(this, FavoritesActivity::class.java))
+                    startActivity(Intent(this, FavoritesActivity::class.java))
                     true
                 }
                 R.id.page_3 -> {

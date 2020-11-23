@@ -8,7 +8,6 @@ import android.os.Looper
 import com.example.projetointegradordigitalhouse.databinding.ActivityRegisterSplashBinding
 
 class RegisterSplash : AppCompatActivity() {
-    private val SPLASH_TIME_OUT: Long = 3000
     private lateinit var binding: ActivityRegisterSplashBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -18,7 +17,7 @@ class RegisterSplash : AppCompatActivity() {
         Handler(Looper.getMainLooper()).postDelayed({
             startActivity(Intent(this, HomeActivity::class.java))
             finish()
-        }, SPLASH_TIME_OUT)
+        }, 3000)
 
         binding.btHome.setOnClickListener {
             startActivity(Intent(this, HomeActivity::class.java))

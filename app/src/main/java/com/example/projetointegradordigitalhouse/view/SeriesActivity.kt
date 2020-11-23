@@ -71,7 +71,7 @@ class SeriesActivity : AppCompatActivity() {
                     startActivity(Intent(this,HomeActivity::class.java))
                 }
                 R.id.page_2 -> {
-//                    startActivity(this, FavoriteActivity::class.java)
+                    startActivity(Intent(this, FavoritesActivity::class.java))
                 }
                 R.id.page_3 ->{
                     startActivity(Intent(this,ChipSearchActivity::class.java))
