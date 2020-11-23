@@ -9,7 +9,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.ProjetoIntegradorDigitalHouse">
-
+        <activity android:name=".view.FavoritesActivity" />
         <activity android:name=".view.RegisterSplash" />
         <activity android:name=".view.RegisterActivity" />
         <activity android:name=".view.LoginActivity" />
@@ -17,8 +17,10 @@
         <activity android:name=".view.SeriesActivity" />
         <activity android:name=".view.ComicActivity" />
         <activity android:name=".view.CharacterActivity" />
-        <activity
-            android:name=".view.ChipSearchActivity"
+        <activity android:name=".view.ChipSearchActivity"
+            android:theme="@style/Theme.MaterialComponents.DayNight.NoActionBar"/>
+        <activity android:name=".view.SplashActivity" />
+        <activity android:name=".view.HomeActivity" />
             android:theme="@style/Theme.MaterialComponents.DayNight.NoActionBar">
         </activity>
         <activity android:name=".view.SplashActivity">
@@ -32,5 +34,4 @@
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
     </application>
-
 </manifest>
