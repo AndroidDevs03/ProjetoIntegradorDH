@@ -9,18 +9,19 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.ProjetoIntegradorDigitalHouse">
-        <activity android:name=".view.MovieActivity"></activity>
+        <activity android:name=".view.FavoritesActivity"></activity>
+        <activity android:name=".view.MovieActivity" />
         <activity android:name=".view.SeriesActivity" />
         <activity android:name=".view.ComicActivity" />
         <activity android:name=".view.CharacterActivity" />
         <activity
             android:name=".view.ChipSearchActivity"
-            android:theme="@style/Theme.MaterialComponents.DayNight.NoActionBar">
-        </activity>
+            android:theme="@style/Theme.MaterialComponents.DayNight.NoActionBar"></activity>
         <activity android:name=".view.SplashActivity" />
         <activity android:name=".view.HomeActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
