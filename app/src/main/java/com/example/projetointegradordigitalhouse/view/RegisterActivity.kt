@@ -74,6 +74,7 @@ class RegisterActivity() : AppCompatActivity() {
                     }else{
                         if (binding.etFullName.length() > 0 && validateBirthday() && binding.etEmailSU.validateEmailFormat() && validatePassword()){
                             startActivity(Intent(this, RegisterSplash::class.java))
+                            finish()
                         }else{
                             Toast.makeText(this, "Obrigatótio o preenchimento correto de todos os campos", Toast.LENGTH_LONG).show()
                         }
