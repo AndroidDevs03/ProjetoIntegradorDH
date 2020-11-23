@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".view.LoginActivity">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/redBackground">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="14dp"
+                android:layout_marginTop="14dp"
+                android:layout_marginEnd="14dp"
+                android:orientation="vertical"
+                android:background="@drawable/background_login">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/ic_baseline_check_circle_24"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="40dp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="40dp"
+                    android:text="@string/register_sucessful"
+                    android:fontFamily="@font/marvel"
+                    android:textAllCaps="true"
+                    android:textColor="@color/black"
+                    android:textSize="51sp"
+                    android:textAlignment="center"/>
+
+
+                <TextView
+                    android:layout_width="210dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="40dp"
+                    android:text="@string/welcome_to_the_marvel_community"
+                    android:textAllCaps="true"
+                    android:textColor="@color/black"
+                    android:fontFamily="@font/marvel"
+                    android:textSize="20sp"
+                    android:textAlignment="center"/>
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/btHome"
+                    style="@style/button_home"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="24dp"
+                    android:layout_marginTop="40dp"
+                    android:layout_marginEnd="24dp"
+                    android:layout_marginBottom="40dp"
+                    android:fontFamily="@font/marvel"
+                    android:text="@string/home"
+                    android:textAllCaps="true"
+                    android:layout_gravity="center_horizontal"/>
+
+            </LinearLayout>
+
+    </FrameLayout>
+
+</LinearLayout>

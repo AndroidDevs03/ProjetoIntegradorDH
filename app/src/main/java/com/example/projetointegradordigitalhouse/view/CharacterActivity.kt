@@ -94,7 +94,7 @@ class CharacterActivity : AppCompatActivity() {
                     startActivity(Intent(this,ChipSearchActivity::class.java))
                 }
                 R.id.page_4 -> {
-//                    startActivity(this, ProfileActivity::class.java)
+                    startActivity(Intent(this, LoginActivity::class.java))
                 }
 
             }

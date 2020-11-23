@@ -56,11 +56,11 @@ class ChipSearchActivity : AppCompatActivity() {
                     true
                 }
                 R.id.page_3 -> {
-                    //startActivity(Intent(this, ChipSearchActivity::class.java))
+                    startActivity(Intent(this, ChipSearchActivity::class.java))
                     true
                 }
                 R.id.page_4 -> {
-                    //startActivity(Intent(this, LoginActivity::class.java))
+                    startActivity(Intent(this, LoginActivity::class.java))
                     true
                 }
                 else -> {false}

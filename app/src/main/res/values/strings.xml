@@ -13,4 +13,18 @@
     <string name="text_label_movie_director">Directed by:</string>
     <string name="text_label_movie_release_date">Release date:</string>
     <string name="text_movie_release_date">May 7, 2021</string>
+    <string name="sign_in">Sign in</string>
+    <string name="e_mail">E-mail</string>
+    <string name="password">Password</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="or">OR</string>
+    <string name="not_on_marvel_app_yet">Not on Marvel app yet?</string>
+    <string name="full_name">Full Name</string>
+    <string name="birth_date">Birth Date</string>
+    <string name="confirm_password">Confirm Password</string>
+    <string name="register">Register</string>
+    <string name="register_sucessful">Register sucessful</string>
+    <string name="welcome_to_the_marvel_community">welcome to the marvel community</string>
+    <string name="home">home</string>
+    <string name="sign_in_no_account">Sign In no account</string>
 </resources>
