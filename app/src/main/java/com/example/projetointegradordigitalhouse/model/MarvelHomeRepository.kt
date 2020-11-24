@@ -1,14 +1,9 @@
-package com.github.cesar1287.desafiopicpayandroid.model.home
+package com.example.projetointegradordigitalhouse.model
 
-import com.example.projetointegradordigitalhouse.model.ApiService
-import com.example.projetointegradordigitalhouse.model.ResponseApi
-import java.lang.Exception
-
-class HomeRepository {
-
-    suspend fun getCharacters(): ResponseApi {
+class MarvelHomeRepository {
+    suspend fun getCharacters(pageNumber: Int): ResponseApi {
         return try {
-            val response = ApiService.marvelApi.Characters(1)
+            val response = ApiService.marvelApi.Characters(pageNumber)
 
             if (response.isSuccessful) {
                 ResponseApi.Success(response.body())
