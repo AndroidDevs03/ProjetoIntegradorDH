@@ -3,8 +3,10 @@ package com.example.projetointegradordigitalhouse.view
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.lifecycle.ViewModelProvider
 import com.example.projetointegradordigitalhouse.R
 import com.example.projetointegradordigitalhouse.databinding.ActivityMainBinding
+import com.example.projetointegradordigitalhouse.viewModel.HomeViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationMenu
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.chip.Chip
@@ -42,14 +44,23 @@ class HomeActivity : AppCompatActivity() {
     )
 
     private lateinit var binding: ActivityMainBinding
-
+    private lateinit var viewModel: HomeViewModel
+    private val adapter: HomeAdapter by lazy {
+        HomeAdapter{val movieclicked = it}
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        loadContent()
         initComponents()
         setupObservables()
+    }
+
+    private fun loadContent() {
+        viewModel = ViewModelProvider(this).get(HomeViewModel::class.java)
+        viewModel.getCharacters()
     }
 
     private fun setupObservables() {

@@ -14,8 +14,10 @@ buildscript {
             'lifecycle'             :"2.2.0",
             'circleImageView'       :"3.1.0",
             'fragment'              :"1.2.5",
-            'gradle'                : '4.1.1',
-            'material'              :"1.2.1"
+            'gradle'                :"4.1.1",
+            'material'              :"1.2.1",
+            'paging'                :"2.1.2",
+            'loggingInterceptor'    :"3.12.3"
     ]
 
     repositories {
