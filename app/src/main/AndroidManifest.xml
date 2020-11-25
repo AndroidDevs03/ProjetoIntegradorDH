@@ -20,16 +20,13 @@
         <activity android:name=".view.ChipSearchActivity"
             android:theme="@style/Theme.MaterialComponents.DayNight.NoActionBar"/>
         <activity android:name=".view.SplashActivity" />
-        <activity android:name=".view.HomeActivity" />
+        <activity android:name=".view.HomeActivity"
             android:theme="@style/Theme.MaterialComponents.DayNight.NoActionBar">
-        </activity>
-        <activity android:name=".view.SplashActivity">
         <intent-filter>
             <action android:name="android.intent.action.MAIN" />
             <category android:name="android.intent.category.LAUNCHER" />
         </intent-filter>
-    </activity>
-        <activity android:name=".view.HomeActivity"/>
+        </activity>
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />

@@ -82,23 +82,26 @@ class CharacterActivity : AppCompatActivity() {
             startActivity(Intent(this, MovieActivity::class.java))
         }
 
-        BottomNavigationView.OnNavigationItemReselectedListener {
-            when (it.itemId){
+        findViewById<BottomNavigationView>(R.id.bnvCharacter).setOnNavigationItemSelectedListener {
+            when(it.itemId){
                 R.id.page_1 -> {
-                    startActivity(Intent(this,HomeActivity::class.java))
+                    startActivity(Intent(this, HomeActivity::class.java))
+                    true
                 }
                 R.id.page_2 -> {
                     startActivity(Intent(this, FavoritesActivity::class.java))
+                    true
                 }
-                R.id.page_3 ->{
-                    startActivity(Intent(this,ChipSearchActivity::class.java))
+                R.id.page_3 -> {
+                    startActivity(Intent(this, ChipSearchActivity::class.java))
+                    true
                 }
                 R.id.page_4 -> {
                     startActivity(Intent(this, LoginActivity::class.java))
+                    true
                 }
-
+                else -> {false}
             }
         }
-
     }
 }
