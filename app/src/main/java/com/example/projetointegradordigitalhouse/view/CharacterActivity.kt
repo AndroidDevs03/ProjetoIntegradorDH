@@ -62,13 +62,9 @@ class CharacterActivity : AppCompatActivity() {
             startActivity(Intent(this,ChipSearchActivity::class.java))
         }
 
-        findViewById<ImageButton>(R.id.ibCharacterFavoriteNO).setOnClickListener {
-            findViewById<ImageButton>(R.id.ibCharacterFavoriteYes).visibility = View.VISIBLE
-            findViewById<ImageButton>(R.id.ibCharacterFavoriteNO).visibility = View.INVISIBLE
-        }
-        findViewById<ImageButton>(R.id.ibCharacterFavoriteYes).setOnClickListener {
-            findViewById<ImageButton>(R.id.ibCharacterFavoriteNO).visibility = View.VISIBLE
-            findViewById<ImageButton>(R.id.ibCharacterFavoriteYes).visibility = View.INVISIBLE
+        findViewById<ImageButton>(R.id.ibCharacterFavorite).setOnClickListener {
+            findViewById<ImageButton>(R.id.ibCharacterFavorite).visibility = View.VISIBLE
+            findViewById<ImageButton>(R.id.ibCharacterFavorite).visibility = View.INVISIBLE
         }
 
         findViewById<CarouselView>(R.id.cvCharacterComics).setImageClickListener {
