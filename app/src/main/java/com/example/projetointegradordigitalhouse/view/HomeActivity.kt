@@ -45,9 +45,11 @@ class HomeActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var viewModel: HomeViewModel
-//    private val adapter: HomeAdapter by lazy {
-//        HomeAdapter{val movieclicked = it}
-//    }
+
+    private val adapter: HomeAdapter by lazy {
+        HomeAdapter{val movieclicked = it}
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)

@@ -23,30 +23,50 @@ class MarvelPageKeyedDataSource : PageKeyedDataSource<Int, Result>() {
             when (val response = repository.getCharacters(FIRST_PAGE)) {
                 is ResponseApi.Success -> {
                     val data = response.data as Characters
-//                    data.results.forEach {
-//                        it.posterPath = it.posterPath.getFullImagePath()
-                    }
-//                    callback.onResult(data.results, null, FIRST_PAGE + 1)
+                    callback.onResult(data.`data`.results, null, FIRST_PAGE + 1)
                 }
-//                is ResponseApi.Error -> {
-//                    callback.onResult(mutableListOf(), null, FIRST_PAGE + 1)
-//                }
+                is ResponseApi.Error -> {
+                    callback.onResult(mutableListOf(), null, FIRST_PAGE + 1)
+                }
             }
         }
     }
 
     override fun loadBefore(
-//        params: LoadInitialParams<Int>,
-//        callback: LoadInitialCallback<Int, Result>
+        params: LoadParams<Int>,
+        callback: LoadCallback<Int, Result>
     ) {
-        TODO("Not yet implemented")
+        val page = params.key
+        CoroutineScope(IO).launch {
+            when (val response = repository.getCharacters(page)) {
+                is ResponseApi.Success -> {
+                    val data = response.data as Characters
+                    callback.onResult(data.`data`.results,  page - 1)
+                }
+                is ResponseApi.Error -> {
+                    callback.onResult(mutableListOf(),  page - 1)
+                }
+            }
+        }
+
     }
 
     override fun loadAfter(
-//        params: LoadInitialParams<Int>,
-//        callback: LoadInitialCallback<Int, Result>
+        params: LoadParams<Int>,
+        callback: LoadCallback<Int, Result>
     ) {
-        TODO("Not yet implemented")
+        val page = params.key
+        CoroutineScope(IO).launch {
+            when (val response = repository.getCharacters(page)) {
+                is ResponseApi.Success -> {
+                    val data = response.data as Characters
+                    callback.onResult(data.`data`.results,  page + 1)
+                }
+                is ResponseApi.Error -> {
+                    callback.onResult(mutableListOf(), page + 1)
+                }
+            }
+        }
     }
 
 }
