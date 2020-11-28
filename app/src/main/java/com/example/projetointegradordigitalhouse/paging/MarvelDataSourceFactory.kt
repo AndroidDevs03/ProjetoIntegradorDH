@@ -1,6 +1,5 @@
 package com.example.projetointegradordigitalhouse.paging
 
-
 import androidx.lifecycle.MutableLiveData
 import androidx.paging.DataSource
 import androidx.paging.PageKeyedDataSource

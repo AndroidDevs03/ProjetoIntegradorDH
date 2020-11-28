@@ -46,9 +46,9 @@ class HomeActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var viewModel: HomeViewModel
 
-    private val adapter: HomeAdapter by lazy {
-        HomeAdapter{val movieclicked = it}
-    }
+//    private val adapter: HomeAdapter by lazy {
+//        HomeAdapter{val movieclicked = it}
+//    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -63,6 +63,29 @@ class HomeActivity : AppCompatActivity() {
     private fun loadContent() {
         viewModel = ViewModelProvider(this).get(HomeViewModel::class.java)
         viewModel.getCharacters()
+    }
+
+    private fun initComponents() {
+
+        binding.cvCharacter.pageCount = imgsCharacters.size
+        binding.cvCharacter.setImageListener { position, imageView ->
+            imageView.setImageResource(imgsCharacters[position])
+        }
+
+        binding.cvComics.pageCount = imgsComics.size
+        binding.cvComics.setImageListener { position, imageView ->
+            imageView.setImageResource(imgsComics[position])
+        }
+
+        binding.cvMovies.pageCount = imgFilmes.size
+        binding.cvMovies.setImageListener { position, imageView ->
+            imageView.setImageResource(imgFilmes[position])
+        }
+
+        binding.cvSeries.pageCount = imgsSeries.size
+        binding.cvSeries.setImageListener { position, imageView ->
+            imageView.setImageResource(imgsSeries[position])
+        }
     }
 
     private fun setupObservables() {
@@ -95,30 +118,6 @@ class HomeActivity : AppCompatActivity() {
                 else -> {false}
             }
         }
-    }
-
-    private fun initComponents() {
-
-        binding.cvCharacter.pageCount = imgsCharacters.size
-        binding.cvCharacter.setImageListener { position, imageView ->
-            imageView.setImageResource(imgsCharacters[position])
-        }
-
-        binding.cvComics.pageCount = imgsComics.size
-        binding.cvComics.setImageListener { position, imageView ->
-            imageView.setImageResource(imgsComics[position])
-        }
-
-        binding.cvMovies.pageCount = imgFilmes.size
-        binding.cvMovies.setImageListener { position, imageView ->
-            imageView.setImageResource(imgFilmes[position])
-        }
-
-        binding.cvSeries.pageCount = imgsSeries.size
-        binding.cvSeries.setImageListener { position, imageView ->
-            imageView.setImageResource(imgsSeries[position])
-        }
-
         binding.cvCharacter.setImageClickListener {
             startActivity(Intent(this, CharacterActivity::class.java))
         }

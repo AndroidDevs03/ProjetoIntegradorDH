@@ -10,6 +10,7 @@ import com.example.projetointegradordigitalhouse.model.ResponseApi
 import com.github.cesar1287.desafiopicpayandroid.model.home.HomeBusiness
 import kotlinx.coroutines.launch
 import com.example.projetointegradordigitalhouse.model.characters.Result
+import com.example.projetointegradordigitalhouse.paging.MarvelDataSourceFactory
 import com.example.projetointegradordigitalhouse.util.Constants.Api.PAGE_SIZE
 
 internal class HomeViewModel: ViewModel() {
@@ -20,7 +21,7 @@ internal class HomeViewModel: ViewModel() {
 
     init {
         val marvelDataSourceFactory = MarvelDataSourceFactory()
-        marvelLiveDataSource = MarvelDataSourceFactory.getSearchLiveDataSource()
+        marvelLiveDataSource = marvelDataSourceFactory.getSearchLiveDataSource()
         val pagedListConfig = PagedList.Config.Builder().setEnablePlaceholders(false).setPageSize(PAGE_SIZE).build()
         charList = LivePagedListBuilder(marvelDataSourceFactory, pagedListConfig).build()
     }
