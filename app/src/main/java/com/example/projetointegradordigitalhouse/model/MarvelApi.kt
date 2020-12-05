@@ -7,8 +7,8 @@ import retrofit2.http.GET
 import retrofit2.http.Query
 
 interface MarvelApi {
-        @GET("characters?nameStartsWith=Spider-Man&orderBy=name&apikey=c32125ee0eec7c5e61969691516f131c")
-        suspend fun Characters(@Query("page")pagenumber: Int): Response<Characters>
+        @GET("characters?nameStartsWith=Spider-Man")
+        suspend fun Characters(@Query("limit")pagelimit: Int): Response<Characters>
 
 //        @GET("characters?nameStartsWith=Spider-Man&orderBy=name&apikey=c32125ee0eec7c5e61969691516f131c")
 //        suspend fun Movies(@Query("page")pagenumber: Int): Response<Movies>

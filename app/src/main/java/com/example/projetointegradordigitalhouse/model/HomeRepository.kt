@@ -8,7 +8,7 @@ class HomeRepository {
 
     suspend fun getCharacters(): ResponseApi {
         return try {
-            val response = ApiService.marvelApi.Characters(1)
+            val response = ApiService.marvelApi.Characters(4)
 
             if (response.isSuccessful) {
                 ResponseApi.Success(response.body())

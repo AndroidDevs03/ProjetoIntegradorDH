@@ -20,7 +20,7 @@ class MarvelHomeRepository {
     }
     suspend fun getMovies(pageNumber: Int): ResponseApi {
         return try {
-            val response = ApiService.marvelApi.Movies(pageNumber)
+            val response = ApiService.marvelApi.Characters(pageNumber)
 
             if (response.isSuccessful) {
                 ResponseApi.Success(response.body())
@@ -54,7 +54,7 @@ class MarvelHomeRepository {
     }
     suspend fun getSeries(pageNumber: Int): ResponseApi {
         return try {
-            val response = ApiService.marvelApi.Series(pageNumber)
+            val response = ApiService.marvelApi.Characters(pageNumber)
 
             if (response.isSuccessful) {
                 ResponseApi.Success(response.body())

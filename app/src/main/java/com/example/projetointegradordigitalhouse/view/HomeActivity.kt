@@ -3,14 +3,18 @@ package com.example.projetointegradordigitalhouse.view
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.ImageView
 import androidx.lifecycle.ViewModelProvider
+import com.bumptech.glide.Glide
 import com.example.projetointegradordigitalhouse.R
 import com.example.projetointegradordigitalhouse.databinding.ActivityMainBinding
+import com.example.projetointegradordigitalhouse.model.characters.Result
 import com.example.projetointegradordigitalhouse.viewModel.HomeViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationMenu
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.chip.Chip
 import com.synnapps.carouselview.CarouselView
+import com.synnapps.carouselview.ImageClickListener
 
 class HomeActivity : AppCompatActivity() {
 
@@ -45,10 +49,7 @@ class HomeActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var viewModel: HomeViewModel
-
-//    private val adapter: HomeAdapter by lazy {
-//        HomeAdapter{val movieclicked = it}
-//    }
+    private val characterList = mutableListOf<Result>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,36 +57,42 @@ class HomeActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         loadContent()
-        initComponents()
         setupObservables()
     }
 
     private fun loadContent() {
         viewModel = ViewModelProvider(this).get(HomeViewModel::class.java)
         viewModel.getCharacters()
+        viewModel.charList?.observe(this, {
+            characterList.addAll(it)
+            initComponents()
+        })
+
     }
 
     private fun initComponents() {
 
-        binding.cvCharacter.pageCount = imgsCharacters.size
-        binding.cvCharacter.setImageListener { position, imageView ->
-            imageView.setImageResource(imgsCharacters[position])
-        }
 
-        binding.cvComics.pageCount = imgsComics.size
+        binding.cvCharacter.setImageListener { position, imageView ->
+            Glide.with(this).load(characterList[position].thumbnail.getThumb()).into(imageView)
+        }
+        binding.cvCharacter.pageCount = characterList.size
+
+
         binding.cvComics.setImageListener { position, imageView ->
             imageView.setImageResource(imgsComics[position])
         }
-
-        binding.cvMovies.pageCount = imgFilmes.size
-        binding.cvMovies.setImageListener { position, imageView ->
-            imageView.setImageResource(imgFilmes[position])
-        }
-
-        binding.cvSeries.pageCount = imgsSeries.size
-        binding.cvSeries.setImageListener { position, imageView ->
-            imageView.setImageResource(imgsSeries[position])
-        }
+        binding.cvComics.pageCount = imgsComics.size
+//
+//        binding.cvMovies.pageCount = imgFilmes.size
+//        binding.cvMovies.setImageListener { position, imageView ->
+//            imageView.setImageResource(imgFilmes[position])
+//        }
+//
+//        binding.cvSeries.pageCount = imgsSeries.size
+//        binding.cvSeries.setImageListener { position, imageView ->
+//            imageView.setImageResource(imgsSeries[position])
+//        }
     }
 
     private fun setupObservables() {
@@ -118,9 +125,13 @@ class HomeActivity : AppCompatActivity() {
                 else -> {false}
             }
         }
-        binding.cvCharacter.setImageClickListener {
-            startActivity(Intent(this, CharacterActivity::class.java))
-        }
+        binding.cvCharacter.setImageClickListener(ImageClickListener() {
+            fun onClick(position: Int) {
+                val intent = Intent(this, CharacterActivity::class.java)
+                intent.putExtra("blablabla", characterList[position].id)
+                startActivity(intent)
+            }
+        })
 
         binding.cvComics.setImageClickListener {
             startActivity(Intent(this, ComicActivity::class.java))
