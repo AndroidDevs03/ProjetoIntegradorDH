@@ -1,20 +1,18 @@
 package com.example.projetointegradordigitalhouse.view
 
+import android.app.Activity
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.ImageView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.example.projetointegradordigitalhouse.R
 import com.example.projetointegradordigitalhouse.databinding.ActivityMainBinding
 import com.example.projetointegradordigitalhouse.model.characters.Result
 import com.example.projetointegradordigitalhouse.viewModel.HomeViewModel
-import com.google.android.material.bottomnavigation.BottomNavigationMenu
-import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.google.android.material.chip.Chip
-import com.synnapps.carouselview.CarouselView
 import com.synnapps.carouselview.ImageClickListener
+import com.synnapps.carouselview.ImageListener
 
 class HomeActivity : AppCompatActivity() {
 
@@ -71,11 +69,9 @@ class HomeActivity : AppCompatActivity() {
     }
 
     private fun initComponents() {
+        val imageListener = CharCarouselListener(this,characterList)
 
-
-        binding.cvCharacter.setImageListener { position, imageView ->
-            Glide.with(this).load(characterList[position].thumbnail.getThumb()).into(imageView)
-        }
+        binding.cvCharacter.setImageListener(imageListener)
         binding.cvCharacter.pageCount = characterList.size
 
 
@@ -148,5 +144,14 @@ class HomeActivity : AppCompatActivity() {
     companion object {
         const val KEY_INTENT_SEARCH = "search"
     }
-
+}
+class CharCarouselListener(val activity: Activity, val charlist: MutableList<Result>): ImageListener{
+    override fun setImageForPosition(position: Int, imageView: ImageView) {
+        Glide.with(activity)
+            //.load("https://raw.githubusercontent.com/sayyam/carouselview/master/sample/src/main/res/drawable/image_2.jpg")
+            .load(charlist[position].thumbnail.getThumb())
+            .fitCenter()
+            .placeholder(R.drawable.button)
+            .into(imageView)
+    }
 }
