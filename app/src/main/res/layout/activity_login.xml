@@ -94,30 +94,68 @@
                 android:textAllCaps="true"
                 android:textColor="@color/black"
                 android:textSize="18sp" />
-
-            <androidx.appcompat.widget.AppCompatImageButton
+<FrameLayout
+    android:layout_width="match_parent"
+    android:layout_height="45dp">
+            <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btFacebook"
                 android:layout_width="match_parent"
                 android:layout_height="45dp"
-                android:layout_marginStart="24dp"
-                android:layout_marginTop="28dp"
-                android:layout_marginEnd="24dp"
-                android:background="@drawable/facebook" />
+                android:background="#1877F2"
+                android:layout_marginHorizontal="24dp"
+                android:text="SIGN IN WITH FACEBOOK "
+                android:textColor="@color/white"
+                android:fontFamily="@font/marvel"
+                android:textStyle="bold"
+                android:textSize="20dp">
+            </androidx.appcompat.widget.AppCompatButton>
 
-            <androidx.appcompat.widget.AppCompatImageButton
-                android:id="@+id/btGoogle"
+    <androidx.appcompat.widget.AppCompatImageView
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:background="@drawable/ic_facebook"
+       android:layout_marginLeft="30dp"
+        android:layout_gravity="center_vertical"
+        android:translationZ="3dp">
+
+    </androidx.appcompat.widget.AppCompatImageView>
+</FrameLayout>
+
+            <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="45dp"
-                android:layout_marginStart="24dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginEnd="24dp"
-                android:background="@drawable/google" />
+                android:layout_height="50dp">
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/btGoogle"
+                    android:layout_width="match_parent"
+                    android:layout_height="45dp"
+                    android:background="#F53E28"
+                    android:layout_marginHorizontal="24dp"
+                    android:layout_marginTop="10dp"
+                    android:text="SIGN IN WITH GOOGLE+ "
+                    android:textColor="@color/white"
+                    android:textStyle="bold"
+                    android:fontFamily="@font/marvel"
+                    android:textSize="20dp">
+                </androidx.appcompat.widget.AppCompatButton>
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:background="@drawable/ic_google"
+                    android:layout_marginLeft="30dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_gravity="center_vertical"
+                    android:translationZ="3dp">
+
+                </androidx.appcompat.widget.AppCompatImageView>
+            </FrameLayout>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:layout_marginTop="28dp"
+                android:layout_marginTop="15dp"
                 android:text="@string/not_on_marvel_app_yet"
                 android:fontFamily="@font/marvel"
                 android:textColor="@color/black"
@@ -134,7 +172,6 @@
                 android:layout_marginBottom="24dp"
                 android:fontFamily="@font/marvel"
                 android:text="@string/sign_up" />
-
 
         </LinearLayout>
         </ScrollView>
