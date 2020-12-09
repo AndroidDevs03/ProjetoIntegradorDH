@@ -61,7 +61,7 @@ class HomeActivity : AppCompatActivity() {
                         startActivity(intent)
             }
         }
-        binding.hmBottomNavigation.setOnNavigationItemSelectedListener(){
+        binding.hmBottomNavigation.setOnNavigationItemSelectedListener{
             when(it.itemId){
                 R.id.page_1 -> {
                     startActivity(Intent(this, HomeActivity::class.java))
@@ -85,6 +85,8 @@ class HomeActivity : AppCompatActivity() {
     }
 
     private fun initComponents() {
+
+        binding.hmBottomNavigation.menu.getItem(0).setChecked(true).setEnabled(false)
 
         binding.cvCharacter.pageCount = imgsCharacters.size
         binding.cvCharacter.setImageListener { position, imageView ->
