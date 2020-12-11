@@ -62,13 +62,9 @@ class CharacterActivity : AppCompatActivity() {
             startActivity(Intent(this,ChipSearchActivity::class.java))
         }
 
-        findViewById<ImageButton>(R.id.ibCharacterFavoriteNO).setOnClickListener {
-            findViewById<ImageButton>(R.id.ibCharacterFavoriteYes).visibility = View.VISIBLE
-            findViewById<ImageButton>(R.id.ibCharacterFavoriteNO).visibility = View.INVISIBLE
-        }
-        findViewById<ImageButton>(R.id.ibCharacterFavoriteYes).setOnClickListener {
-            findViewById<ImageButton>(R.id.ibCharacterFavoriteNO).visibility = View.VISIBLE
-            findViewById<ImageButton>(R.id.ibCharacterFavoriteYes).visibility = View.INVISIBLE
+        findViewById<ImageButton>(R.id.ibCharacterFavorite).setOnClickListener {
+            findViewById<ImageButton>(R.id.ibCharacterFavorite).visibility = View.VISIBLE
+            findViewById<ImageButton>(R.id.ibCharacterFavorite).visibility = View.INVISIBLE
         }
 
         findViewById<CarouselView>(R.id.cvCharacterComics).setImageClickListener {
@@ -82,23 +78,26 @@ class CharacterActivity : AppCompatActivity() {
             startActivity(Intent(this, MovieActivity::class.java))
         }
 
-        BottomNavigationView.OnNavigationItemReselectedListener {
-            when (it.itemId){
+        findViewById<BottomNavigationView>(R.id.bnvCharacter).setOnNavigationItemSelectedListener {
+            when(it.itemId){
                 R.id.page_1 -> {
-                    startActivity(Intent(this,HomeActivity::class.java))
+                    startActivity(Intent(this, HomeActivity::class.java))
+                    true
                 }
                 R.id.page_2 -> {
                     startActivity(Intent(this, FavoritesActivity::class.java))
+                    true
                 }
-                R.id.page_3 ->{
-                    startActivity(Intent(this,ChipSearchActivity::class.java))
+                R.id.page_3 -> {
+                    startActivity(Intent(this, ChipSearchActivity::class.java))
+                    true
                 }
                 R.id.page_4 -> {
                     startActivity(Intent(this, LoginActivity::class.java))
+                    true
                 }
-
+                else -> {false}
             }
         }
-
     }
 }

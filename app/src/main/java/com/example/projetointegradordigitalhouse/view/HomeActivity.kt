@@ -100,7 +100,7 @@ class HomeActivity : AppCompatActivity() {
                         startActivity(intent)
             }
         }
-        binding.hmBottomNavigation.setOnNavigationItemSelectedListener(){
+        binding.hmBottomNavigation.setOnNavigationItemSelectedListener{
             when(it.itemId){
                 R.id.page_1 -> {
                     startActivity(Intent(this, HomeActivity::class.java))

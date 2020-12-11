@@ -66,6 +66,4 @@ dependencies {
     implementation "androidx.multidex:multidex:${versions.multidex}"
 
 //    kapt "com.github.bumptech.glide:compiler:${versions.glide}"
-
-
 }

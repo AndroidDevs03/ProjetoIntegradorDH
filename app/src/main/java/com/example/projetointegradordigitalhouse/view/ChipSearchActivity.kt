@@ -1,6 +1,8 @@
 package com.example.projetointegradordigitalhouse.view
 
 import android.content.Intent
+import android.content.res.ColorStateList
+import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.lifecycle.ViewModelProvider
@@ -32,6 +34,7 @@ class ChipSearchActivity : AppCompatActivity() {
     private fun initComponents() {
         viewModel = ViewModelProvider(this).get(ChipSearchViewModel::class.java)
         searchTags = mutableSetOf()
+        binding.csBottomNavigation.menu.getItem(2).setChecked(true).setEnabled(false)
     }
 
     private fun setupObservables() {
