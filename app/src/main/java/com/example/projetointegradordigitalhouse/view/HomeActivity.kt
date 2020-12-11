@@ -10,6 +10,7 @@ import com.bumptech.glide.Glide
 import com.example.projetointegradordigitalhouse.R
 import com.example.projetointegradordigitalhouse.databinding.ActivityMainBinding
 import com.example.projetointegradordigitalhouse.model.characters.Result
+import com.example.projetointegradordigitalhouse.util.Constants.Api.KEY_INTENT_SEARCH
 import com.example.projetointegradordigitalhouse.viewModel.HomeViewModel
 import com.synnapps.carouselview.ImageClickListener
 import com.synnapps.carouselview.ImageListener
@@ -60,8 +61,8 @@ class HomeActivity : AppCompatActivity() {
 
     private fun loadContent() {
         viewModel = ViewModelProvider(this).get(HomeViewModel::class.java)
-        viewModel.getCharacters()
-        viewModel.charList?.observe(this, {
+        viewModel.getHomeCharacters()
+        viewModel.homeCharList.observe(this, {
             characterList.addAll(it)
             initComponents()
         })
@@ -73,7 +74,6 @@ class HomeActivity : AppCompatActivity() {
 
         binding.cvCharacter.setImageListener(imageListener)
         binding.cvCharacter.pageCount = characterList.size
-
 
         binding.cvComics.setImageListener { position, imageView ->
             imageView.setImageResource(imgsComics[position])
@@ -95,7 +95,7 @@ class HomeActivity : AppCompatActivity() {
         binding.hmSearchField.setEndIconOnClickListener {
             val newtag = binding.hmSearchField.editText?.text.toString().trim()
             if (newtag!="") {
-                        val intent = Intent(this@HomeActivity, ChipSearchActivity::class.java)
+                        val intent = Intent(this@HomeActivity, NameSearchActivity::class.java)
                         intent.putExtra(KEY_INTENT_SEARCH, newtag)
                         startActivity(intent)
             }
@@ -141,14 +141,10 @@ class HomeActivity : AppCompatActivity() {
             startActivity(Intent(this, SeriesActivity::class.java))
         }
     }
-    companion object {
-        const val KEY_INTENT_SEARCH = "search"
-    }
 }
 class CharCarouselListener(val activity: Activity, val charlist: MutableList<Result>): ImageListener{
     override fun setImageForPosition(position: Int, imageView: ImageView) {
         Glide.with(activity)
-            //.load("https://raw.githubusercontent.com/sayyam/carouselview/master/sample/src/main/res/drawable/image_2.jpg")
             .load(charlist[position].thumbnail.getThumb())
             .fitCenter()
             .placeholder(R.drawable.button)
