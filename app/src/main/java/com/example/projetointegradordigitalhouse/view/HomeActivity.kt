@@ -1,14 +1,19 @@
 package com.example.projetointegradordigitalhouse.view
 
+import android.app.Activity
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.ImageView
+import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProvider
+import com.bumptech.glide.Glide
 import com.example.projetointegradordigitalhouse.R
 import com.example.projetointegradordigitalhouse.databinding.ActivityMainBinding
-import com.google.android.material.bottomnavigation.BottomNavigationMenu
-import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.google.android.material.chip.Chip
-import com.synnapps.carouselview.CarouselView
+import com.example.projetointegradordigitalhouse.model.characters.Result
+import com.example.projetointegradordigitalhouse.util.Constants.Api.KEY_INTENT_SEARCH
+import com.example.projetointegradordigitalhouse.viewModel.HomeViewModel
+import com.synnapps.carouselview.ImageClickListener
+import com.synnapps.carouselview.ImageListener
 
 class HomeActivity : AppCompatActivity() {
 
@@ -42,21 +47,55 @@ class HomeActivity : AppCompatActivity() {
     )
 
     private lateinit var binding: ActivityMainBinding
+    private lateinit var viewModel: HomeViewModel
+    private val characterList = mutableListOf<Result>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        initComponents()
+        loadContent()
         setupObservables()
+    }
+
+    private fun loadContent() {
+        viewModel = ViewModelProvider(this).get(HomeViewModel::class.java)
+        viewModel.getHomeCharacters()
+        viewModel.homeCharList.observe(this, {
+            characterList.addAll(it)
+            initComponents()
+        })
+
+    }
+
+    private fun initComponents() {
+        val imageListener = CharCarouselListener(this,characterList)
+
+        binding.cvCharacter.setImageListener(imageListener)
+        binding.cvCharacter.pageCount = characterList.size
+
+        binding.cvComics.setImageListener { position, imageView ->
+            imageView.setImageResource(imgsComics[position])
+        }
+        binding.cvComics.pageCount = imgsComics.size
+//
+//        binding.cvMovies.pageCount = imgFilmes.size
+//        binding.cvMovies.setImageListener { position, imageView ->
+//            imageView.setImageResource(imgFilmes[position])
+//        }
+//
+//        binding.cvSeries.pageCount = imgsSeries.size
+//        binding.cvSeries.setImageListener { position, imageView ->
+//            imageView.setImageResource(imgsSeries[position])
+//        }
     }
 
     private fun setupObservables() {
         binding.hmSearchField.setEndIconOnClickListener {
             val newtag = binding.hmSearchField.editText?.text.toString().trim()
             if (newtag!="") {
-                        val intent = Intent(this@HomeActivity, ChipSearchActivity::class.java)
+                        val intent = Intent(this@HomeActivity, NameSearchActivity::class.java)
                         intent.putExtra(KEY_INTENT_SEARCH, newtag)
                         startActivity(intent)
             }
@@ -82,35 +121,13 @@ class HomeActivity : AppCompatActivity() {
                 else -> {false}
             }
         }
-    }
-
-    private fun initComponents() {
-
-        binding.hmBottomNavigation.menu.getItem(0).setChecked(true).setEnabled(false)
-
-        binding.cvCharacter.pageCount = imgsCharacters.size
-        binding.cvCharacter.setImageListener { position, imageView ->
-            imageView.setImageResource(imgsCharacters[position])
-        }
-
-        binding.cvComics.pageCount = imgsComics.size
-        binding.cvComics.setImageListener { position, imageView ->
-            imageView.setImageResource(imgsComics[position])
-        }
-
-        binding.cvMovies.pageCount = imgFilmes.size
-        binding.cvMovies.setImageListener { position, imageView ->
-            imageView.setImageResource(imgFilmes[position])
-        }
-
-        binding.cvSeries.pageCount = imgsSeries.size
-        binding.cvSeries.setImageListener { position, imageView ->
-            imageView.setImageResource(imgsSeries[position])
-        }
-
-        binding.cvCharacter.setImageClickListener {
-            startActivity(Intent(this, CharacterActivity::class.java))
-        }
+        binding.cvCharacter.setImageClickListener(ImageClickListener() {
+            fun onClick(position: Int) {
+                val intent = Intent(this, CharacterActivity::class.java)
+                intent.putExtra("blablabla", characterList[position].id)
+                startActivity(intent)
+            }
+        })
 
         binding.cvComics.setImageClickListener {
             startActivity(Intent(this, ComicActivity::class.java))
@@ -124,8 +141,13 @@ class HomeActivity : AppCompatActivity() {
             startActivity(Intent(this, SeriesActivity::class.java))
         }
     }
-    companion object {
-        const val KEY_INTENT_SEARCH = "search"
+}
+class CharCarouselListener(val activity: Activity, val charlist: MutableList<Result>): ImageListener{
+    override fun setImageForPosition(position: Int, imageView: ImageView) {
+        Glide.with(activity)
+            .load(charlist[position].thumbnail.getThumb())
+            .fitCenter()
+            .placeholder(R.drawable.button)
+            .into(imageView)
     }
-
 }

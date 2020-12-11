@@ -4,11 +4,14 @@ import com.example.projetointegradordigitalhouse.model.ResponseApi
 
 class HomeBusiness {
 
-    private val repository: HomeRepository by lazy {
-        HomeRepository()
+    private val repository: MarvelXRepository by lazy {
+        MarvelXRepository()
     }
 
-    suspend fun getCharacters(): ResponseApi {
-        return repository.getCharacters()
+    suspend fun getCharactersByName(name: String): ResponseApi {
+        return repository.getCharactersByName(name)
+    }
+    suspend fun getCharactersByID(id: Int): ResponseApi {
+        return repository.getCharactersByID(id)
     }
 }

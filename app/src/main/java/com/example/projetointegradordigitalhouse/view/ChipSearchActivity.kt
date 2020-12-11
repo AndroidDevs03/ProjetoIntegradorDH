@@ -5,8 +5,12 @@ import android.content.res.ColorStateList
 import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.lifecycle.ViewModelProvider
 import com.example.projetointegradordigitalhouse.R
 import com.example.projetointegradordigitalhouse.databinding.ActivityChipSearchBinding
+import com.example.projetointegradordigitalhouse.model.characters.Result
+import com.example.projetointegradordigitalhouse.viewModel.ChipSearchViewModel
+import com.example.projetointegradordigitalhouse.viewModel.HomeViewModel
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
 import com.google.android.material.textfield.TextInputLayout
@@ -14,7 +18,9 @@ import com.google.android.material.textfield.TextInputLayout
 class ChipSearchActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityChipSearchBinding
+    private lateinit var viewModel: ChipSearchViewModel
     lateinit var searchTags: MutableSet<String?>
+    private val characterList = mutableListOf<Result>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,6 +32,7 @@ class ChipSearchActivity : AppCompatActivity() {
     }
 
     private fun initComponents() {
+        viewModel = ViewModelProvider(this).get(ChipSearchViewModel::class.java)
         searchTags = mutableSetOf()
         binding.csBottomNavigation.menu.getItem(2).setChecked(true).setEnabled(false)
     }
@@ -46,6 +53,11 @@ class ChipSearchActivity : AppCompatActivity() {
                     searchTags.add(newtag)
                     binding.csSearchField.editText?.text?.clear()
                 }
+                viewModel.getCharactersByName(newtag)
+                viewModel.searchCharList.observe(this, {
+                    characterList.addAll(it)
+                    refreshResults()
+                })
             }
         }
         binding.csBottomNavigation.setOnNavigationItemSelectedListener(){
@@ -69,5 +81,9 @@ class ChipSearchActivity : AppCompatActivity() {
                 else -> {false}
             }
         }
+    }
+
+    private fun refreshResults() {
+        TODO("Not yet implemented")
     }
 }
