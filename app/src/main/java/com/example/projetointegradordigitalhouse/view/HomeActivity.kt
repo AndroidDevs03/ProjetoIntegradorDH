@@ -3,8 +3,11 @@ package com.example.projetointegradordigitalhouse.view
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.widget.ArrayAdapter
+import android.widget.AutoCompleteTextView
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.example.projetointegradordigitalhouse.R
@@ -55,6 +58,10 @@ class HomeActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        val items = listOf("Material", "Design", "Components", "Android")
+        val adapter = ArrayAdapter(this, R.layout.list_item, items)
+        (binding.hmSearchField.editText as? AutoCompleteTextView)?.setAdapter(adapter)
+
         loadContent()
         setupObservables()
     }
@@ -79,16 +86,18 @@ class HomeActivity : AppCompatActivity() {
             imageView.setImageResource(imgsComics[position])
         }
         binding.cvComics.pageCount = imgsComics.size
-//
-//        binding.cvMovies.pageCount = imgFilmes.size
-//        binding.cvMovies.setImageListener { position, imageView ->
-//            imageView.setImageResource(imgFilmes[position])
-//        }
-//
-//        binding.cvSeries.pageCount = imgsSeries.size
-//        binding.cvSeries.setImageListener { position, imageView ->
-//            imageView.setImageResource(imgsSeries[position])
-//        }
+
+
+        binding.cvMovies.setImageListener { position, imageView ->
+            imageView.setImageResource(imgFilmes[position])
+        }
+        binding.cvMovies.pageCount = imgFilmes.size
+
+
+        binding.cvSeries.setImageListener { position, imageView ->
+            imageView.setImageResource(imgsSeries[position])
+        }
+        binding.cvSeries.pageCount = imgsSeries.size
     }
 
     private fun setupObservables() {

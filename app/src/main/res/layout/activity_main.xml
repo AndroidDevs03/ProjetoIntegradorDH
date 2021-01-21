@@ -16,11 +16,13 @@
         app:layout_constraintEnd_toEndOf="parent"
         android:theme="@style/search_field"
         app:endIconTint="@color/white"
-        app:boxStrokeColor="@color/white">
-        <com.google.android.material.textfield.TextInputEditText
+        app:boxStrokeColor="@color/white"
+        style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu">
+        <AutoCompleteTextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            style="@style/search_input" />
+            android:inputType="none"
+            />
     </com.google.android.material.textfield.TextInputLayout>
 <ScrollView
     android:layout_width="match_parent"
