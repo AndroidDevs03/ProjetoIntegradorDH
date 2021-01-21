@@ -14,21 +14,28 @@ class FavoritesActivity : AppCompatActivity() {
         binding = ActivityFavoritesBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        BottomNavigationView.OnNavigationItemReselectedListener {
-            when (it.itemId){
+        binding.fvBottomNavigation.menu.getItem(1).setChecked(true).setEnabled(false)
+
+        binding.fvBottomNavigation.setOnNavigationItemSelectedListener{
+            when(it.itemId){
                 R.id.page_1 -> {
-                    startActivity(Intent(this,HomeActivity::class.java))
+                    startActivity(Intent(this, HomeActivity::class.java))
+                    true
                 }
                 R.id.page_2 -> {
                     startActivity(Intent(this, FavoritesActivity::class.java))
+                    true
                 }
-                R.id.page_3 ->{
-                    startActivity(Intent(this,ChipSearchActivity::class.java))
+                R.id.page_3 -> {
+                    startActivity(Intent(this, ChipSearchActivity::class.java))
+                    true
                 }
                 R.id.page_4 -> {
                     startActivity(Intent(this, LoginActivity::class.java))
+                    true
                 }
+                else -> {false}
             }
-         }
+        }
     }
 }

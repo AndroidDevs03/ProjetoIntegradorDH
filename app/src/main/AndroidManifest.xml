@@ -57,10 +57,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".view.HomeActivity" />
+        <activity android:name=".view.HomeActivity" 
+                  android:theme="@style/Theme.MaterialComponents.DayNight.NoActionBar"/>
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
     </application>
-
 </manifest>
