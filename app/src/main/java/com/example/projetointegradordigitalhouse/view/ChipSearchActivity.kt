@@ -1,10 +1,12 @@
 package com.example.projetointegradordigitalhouse.view
 
+import android.content.Context
 import android.content.Intent
 import android.content.res.ColorStateList
 import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import com.example.projetointegradordigitalhouse.R
 import com.example.projetointegradordigitalhouse.databinding.ActivityChipSearchBinding
@@ -13,6 +15,7 @@ import com.example.projetointegradordigitalhouse.viewModel.ChipSearchViewModel
 import com.example.projetointegradordigitalhouse.viewModel.HomeViewModel
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
+import com.google.android.material.tabs.TabLayout
 import com.google.android.material.textfield.TextInputLayout
 
 class ChipSearchActivity : AppCompatActivity() {
@@ -31,12 +34,19 @@ class ChipSearchActivity : AppCompatActivity() {
         setupObservables()
     }
 
+
+
     private fun initComponents() {
         viewModel = ViewModelProvider(this).get(ChipSearchViewModel::class.java)
         searchTags = mutableSetOf()
         binding.csBottomNavigation.menu.getItem(2).setChecked(true).setEnabled(false)
-    }
+        binding.csTabLayout.addTab(binding.csTabLayout.newTab().setText("Characters"))
+        binding.csTabLayout.addTab(binding.csTabLayout.newTab().setText("Series"))
+        binding.csTabLayout.addTab(binding.csTabLayout.newTab().setText("Comics"))
 
+//        binding.csTabLayout.setupWithViewPager(binding.csViewPager)
+
+    }
     private fun setupObservables() {
         binding.csSearchField.setEndIconOnClickListener {
             val newtag = binding.csSearchField.editText?.text.toString().trim()
@@ -60,6 +70,19 @@ class ChipSearchActivity : AppCompatActivity() {
                 })
             }
         }
+        binding.csTabLayout.addOnTabSelectedListener(object: TabLayout.OnTabSelectedListener {
+            override fun onTabSelected(tab: TabLayout.Tab?) {
+
+                Toast.makeText(this@ChipSearchActivity, "Busca ${tab?.text}", Toast.LENGTH_LONG).show()
+            }
+
+            override fun onTabUnselected(tab: TabLayout.Tab?) {
+            }
+
+            override fun onTabReselected(tab: TabLayout.Tab?) {
+            }
+        })
+
         binding.csBottomNavigation.setOnNavigationItemSelectedListener(){
             when(it.itemId){
                 R.id.page_1 -> {
