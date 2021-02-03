@@ -11,7 +11,7 @@ import com.example.projetointegradordigitalhouse.R
 import com.example.projetointegradordigitalhouse.databinding.ActivityNameSearchBinding
 import com.example.projetointegradordigitalhouse.model.characters.Result
 import com.example.projetointegradordigitalhouse.util.Constants.Api.KEY_ACTIVE_SEARCH
-import com.example.projetointegradordigitalhouse.util.Constants.Api.KEY_INTENT_SEARCH
+import com.example.projetointegradordigitalhouse.util.Constants.Intent.KEY_INTENT_SEARCH
 import com.example.projetointegradordigitalhouse.view.adapter.NameSearchAdapter
 import com.example.projetointegradordigitalhouse.viewModel.NameSearchViewModel
 

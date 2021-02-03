@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "736742621450",
+    "project_id": "marvel-x-8cbb0",
+    "storage_bucket": "marvel-x-8cbb0.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:736742621450:android:72b2c7ebd1a674a147baf3",
+        "android_client_info": {
+          "package_name": "com.example.projetointegradordigitalhouse"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "736742621450-c7co0l8cbp1mbsv0locpn5u6ireg1o30.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDanWkBGHiEIZ7ceSGSP5fKcIfHuDm80io"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "736742621450-c7co0l8cbp1mbsv0locpn5u6ireg1o30.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

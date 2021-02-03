@@ -13,7 +13,7 @@ import com.bumptech.glide.Glide
 import com.example.projetointegradordigitalhouse.R
 import com.example.projetointegradordigitalhouse.databinding.ActivityMainBinding
 import com.example.projetointegradordigitalhouse.model.characters.Result
-import com.example.projetointegradordigitalhouse.util.Constants.Api.KEY_INTENT_SEARCH
+import com.example.projetointegradordigitalhouse.util.Constants.Intent.KEY_INTENT_SEARCH
 import com.example.projetointegradordigitalhouse.viewModel.HomeViewModel
 import com.synnapps.carouselview.ImageClickListener
 import com.synnapps.carouselview.ImageListener

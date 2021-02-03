@@ -6,11 +6,15 @@ import android.content.res.ColorStateList
 import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.GridLayoutManager
 import com.example.projetointegradordigitalhouse.R
 import com.example.projetointegradordigitalhouse.databinding.ActivityChipSearchBinding
 import com.example.projetointegradordigitalhouse.model.characters.Result
+import com.example.projetointegradordigitalhouse.util.Constants.Intent.KEY_INTENT_DATA
+import com.example.projetointegradordigitalhouse.view.adapter.ChipSearchAdapter
 import com.example.projetointegradordigitalhouse.viewModel.ChipSearchViewModel
 import com.example.projetointegradordigitalhouse.viewModel.HomeViewModel
 import com.google.android.material.chip.Chip
@@ -44,8 +48,6 @@ class ChipSearchActivity : AppCompatActivity() {
         binding.csTabLayout.addTab(binding.csTabLayout.newTab().setText("Series"))
         binding.csTabLayout.addTab(binding.csTabLayout.newTab().setText("Comics"))
 
-//        binding.csTabLayout.setupWithViewPager(binding.csViewPager)
-
     }
     private fun setupObservables() {
         binding.csSearchField.setEndIconOnClickListener {
@@ -70,6 +72,21 @@ class ChipSearchActivity : AppCompatActivity() {
                 })
             }
         }
+
+        Log.i("ChipSearchActivity", "Configurando recycler view")
+        viewModel.searchCharList.observe(this, {
+            it?.let { charList ->
+                binding.csRecyclerView.apply {
+                    layoutManager = GridLayoutManager(this@ChipSearchActivity, 3)
+                    adapter = ChipSearchAdapter(charList) { position ->
+                        val intent = Intent(this@ChipSearchActivity, CharacterActivity::class.java)
+                        intent.putExtra(KEY_INTENT_DATA, charList[position])
+                        startActivity(intent)
+                    }
+                }
+            }
+        })
+
         binding.csTabLayout.addOnTabSelectedListener(object: TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {
 
