@@ -31,4 +31,8 @@ class Constants {
         const val KEY_INTENT_DATA = "data"
     }
 
+    object Values {
+        const val CONST_MAX_SEARCH_RESULTS = 4
+    }
+
 }

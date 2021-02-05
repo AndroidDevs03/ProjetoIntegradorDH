@@ -8,5 +8,7 @@ class MarvelXApplication :  MultiDexApplication(){
         override fun attachBaseContext(newBase: Context?) {
         super.attachBaseContext(newBase)
         MultiDex.install(this)
+
+            //android:name=".MarvelXApplication"
     }
 }

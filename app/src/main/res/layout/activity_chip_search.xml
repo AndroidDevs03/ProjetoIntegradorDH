@@ -12,10 +12,11 @@
         android:id="@+id/cs_search_field"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu"
         android:theme="@style/search_field"
         app:endIconTint="@color/white"
         app:boxStrokeColor="@color/white">
-        <com.google.android.material.textfield.TextInputEditText
+        <AutoCompleteTextView
             style="@style/search_input"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
