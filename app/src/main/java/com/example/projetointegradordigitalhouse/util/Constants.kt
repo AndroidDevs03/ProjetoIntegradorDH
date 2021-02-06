@@ -35,4 +35,24 @@ class Constants {
         const val CONST_MAX_SEARCH_RESULTS = 4
     }
 
+    object Firebase {
+        const val NAME_CHARACTER_DATABASE = "characters"
+        const val NAME_SERIES_DATABASE = "series"
+        const val NAME_COMICS_DATABASE = "comics"
+        const val NAME_SEARCHES_DATABASE = "searchtags"
+        const val NAME_USERS_DATABASE = "users"
+        const val NAME_FAVORITED = "favorited"
+        const val NAME_NAME = "name"
+        const val NAME_THUMBNAIL = "thumbnail"
+        const val NAME_DESCRIPTION = "description"
+        const val NAME_CHARACTER_LIST = "characters"
+        const val NAME_COMIC_LIST = "comics"
+        const val NAME_ISSUE_NUMBER = "issueNumber"
+        const val NAME_PAGE_COUNT = "pageCount"
+        const val NAME_PUBLISHED = "published"
+        const val NAME_SERIES_ID = "series"
+        const val NAME_PRICE = "price"
+
+    }
+
 }

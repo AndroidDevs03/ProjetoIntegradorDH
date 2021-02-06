@@ -24,7 +24,7 @@ class ChipSearchViewModel(
     private val localDatabase: SearchDao by lazy { LocalDatabase.getDatabase(context).userDao() }
 
     private val firebaseAuth by lazy { Firebase.auth }
-    private val firebaseDatabase by lazy { Firebase.firestore }
+
 
     var searchCharList: MutableLiveData<List<Result>> = MutableLiveData()
     var lastSearchHistory: MutableLiveData<MutableList<String>> = MutableLiveData()
