@@ -62,8 +62,6 @@ class HomeActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-
-
         loadContent()
         setupObservables()
     }

@@ -36,7 +36,7 @@ object LocalDatabase {
         return Room.databaseBuilder(
             context,
             LocalRoomDatabase::class.java,
-            "tmdb_db"
+            "room_db"
         ).build()
     }
 }

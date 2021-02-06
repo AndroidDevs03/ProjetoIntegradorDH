@@ -26,7 +26,7 @@ internal class HomeViewModel(
 
 //  var marvelLiveDataSource: LiveData<PageKeyedDataSource<Int, Result>>? = null
 
-    //    init {
+//    init {
 //        val marvelDataSourceFactory = MarvelDataSourceFactory()
 //        marvelLiveDataSource = marvelDataSourceFactory.getSearchLiveDataSource()
 //        val pagedListConfig = PagedList.Config.Builder().setEnablePlaceholders(false).setPageSize(PAGE_SIZE).build()

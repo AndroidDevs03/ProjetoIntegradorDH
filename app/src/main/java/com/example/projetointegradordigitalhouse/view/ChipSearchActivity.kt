@@ -25,7 +25,12 @@ import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.textfield.TextInputLayout
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.ktx.storage
 import java.time.LocalDateTime
+import java.util.*
 
 class ChipSearchActivity : AppCompatActivity() {
 
@@ -69,7 +74,7 @@ class ChipSearchActivity : AppCompatActivity() {
         binding.csSearchField.setEndIconOnClickListener {
             val newtag = binding.csSearchField.editText?.text.toString().trim()
             if (newtag!="") {
-                viewModel.addSearchToLocalDatabase(Search(newtag,0, LocalDateTime.now().toString()))
+                viewModel.addSearchToLocalDatabase(Search(newtag,0, Date().toString()))
                 if (searchTags.contains(newtag).not()) {
                     val chipDrawable = Chip(this)
                     chipDrawable.text = newtag

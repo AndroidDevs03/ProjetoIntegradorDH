@@ -12,6 +12,9 @@ import com.example.projetointegradordigitalhouse.model.characters.Characters
 import com.example.projetointegradordigitalhouse.model.characters.Result
 import com.example.projetointegradordigitalhouse.util.Constants.Values.CONST_MAX_SEARCH_RESULTS
 import com.github.cesar1287.desafiopicpayandroid.model.home.MarvelXRepository
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.launch
 
 class ChipSearchViewModel(
@@ -19,6 +22,9 @@ class ChipSearchViewModel(
 ): ViewModel() {
     private val repository: MarvelXRepository by lazy {MarvelXRepository()}
     private val localDatabase: SearchDao by lazy { LocalDatabase.getDatabase(context).userDao() }
+
+    private val firebaseAuth by lazy { Firebase.auth }
+    private val firebaseDatabase by lazy { Firebase.firestore }
 
     var searchCharList: MutableLiveData<List<Result>> = MutableLiveData()
     var lastSearchHistory: MutableLiveData<MutableList<String>> = MutableLiveData()
