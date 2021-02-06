@@ -7,18 +7,23 @@ import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContentProviderCompat.requireContext
-import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.GridLayoutManager
 import com.bumptech.glide.Glide
 import com.example.projetointegradordigitalhouse.R
 import com.example.projetointegradordigitalhouse.databinding.ActivityMainBinding
+import com.example.projetointegradordigitalhouse.model.Search
 import com.example.projetointegradordigitalhouse.model.characters.Result
-import com.example.projetointegradordigitalhouse.util.Constants.Api.KEY_INTENT_SEARCH
+import com.example.projetointegradordigitalhouse.util.Constants.Intent.KEY_INTENT_SEARCH
 import com.example.projetointegradordigitalhouse.viewModel.HomeViewModel
 import com.synnapps.carouselview.ImageClickListener
 import com.synnapps.carouselview.ImageListener
+import java.time.LocalDate
+import java.time.LocalDateTime
 
 class HomeActivity : AppCompatActivity() {
+
+    private val viewModel by lazy {HomeViewModel(this)}
+
 
     private val imgsCharacters = intArrayOf(
         R.drawable.black_widow,
@@ -50,7 +55,6 @@ class HomeActivity : AppCompatActivity() {
     )
 
     private lateinit var binding: ActivityMainBinding
-    private lateinit var viewModel: HomeViewModel
     private val characterList = mutableListOf<Result>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -58,16 +62,11 @@ class HomeActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val items = listOf("Material", "Design", "Components", "Android")
-        val adapter = ArrayAdapter(this, R.layout.list_item, items)
-        (binding.hmSearchField.editText as? AutoCompleteTextView)?.setAdapter(adapter)
-
         loadContent()
         setupObservables()
     }
 
     private fun loadContent() {
-        viewModel = ViewModelProvider(this).get(HomeViewModel::class.java)
         viewModel.getHomeCharacters()
         viewModel.homeCharList.observe(this, {
             characterList.addAll(it)
@@ -77,6 +76,9 @@ class HomeActivity : AppCompatActivity() {
     }
 
     private fun initComponents() {
+
+        viewModel.getSearchHistory()
+
         val imageListener = CharCarouselListener(this,characterList)
 
         binding.cvCharacter.setImageListener(imageListener)
@@ -101,9 +103,16 @@ class HomeActivity : AppCompatActivity() {
     }
 
     private fun setupObservables() {
+        viewModel.lastSearchHistory.observe(this, {
+            it?.let { searchTags ->
+                val adapter = ArrayAdapter(this@HomeActivity, R.layout.list_item, searchTags)
+                (binding.hmSearchField.editText as? AutoCompleteTextView)?.setAdapter(adapter)
+            }
+        })
         binding.hmSearchField.setEndIconOnClickListener {
             val newtag = binding.hmSearchField.editText?.text.toString().trim()
             if (newtag!="") {
+                    viewModel.addSearchToLocalDatabase(Search(newtag,0, LocalDateTime.now().toString()))
                         val intent = Intent(this@HomeActivity, NameSearchActivity::class.java)
                         intent.putExtra(KEY_INTENT_SEARCH, newtag)
                         startActivity(intent)

@@ -15,6 +15,12 @@ interface MarvelApi {
         @GET("characters")
         suspend fun CharactersByName(@Query("nameStartsWith")charName: String,@Query("limit")limit: Int = 10,@Query("offset")offset: Int = 0): Response<Characters>
 
+        @GET("series")
+        suspend fun SeriesByName(@Query("titleStartsWith")charName: String,@Query("limit")limit: Int = 10,@Query("offset")offset: Int = 0): Response<Characters>
+
+        @GET("comics")
+        suspend fun ComicsByName(@Query("titleStartsWith")charName: String,@Query("limit")limit: Int = 10,@Query("offset")offset: Int = 0): Response<Characters>
+
         @GET("characters/{characterId}")
         suspend fun CharactersByID(@Path("characterId") charID: Int): Response<Characters>
 

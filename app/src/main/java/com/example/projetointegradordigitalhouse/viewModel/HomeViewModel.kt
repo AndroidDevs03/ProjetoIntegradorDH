@@ -1,18 +1,28 @@
 package com.example.projetointegradordigitalhouse.viewModel
 
+import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.projetointegradordigitalhouse.model.LocalDatabase
 import com.example.projetointegradordigitalhouse.model.ResponseApi
+import com.example.projetointegradordigitalhouse.model.Search
+import com.example.projetointegradordigitalhouse.model.SearchDao
 import com.example.projetointegradordigitalhouse.model.characters.Characters
 import com.github.cesar1287.desafiopicpayandroid.model.home.HomeBusiness
 import kotlinx.coroutines.launch
 import com.example.projetointegradordigitalhouse.model.characters.Result
+import com.example.projetointegradordigitalhouse.util.Constants
 
-internal class HomeViewModel: ViewModel() {
+internal class HomeViewModel(
+    context: Context
+) : ViewModel() {
 
     private val homeBusiness = HomeBusiness()
     var homeCharList: MutableLiveData<List<Result>> = MutableLiveData()
+
+    private val localDatabase: SearchDao by lazy { LocalDatabase.getDatabase(context).userDao() }
+    var lastSearchHistory: MutableLiveData<MutableList<String>> = MutableLiveData()
 
 //  var marvelLiveDataSource: LiveData<PageKeyedDataSource<Int, Result>>? = null
 
@@ -22,6 +32,28 @@ internal class HomeViewModel: ViewModel() {
 //        val pagedListConfig = PagedList.Config.Builder().setEnablePlaceholders(false).setPageSize(PAGE_SIZE).build()
 //        charList = LivePagedListBuilder(marvelDataSourceFactory, pagedListConfig).build()
 //    }
+    fun getSearchHistory() {
+        viewModelScope.launch {
+            lastSearchHistory.postValue(localDatabase.getLastSearchResults() as MutableList<String>)
+        }
+    }
+    fun addSearchToLocalDatabase(search: Search){
+        viewModelScope.launch {
+            val tempNewList: MutableList<String> = lastSearchHistory.value ?: mutableListOf()
+            localDatabase.insert(search)
+            //Se já tiver alguma busca recente com a mesma tag, ele joga ela em primeiro
+            if (search.busca in tempNewList) {
+                tempNewList.remove(search.busca)
+                tempNewList.add(0, search.busca)
+            } else if (tempNewList.size >= Constants.Values.CONST_MAX_SEARCH_RESULTS){
+                tempNewList.add(0, search.busca)
+                tempNewList.removeLast()
+            } else {
+                tempNewList.add(0, search.busca)
+            }
+            lastSearchHistory.postValue(tempNewList)
+        }
+    }
 
     fun getHomeCharacters() {
 //    1009664 Thor

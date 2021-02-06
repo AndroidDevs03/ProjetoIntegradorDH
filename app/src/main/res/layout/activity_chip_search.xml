@@ -12,10 +12,11 @@
         android:id="@+id/cs_search_field"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu"
         android:theme="@style/search_field"
         app:endIconTint="@color/white"
         app:boxStrokeColor="@color/white">
-        <com.google.android.material.textfield.TextInputEditText
+        <AutoCompleteTextView
             style="@style/search_input"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
@@ -31,168 +32,22 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:orientation="vertical">
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/cs_rvChars"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:visibility="visible"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:itemCount="3"
-                tools:listitem="@layout/card_generic"
-                tools:visibility="visible" />
-
-            <ImageButton
-                android:id="@+id/cs_rvChars_leftArrow"
-                style="@style/arrow_navigation"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:elevation="10dp"
-                android:src="@drawable/ic_baseline_arrow_left_24"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <ImageButton
-                android:id="@+id/cs_rvChars_rightArrow"
-                style="@style/arrow_navigation"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:elevation="10dp"
-                android:src="@drawable/ic_baseline_arrow_right_24"
-                android:visibility="visible"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/cs_rvComics"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:visibility="gone"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <ImageButton
-                android:id="@+id/cs_rvComics_leftArrow"
-                style="@style/arrow_navigation"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:elevation="10dp"
-                android:src="@drawable/ic_baseline_arrow_left_24"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <ImageButton
-                android:id="@+id/cs_rvComics_rightArrow"
-                style="@style/arrow_navigation"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:elevation="10dp"
-                android:src="@drawable/ic_baseline_arrow_right_24"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/cs_rvSeries"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:visibility="gone"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <ImageButton
-                android:id="@+id/cs_rvSeries_leftArrow"
-                style="@style/arrow_navigation"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:elevation="10dp"
-                android:src="@drawable/ic_baseline_arrow_left_24"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <ImageButton
-                android:id="@+id/cs_rvSeries_rightArrow"
-                style="@style/arrow_navigation"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:elevation="10dp"
-                android:src="@drawable/ic_baseline_arrow_right_24"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/cs_rvMovies"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:visibility="gone"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <ImageButton
-                android:id="@+id/cs_rvMovies_leftArrow"
-                style="@style/arrow_navigation"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:elevation="10dp"
-                android:src="@drawable/ic_baseline_arrow_left_24"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <ImageButton
-                android:id="@+id/cs_rvMovies_rightArrow"
-                style="@style/arrow_navigation"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:elevation="10dp"
-                android:src="@drawable/ic_baseline_arrow_right_24"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
     </LinearLayout>
-    <LinearLayout
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/cs_recyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="1" />
+        android:layout_weight="1"
+        android:orientation="vertical"
+        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+        app:spanCount="3"
+        tools:itemCount="13"
+        tools:listitem="@layout/card_generic" />
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/cs_tabLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/cs_bottomNavigation"
         style="@style/bottom_navigation"

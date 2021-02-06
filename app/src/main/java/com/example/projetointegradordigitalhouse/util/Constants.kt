@@ -24,6 +24,15 @@ class Constants {
         const val QUERY_PARAM_LANGUAGE_LABEL = "language"
         const val QUERY_PARAM_LANGUAGE_VALUE = "pt-BR"
         const val KEY_ACTIVE_SEARCH = "activeSearch"
-        const val KEY_INTENT_SEARCH = "search"
     }
+
+    object Intent {
+        const val KEY_INTENT_SEARCH = "search"
+        const val KEY_INTENT_DATA = "data"
+    }
+
+    object Values {
+        const val CONST_MAX_SEARCH_RESULTS = 4
+    }
+
 }
