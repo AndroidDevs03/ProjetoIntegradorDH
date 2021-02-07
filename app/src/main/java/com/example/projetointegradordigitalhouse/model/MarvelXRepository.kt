@@ -1,10 +1,15 @@
 package com.github.cesar1287.desafiopicpayandroid.model.home
 
 import com.example.projetointegradordigitalhouse.model.ApiService
+import com.example.projetointegradordigitalhouse.model.FirebaseFirestore
+import com.example.projetointegradordigitalhouse.model.MarvelApi
 import com.example.projetointegradordigitalhouse.model.ResponseApi
 import java.lang.Exception
 
 class MarvelXRepository {
+
+    private val firebaseFirestore: FirebaseFirestore by lazy { FirebaseFirestore() }
+    private val marvelApi: MarvelApi by lazy { MarvelApi() }
 
     suspend fun getCharactersByName(name: String,limit:Int=10, offset:Int=0): ResponseApi {
         return try {

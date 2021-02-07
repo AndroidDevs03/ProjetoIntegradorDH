@@ -35,7 +35,7 @@ class Constants {
         const val CONST_MAX_SEARCH_RESULTS = 4
     }
 
-    object Firebase {
+    object FirebaseNames {
         const val NAME_CHARACTER_DATABASE = "characters"
         const val NAME_SERIES_DATABASE = "series"
         const val NAME_COMICS_DATABASE = "comics"
@@ -54,5 +54,8 @@ class Constants {
         const val NAME_PRICE = "price"
 
     }
-
+    object SharedPreferences {
+        const val NAME_SP_DBNAME = "sp_database"
+        const val NAME_SP_CURRENT_SEARCH= "current_search"
+    }
 }

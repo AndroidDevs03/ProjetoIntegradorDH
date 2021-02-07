@@ -57,6 +57,8 @@ dependencies {
     implementation 'com.synnapps:carouselview:0.1.5'
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:${versions.lifecycle}"
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:${versions.lifecycle}"
+
+    //Gerenciador de Api
     implementation "com.squareup.retrofit2:retrofit:${versions.retrofit}"
     implementation "com.squareup.retrofit2:converter-gson:${versions.retrofit}"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:${versions.coroutines}"
@@ -69,8 +71,6 @@ dependencies {
 
     implementation "androidx.paging:paging-runtime-ktx:${versions.paging}"
     implementation "com.squareup.okhttp3:logging-interceptor:${versions.loggingInterceptor}"
-    //implementation "com.facebook.android:facebook-android-sdk:${versions.facebook}"
-    implementation "androidx.multidex:multidex:${versions.multidex}"
 
     //database local
     implementation "androidx.room:room-runtime:2.2.6"
@@ -85,6 +85,9 @@ dependencies {
     implementation 'com.google.firebase:firebase-crashlytics-ktx'
     implementation 'com.google.firebase:firebase-storage-ktx'
     implementation 'com.google.firebase:firebase-firestore-ktx:22.0.2'
+
+    //Shared Preferences
+    implementation "androidx.preference:preference-ktx:1.1.1"
 
 //    kapt "com.github.bumptech.glide:compiler:${versions.glide}"
 }
