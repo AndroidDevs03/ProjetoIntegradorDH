@@ -1,37 +1,31 @@
 package com.example.projetointegradordigitalhouse.viewModel
 
 import android.content.Context
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.projetointegradordigitalhouse.model.LocalDatabase
-import com.example.projetointegradordigitalhouse.model.ResponseApi
-import com.example.projetointegradordigitalhouse.model.Search
-import com.example.projetointegradordigitalhouse.model.SearchDao
+import com.example.projetointegradordigitalhouse.model.*
 import com.example.projetointegradordigitalhouse.model.characters.Characters
 import com.github.cesar1287.desafiopicpayandroid.model.home.HomeBusiness
 import kotlinx.coroutines.launch
 import com.example.projetointegradordigitalhouse.model.characters.Result
 import com.example.projetointegradordigitalhouse.util.Constants
+import com.github.cesar1287.desafiopicpayandroid.model.home.MarvelXRepository
 
 internal class HomeViewModel(
     context: Context
 ) : ViewModel() {
 
     private val homeBusiness = HomeBusiness()
-    var homeCharList: MutableLiveData<List<Result>> = MutableLiveData()
+    var homeCharList: MutableLiveData<List<CharacterResult>> = MutableLiveData()
+    var homeSeriesList: MutableLiveData<List<SeriesResult>> = MutableLiveData()
+    var homeComicsList: MutableLiveData<List<ComicResult>> = MutableLiveData()
 
     private val localDatabase: SearchDao by lazy { LocalDatabase.getDatabase(context).userDao() }
+    private val repository: MarvelXRepository by lazy {MarvelXRepository()}
     var lastSearchHistory: MutableLiveData<MutableList<String>> = MutableLiveData()
 
-//  var marvelLiveDataSource: LiveData<PageKeyedDataSource<Int, Result>>? = null
-
-//    init {
-//        val marvelDataSourceFactory = MarvelDataSourceFactory()
-//        marvelLiveDataSource = marvelDataSourceFactory.getSearchLiveDataSource()
-//        val pagedListConfig = PagedList.Config.Builder().setEnablePlaceholders(false).setPageSize(PAGE_SIZE).build()
-//        charList = LivePagedListBuilder(marvelDataSourceFactory, pagedListConfig).build()
-//    }
     fun getSearchHistory() {
         viewModelScope.launch {
             lastSearchHistory.postValue(localDatabase.getLastSearchResults() as MutableList<String>)
@@ -81,49 +75,24 @@ internal class HomeViewModel(
 //    1009472 Nightcrawler
 //    Ms. Marvel (não teve retorno)
 //    1009504 Professor X
-        val tempCharList: MutableList<Result> = mutableListOf()
         viewModelScope.launch {
-            when (val response = homeBusiness.getCharactersByID(1009664)) {
-                is ResponseApi.Success -> {
-                    val data = response.data as Characters
-                    tempCharList.add(data.data.results[0])
-                }
-                is ResponseApi.Error -> {
-                }
-            }
-            when (val response = homeBusiness.getCharactersByID(1009610)) {
-                is ResponseApi.Success -> {
-                    val data = response.data as Characters
-                    tempCharList.add(data.data.results[0])
-                }
-                is ResponseApi.Error -> {
-                }
-            }
-            when (val response = homeBusiness.getCharactersByID(1009268)) {
-                is ResponseApi.Success -> {
-                    val data = response.data as Characters
-                    tempCharList.add(data.data.results[0])
-                }
-                is ResponseApi.Error -> {
-                }
-            }
-            when (val response = homeBusiness.getCharactersByID(1009368)) {
-                is ResponseApi.Success -> {
-                    val data = response.data as Characters
-                    tempCharList.add(data.data.results[0])
-                }
-                is ResponseApi.Error -> {
-                }
-            }
-            when (val response = homeBusiness.getCharactersByID(1009189)) {
-                is ResponseApi.Success -> {
-                    val data = response.data as Characters
-                    tempCharList.add(data.data.results[0])
-                }
-                is ResponseApi.Error -> {
-                }
-            }
-            homeCharList.postValue(tempCharList)
+            val tempList = repository.getMostPopularCharacters(5)
+            Log.i("HomeViewModel", "Character List com ${tempList.size} elementos")
+            homeCharList.postValue(tempList)
+        }
+    }
+    fun getHomeSeries() {
+        Log.i("HomeViewModel", "Series List")
+        viewModelScope.launch {
+            val tempList = repository.getMostPopularSeries(5)
+            homeSeriesList.postValue(tempList)
+        }
+    }
+    fun getHomeComics() {
+        Log.i("HomeViewModel", "Comic List")
+        viewModelScope.launch {
+            val tempList = repository.getMostPopularComics(5)
+            homeComicsList.postValue(tempList)
         }
     }
 }

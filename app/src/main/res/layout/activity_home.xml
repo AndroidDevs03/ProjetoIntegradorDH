@@ -34,7 +34,6 @@
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-
         <TextView
             android:id="@+id/tvCharacter"
             style="@style/theme_title"
@@ -51,16 +50,15 @@
             app:pageTransformer="depth">
         </com.synnapps.carouselview.CarouselView>
         <TextView
-            android:id="@+id/tvMovies"
+            android:id="@+id/tvSeries"
             style="@style/theme_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="MOVIES"
-            android:background="@color/greenBackground">
+            android:text="SERIES"
+            android:background="@color/blueBackground">
         </TextView>
-
         <com.synnapps.carouselview.CarouselView
-            android:id="@+id/cvMovies"
+            android:id="@+id/cvSeries"
             android:layout_width="match_parent"
             android:layout_height="240dp"
             app:disableAutoPlayOnUserInteraction="true"
@@ -74,26 +72,8 @@
             android:text="COMICS"
             android:background="@color/yellowBackground">
         </TextView>
-
         <com.synnapps.carouselview.CarouselView
             android:id="@+id/cvComics"
-            android:layout_width="match_parent"
-            android:layout_height="240dp"
-            app:disableAutoPlayOnUserInteraction="true"
-            app:pageTransformer="depth">
-        </com.synnapps.carouselview.CarouselView>
-
-        <TextView
-            android:id="@+id/tvSeries"
-            style="@style/theme_title"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="SERIES"
-            android:background="@color/blueBackground">
-        </TextView>
-
-        <com.synnapps.carouselview.CarouselView
-            android:id="@+id/cvSeries"
             android:layout_width="match_parent"
             android:layout_height="240dp"
             app:disableAutoPlayOnUserInteraction="true"
