@@ -14,7 +14,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 
-object ApiService {
+class ApiService {
 
     val marvelApi = getMarvelApiClient().create(MarvelApiQueries::class.java)
     val tmdbApi = getMarvelApiClient().create(TmdbApi::class.java)

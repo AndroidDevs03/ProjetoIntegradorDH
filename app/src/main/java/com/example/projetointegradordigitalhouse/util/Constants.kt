@@ -41,6 +41,7 @@ class Constants {
         const val NAME_COMICS_DATABASE = "comics"
         const val NAME_SEARCHES_DATABASE = "searchtags"
         const val NAME_USERS_DATABASE = "users"
+        const val NAME_LAST_UPDATE = "lastUpdate"
         const val NAME_FAVORITED = "favorited"
         const val NAME_NAME = "name"
         const val NAME_THUMBNAIL = "thumbnail"

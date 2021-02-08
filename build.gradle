@@ -4,7 +4,7 @@ buildscript {
     ext.kotlin_version = "1.4.20-M2"
 
     ext.versions = [
-            'kotlinVersion'         :"1.4.20",
+            'kotlinVersion'         :"1.4.21",
             'kotlinx'               :"1.3.2",
             'appCompat'             :"1.2.0",
             'constraintLayout'      :"2.0.4",
@@ -14,8 +14,8 @@ buildscript {
             'lifecycle'             :"2.2.0",
             'circleImageView'       :"3.1.0",
             'fragment'              :"1.2.5",
-            'gradle'                :"4.1.1",
-            'material'              :"1.2.1",
+            'gradle'                :'4.1.2',
+            'material'              :"1.3.0",
             'paging'                :"2.1.2",
             'facebook'              :"7.1.0",
             'multidex'              :"2.0.1",
@@ -32,7 +32,10 @@ buildscript {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:${versions.kotlinVersion}"
 
         //firebase
+
         classpath 'com.google.gms:google-services:4.3.5'
+        classpath 'com.google.firebase:firebase-crashlytics-gradle:2.4.1'
+
 
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files

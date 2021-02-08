@@ -1,5 +1,6 @@
 package com.example.projetointegradordigitalhouse.model
 
+import android.util.Log
 import com.example.projetointegradordigitalhouse.util.Constants.FirebaseNames.NAME_CHARACTER_DATABASE
 import com.example.projetointegradordigitalhouse.util.Constants.FirebaseNames.NAME_CHARACTER_LIST
 import com.example.projetointegradordigitalhouse.util.Constants.FirebaseNames.NAME_COMICS_DATABASE
@@ -7,6 +8,7 @@ import com.example.projetointegradordigitalhouse.util.Constants.FirebaseNames.NA
 import com.example.projetointegradordigitalhouse.util.Constants.FirebaseNames.NAME_DESCRIPTION
 import com.example.projetointegradordigitalhouse.util.Constants.FirebaseNames.NAME_FAVORITED
 import com.example.projetointegradordigitalhouse.util.Constants.FirebaseNames.NAME_ISSUE_NUMBER
+import com.example.projetointegradordigitalhouse.util.Constants.FirebaseNames.NAME_LAST_UPDATE
 import com.example.projetointegradordigitalhouse.util.Constants.FirebaseNames.NAME_NAME
 import com.example.projetointegradordigitalhouse.util.Constants.FirebaseNames.NAME_PAGE_COUNT
 import com.example.projetointegradordigitalhouse.util.Constants.FirebaseNames.NAME_PRICE
@@ -17,32 +19,41 @@ import com.example.projetointegradordigitalhouse.util.Constants.FirebaseNames.NA
 import com.google.firebase.firestore.SetOptions
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import kotlin.coroutines.resume
+import kotlin.coroutines.suspendCoroutine
 
 class FirebaseFirestore {
 
     private val firebaseDatabase by lazy { Firebase.firestore }
 
-    fun getMostPopularCharacters(): MutableList<CharacterResult>{
+    suspend fun getMostPopularCharacters(limit: Long): MutableList<CharacterResult> = suspendCoroutine{ ret ->
         val tempList = mutableListOf<CharacterResult>()
-        firebaseDatabase.collection(NAME_CHARACTER_DATABASE).orderBy(NAME_FAVORITED).limit(5).get()
+        firebaseDatabase.collection(NAME_CHARACTER_DATABASE).orderBy(NAME_FAVORITED).limit(limit)
+            .get()
             .addOnSuccessListener { result ->
-            for (document in result) {
-                val tempData = CharacterResult(
-                    document.id.toInt(),
-                    document[NAME_NAME].toString(),
-                    document[NAME_THUMBNAIL].toString(),
-                    document[NAME_DESCRIPTION].toString(),
-                    false,
-                    false
-                )
-                tempList.add(tempData)
+                for (document in result) {
+                    val tempData = CharacterResult(
+                        document.id.toInt(),
+                        document[NAME_NAME].toString(),
+                        document[NAME_THUMBNAIL].toString(),
+                        document[NAME_DESCRIPTION].toString(),
+                        false,
+                        false,
+                        document[NAME_LAST_UPDATE].toString()
+                    )
+                    tempList.add(tempData)
+                }
+                Log.i("Firebase", "Dados recebidos com sucesso. Enviando lista de Characters com ${tempList.size} elementos")
+                ret.resume(tempList)
             }
-        }
-        return tempList
+            .addOnFailureListener { exception ->
+                Log.i("Firebase", "Erro ao receber dados do Firebase. ",exception)
+            }
     }
-    fun getMostPopularSeries(): MutableList<SeriesResult>{
+
+    suspend fun getMostPopularSeries(limit: Long): MutableList<SeriesResult>  = suspendCoroutine{ ret ->
         val tempList = mutableListOf<SeriesResult>()
-        firebaseDatabase.collection(NAME_SERIES_DATABASE).orderBy(NAME_FAVORITED).limit(5).get()
+        firebaseDatabase.collection(NAME_SERIES_DATABASE).orderBy(NAME_FAVORITED).limit(limit).get()
             .addOnSuccessListener { result ->
                 for (document in result) {
                     val tempData = SeriesResult(
@@ -52,47 +63,56 @@ class FirebaseFirestore {
                         document[NAME_DESCRIPTION].toString(),
                         false,
                         false,
+                        document[NAME_LAST_UPDATE].toString(),
                         document[NAME_CHARACTER_LIST] as List<Int>,
                         document[NAME_COMIC_LIST] as List<Int>
                     )
                     tempList.add(tempData)
                 }
+                Log.i("Firebase", "Dados recebidos com sucesso. Enviando lista de Series com ${tempList.size} elementos")
+                ret.resume(tempList)
             }
-        return tempList
     }
-    fun getMostPopularComics(): MutableList<ComicResult>{
+
+    suspend fun getMostPopularComics(limit: Long): MutableList<ComicResult>  = suspendCoroutine{ ret ->
         val tempList = mutableListOf<ComicResult>()
-        firebaseDatabase.collection(NAME_COMICS_DATABASE).orderBy(NAME_FAVORITED).limit(5).get()
+        firebaseDatabase.collection(NAME_COMICS_DATABASE).orderBy(NAME_FAVORITED).limit(limit).get()
             .addOnSuccessListener { result ->
                 for (document in result) {
                     val tempData = ComicResult(
+
                         document.id.toInt(),
                         document[NAME_NAME].toString(),
                         document[NAME_THUMBNAIL].toString(),
                         document[NAME_DESCRIPTION].toString(),
                         false,
                         false,
+                        document[NAME_LAST_UPDATE].toString(),
                         document[NAME_CHARACTER_LIST] as List<Int>,
-                        document[NAME_PAGE_COUNT] as Int,
-                        document[NAME_ISSUE_NUMBER] as Int,
-                        document[NAME_SERIES_ID] as Int,
+                        document[NAME_PAGE_COUNT] as String,
+                        document[NAME_ISSUE_NUMBER] as String,
+                        document[NAME_SERIES_ID] as Long,
                         document[NAME_PUBLISHED] as String,
-                        document[NAME_PRICE]  as Double
+                        document[NAME_PRICE] as Double
                     )
                     tempList.add(tempData)
                 }
+                Log.i("Firebase", "Dados recebidos com sucesso. Enviando lista de Comics com ${tempList.size} elementos")
+                ret.resume(tempList)
             }
-        return tempList
     }
-    fun insertCharacter(result: CharacterResult){
+
+    fun insertCharacter(result: CharacterResult) {
         val dataTemp: HashMap<String, Any> = HashMap()
         dataTemp[NAME_NAME] = result.name
         dataTemp[NAME_THUMBNAIL] = result.thumbnail
         dataTemp[NAME_DESCRIPTION] = result.description
 
-        firebaseDatabase.collection(NAME_CHARACTER_DATABASE).document(result.id.toString()).set(dataTemp, SetOptions.merge())
+        firebaseDatabase.collection(NAME_CHARACTER_DATABASE).document(result.id.toString())
+            .set(dataTemp, SetOptions.merge())
     }
-    fun insertSeries(result: SeriesResult){
+
+    fun insertSeries(result: SeriesResult) {
         val dataTemp: HashMap<String, Any> = HashMap()
         dataTemp[NAME_NAME] = result.name
         dataTemp[NAME_THUMBNAIL] = result.thumbnail
@@ -100,9 +120,11 @@ class FirebaseFirestore {
         dataTemp[NAME_CHARACTER_LIST] = result.charactersList
         dataTemp[NAME_COMIC_LIST] = result.comicsList
 
-        firebaseDatabase.collection(NAME_SERIES_DATABASE).document(result.id.toString()).set(dataTemp, SetOptions.merge())
+        firebaseDatabase.collection(NAME_SERIES_DATABASE).document(result.id.toString())
+            .set(dataTemp, SetOptions.merge())
     }
-    fun insertComic(result: ComicResult){
+
+    fun insertComic(result: ComicResult) {
         val dataTemp: HashMap<String, Any> = HashMap()
         dataTemp[NAME_NAME] = result.name
         dataTemp[NAME_THUMBNAIL] = result.thumbnail
@@ -114,32 +136,39 @@ class FirebaseFirestore {
         dataTemp[NAME_SERIES_ID] = result.seriesID
         dataTemp[NAME_PRICE] = result.price
 
-        firebaseDatabase.collection(NAME_COMICS_DATABASE).document(result.id.toString()).set(dataTemp, SetOptions.merge())
+        firebaseDatabase.collection(NAME_COMICS_DATABASE).document(result.id.toString())
+            .set(dataTemp, SetOptions.merge())
     }
-    fun incrementFavorited(result: GeneralResult){
+
+    fun incrementFavorited(result: GeneralResult) {
         val database = when (result) {
             is CharacterResult -> NAME_CHARACTER_DATABASE
-            is SeriesResult ->  NAME_SERIES_DATABASE
+            is SeriesResult -> NAME_SERIES_DATABASE
             is ComicResult -> NAME_COMICS_DATABASE
             else -> ""
         }
-        firebaseDatabase.collection(database).document(result.id.toString()).get().addOnSuccessListener {
-            val favorited = it[NAME_FAVORITED] as Int
-            val dataTemp = hashMapOf(NAME_FAVORITED to (favorited +1))
-            firebaseDatabase.collection(database).document(result.id.toString()).set(dataTemp, SetOptions.merge())
-        }
+        firebaseDatabase.collection(database).document(result.id.toString()).get()
+            .addOnSuccessListener {
+                val favorited = it[NAME_FAVORITED] as Long
+                val dataTemp = hashMapOf(NAME_FAVORITED to (favorited + 1))
+                firebaseDatabase.collection(database).document(result.id.toString())
+                    .set(dataTemp, SetOptions.merge())
+            }
     }
-    fun decrementFavorited(result: GeneralResult){
+
+    fun decrementFavorited(result: GeneralResult) {
         val database = when (result) {
             is CharacterResult -> NAME_CHARACTER_DATABASE
-            is SeriesResult ->  NAME_SERIES_DATABASE
+            is SeriesResult -> NAME_SERIES_DATABASE
             is ComicResult -> NAME_COMICS_DATABASE
             else -> ""
         }
-        firebaseDatabase.collection(database).document(result.id.toString()).get().addOnSuccessListener {
-            val favorited = it[NAME_FAVORITED] as Int
-            val dataTemp = hashMapOf(NAME_FAVORITED to (favorited -1))
-            firebaseDatabase.collection(database).document(result.id.toString()).set(dataTemp, SetOptions.merge())
-        }
+        firebaseDatabase.collection(database).document(result.id.toString()).get()
+            .addOnSuccessListener {
+                val favorited = it[NAME_FAVORITED] as Long
+                val dataTemp = hashMapOf(NAME_FAVORITED to (favorited - 1))
+                firebaseDatabase.collection(database).document(result.id.toString())
+                    .set(dataTemp, SetOptions.merge())
+            }
     }
 }

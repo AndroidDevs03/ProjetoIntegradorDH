@@ -3,6 +3,10 @@ plugins {
     id 'kotlin-android'
     id 'kotlin-kapt'
     id 'kotlin-android-extensions'
+
+    // Firebase
+    id 'com.google.gms.google-services'
+    id 'com.google.firebase.crashlytics'
 }
 
 android {
@@ -34,6 +38,9 @@ android {
         }
     }
     compileOptions {
+        //Pra parar de encher o saco com as datas
+        coreLibraryDesugaringEnabled true
+
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
@@ -53,7 +60,7 @@ dependencies {
     testImplementation 'junit:junit:4.13.1'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
-    implementation "org.jetbrains.kotlin:kotlin-stdlib:${versions.kotlinVersion}"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:1.4.21"
     implementation 'com.synnapps:carouselview:0.1.5'
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:${versions.lifecycle}"
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:${versions.lifecycle}"
@@ -88,6 +95,10 @@ dependencies {
 
     //Shared Preferences
     implementation "androidx.preference:preference-ktx:1.1.1"
+
+    // Lib pra fixar problemas de compatibilidade de versões de Android
+    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.1.1'
+
 
 //    kapt "com.github.bumptech.glide:compiler:${versions.glide}"
 }

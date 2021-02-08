@@ -14,7 +14,7 @@ import retrofit2.http.Path
 import retrofit2.http.Query
 import java.util.concurrent.TimeUnit
 
-class MarvelApi {
+object MarvelApi {
 
         val commands = getMarvelApiClient().create(MarvelApiQueries::class.java)
         private fun getMarvelApiClient(): Retrofit {

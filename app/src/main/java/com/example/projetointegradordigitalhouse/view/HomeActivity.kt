@@ -3,48 +3,31 @@ package com.example.projetointegradordigitalhouse.view
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.recyclerview.widget.GridLayoutManager
 import com.bumptech.glide.Glide
 import com.example.projetointegradordigitalhouse.R
-import com.example.projetointegradordigitalhouse.databinding.ActivityMainBinding
-import com.example.projetointegradordigitalhouse.model.Search
-import com.example.projetointegradordigitalhouse.model.characters.Result
+import com.example.projetointegradordigitalhouse.databinding.ActivityHomeBinding
+import com.example.projetointegradordigitalhouse.model.*
 import com.example.projetointegradordigitalhouse.util.Constants.Intent.KEY_INTENT_SEARCH
 import com.example.projetointegradordigitalhouse.viewModel.HomeViewModel
 import com.synnapps.carouselview.ImageClickListener
 import com.synnapps.carouselview.ImageListener
-import java.time.LocalDate
-import java.time.LocalDateTime
+import java.util.*
 
 class HomeActivity : AppCompatActivity() {
 
-    private val viewModel by lazy {HomeViewModel(this)}
+    private val viewModel by lazy { HomeViewModel(this) }
 
-
-    private val imgsCharacters = intArrayOf(
-        R.drawable.black_widow,
-        R.drawable.iron_man,
-        R.drawable.captain_marvel,
-        R.drawable.spider_man,
-        R.drawable.hero2
-    )
     private val imgsSeries = intArrayOf(
         R.drawable.daredevil_serie,
         R.drawable.ironfist_serie,
         R.drawable.jessica_serie,
         R.drawable.defenders_serie,
         R.drawable.luke_serie
-    )
-    private val imgFilmes = intArrayOf(
-        R.drawable.avangers_filmes,
-        R.drawable.captainamerica_filme,
-        R.drawable.doctor_filmes,
-        R.drawable.guardians_filme,
-        R.drawable.doctor_filmes
     )
     private val imgsComics = intArrayOf(
         R.drawable.comic2,
@@ -54,55 +37,68 @@ class HomeActivity : AppCompatActivity() {
         R.drawable.comic6
     )
 
-    private lateinit var binding: ActivityMainBinding
-    private val characterList = mutableListOf<Result>()
+    private lateinit var binding: ActivityHomeBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityMainBinding.inflate(layoutInflater)
+        binding = ActivityHomeBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        loadContent()
+        initComponents()
         setupObservables()
     }
 
-    private fun loadContent() {
-        viewModel.getHomeCharacters()
-        viewModel.homeCharList.observe(this, {
-            characterList.addAll(it)
-            initComponents()
-        })
-
-    }
-
     private fun initComponents() {
+        Log.i("HomeActivity", "InitComponents")
 
+        viewModel.getHomeCharacters()
+        viewModel.getHomeSeries()
+        viewModel.getHomeComics()
         viewModel.getSearchHistory()
 
-        val imageListener = CharCarouselListener(this,characterList)
-
-        binding.cvCharacter.setImageListener(imageListener)
-        binding.cvCharacter.pageCount = characterList.size
-
-        binding.cvComics.setImageListener { position, imageView ->
-            imageView.setImageResource(imgsComics[position])
-        }
-        binding.cvComics.pageCount = imgsComics.size
-
-
-        binding.cvMovies.setImageListener { position, imageView ->
-            imageView.setImageResource(imgFilmes[position])
-        }
-        binding.cvMovies.pageCount = imgFilmes.size
-
-
-        binding.cvSeries.setImageListener { position, imageView ->
-            imageView.setImageResource(imgsSeries[position])
-        }
-        binding.cvSeries.pageCount = imgsSeries.size
     }
 
     private fun setupObservables() {
+        val charsList = mutableListOf<CharacterResult>()
+        val seriesList = mutableListOf<SeriesResult>()
+        val comicsList = mutableListOf<ComicResult>()
+        Log.i("HomeActivity", "Setup Observables")
+        viewModel.homeCharList.observe(this, {
+            charsList.addAll(it)
+            Log.i("CarouselView", "${charsList.size} Characters")
+            binding.cvCharacter.setImageListener(
+                CarouselListener(
+                    this,
+                    charsList as MutableList<GeneralResult>
+                )
+            )
+            binding.cvCharacter.pageCount = charsList.size
+
+        })
+        viewModel.homeSeriesList.observe(this, {
+            seriesList.addAll(it)
+            Log.i("CarouselView", "${seriesList.size} Series")
+            binding.cvSeries.setImageListener(
+                CarouselListener(
+                    this,
+                    seriesList as MutableList<GeneralResult>
+                )
+            )
+            binding.cvSeries.pageCount = seriesList.size
+
+        })
+        viewModel.homeComicsList.observe(this, {
+            comicsList.addAll(it)
+            Log.i("CarouselView", "${comicsList.size} Comics")
+            binding.cvComics.setImageListener(
+                CarouselListener(
+                    this,
+                    comicsList as MutableList<GeneralResult>
+                )
+            )
+            binding.cvComics.pageCount = comicsList.size
+
+        })
         viewModel.lastSearchHistory.observe(this, {
             it?.let { searchTags ->
                 val adapter = ArrayAdapter(this@HomeActivity, R.layout.list_item, searchTags)
@@ -111,15 +107,15 @@ class HomeActivity : AppCompatActivity() {
         })
         binding.hmSearchField.setEndIconOnClickListener {
             val newtag = binding.hmSearchField.editText?.text.toString().trim()
-            if (newtag!="") {
-                    viewModel.addSearchToLocalDatabase(Search(newtag,0, LocalDateTime.now().toString()))
-                        val intent = Intent(this@HomeActivity, NameSearchActivity::class.java)
-                        intent.putExtra(KEY_INTENT_SEARCH, newtag)
-                        startActivity(intent)
+            if (newtag != "") {
+                viewModel.addSearchToLocalDatabase(Search(newtag, 0, Date().toString()))
+                val intent = Intent(this@HomeActivity, NameSearchActivity::class.java)
+                intent.putExtra(KEY_INTENT_SEARCH, newtag)
+                startActivity(intent)
             }
         }
-        binding.hmBottomNavigation.setOnNavigationItemSelectedListener{
-            when(it.itemId){
+        binding.hmBottomNavigation.setOnNavigationItemSelectedListener {
+            when (it.itemId) {
                 R.id.page_1 -> {
                     startActivity(Intent(this, HomeActivity::class.java))
                     true
@@ -136,23 +132,19 @@ class HomeActivity : AppCompatActivity() {
                     startActivity(Intent(this, LoginActivity::class.java))
                     true
                 }
-                else -> {false}
+                else -> {
+                    false
+                }
             }
         }
-        binding.cvCharacter.setImageClickListener(ImageClickListener() {
-            fun onClick(position: Int) {
-                val intent = Intent(this, CharacterActivity::class.java)
-                intent.putExtra("blablabla", characterList[position].id)
-                startActivity(intent)
-            }
-        })
+        binding.cvCharacter.setImageClickListener{
+            val intent = Intent(this, CharacterActivity::class.java)
+            intent.putExtra("blablabla", charsList[it].id)
+            startActivity(intent)
+        }
 
         binding.cvComics.setImageClickListener {
             startActivity(Intent(this, ComicActivity::class.java))
-        }
-
-        binding.cvMovies.setImageClickListener {
-            startActivity(Intent(this, MovieActivity::class.java))
         }
 
         binding.cvSeries.setImageClickListener {
@@ -160,10 +152,14 @@ class HomeActivity : AppCompatActivity() {
         }
     }
 }
-class CharCarouselListener(val activity: Activity, val charlist: MutableList<Result>): ImageListener{
+
+class CarouselListener(
+    private val activity: Activity,
+    private val dataList: MutableList<GeneralResult>
+) : ImageListener {
     override fun setImageForPosition(position: Int, imageView: ImageView) {
         Glide.with(activity)
-            .load(charlist[position].thumbnail.getThumb())
+            .load(dataList[position].thumbnail)
             .fitCenter()
             .placeholder(R.drawable.button)
             .into(imageView)

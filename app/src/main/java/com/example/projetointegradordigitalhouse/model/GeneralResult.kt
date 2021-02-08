@@ -7,39 +7,43 @@ import kotlinx.android.parcel.Parcelize
 @Parcelize
 open class GeneralResult(
     // Common properties
-    val id: Int,
-    val name: String,
-    val thumbnail: String,
-    val description: String,
-    var searchTagFlag: Boolean,
-    var favoriteTagFlag: Boolean
+    open val id: Int,
+    open val name: String,
+    open val thumbnail: String,
+    open val description: String,
+    open var searchTagFlag: Boolean,
+    open var favoriteTagFlag: Boolean,
+    open var lastUpdate: String
 ) : Parcelable
 
 @Parcelize
 class CharacterResult(
-    id: Int,
-    name: String,
-    thumbnail: String,
-    description: String,
-    searchTagFlag: Boolean,
-    favoriteTagFlag: Boolean
+    override val id: Int,
+    override val name: String,
+    override val thumbnail: String,
+    override val description: String,
+    override var searchTagFlag: Boolean,
+    override var favoriteTagFlag: Boolean,
+    override var lastUpdate: String
 ) : GeneralResult(
     id,
     name,
     thumbnail,
     description,
     searchTagFlag,
-    favoriteTagFlag
+    favoriteTagFlag,
+    lastUpdate
 )
 
 @Parcelize
 class SeriesResult(
-    id: Int,
-    name: String,
-    thumbnail: String,
-    description: String,
-    searchTagFlag: Boolean,
-    favoriteTagFlag: Boolean,
+    override val id: Int,
+    override val name: String,
+    override val thumbnail: String,
+    override val description: String,
+    override var searchTagFlag: Boolean,
+    override var favoriteTagFlag: Boolean,
+    override var lastUpdate: String,
     val charactersList: List<Int>,
     val comicsList: List<Int>
 ) : GeneralResult(
@@ -48,20 +52,22 @@ class SeriesResult(
     thumbnail,
     description,
     searchTagFlag,
-    favoriteTagFlag
+    favoriteTagFlag,
+    lastUpdate
 )
 @Parcelize
 class ComicResult(
-    id: Int,
-    name: String,
-    thumbnail: String,
-    description: String,
-    searchTagFlag: Boolean,
-    favoriteTagFlag: Boolean,
+    override val id: Int,
+    override val name: String,
+    override val thumbnail: String,
+    override val description: String,
+    override var searchTagFlag: Boolean,
+    override var favoriteTagFlag: Boolean,
+    override var lastUpdate: String,
     val charactersList: List<Int>,
-    val pageCount: Int,
-    val issueNumber: Int,
-    val seriesID: Int,
+    val pageCount: String,
+    val issueNumber: String,
+    val seriesID: Long,
     val published: String,
     val price: Double
 ) : GeneralResult(
@@ -70,5 +76,6 @@ class ComicResult(
     thumbnail,
     description,
     searchTagFlag,
-    favoriteTagFlag
+    favoriteTagFlag,
+    lastUpdate
 )
