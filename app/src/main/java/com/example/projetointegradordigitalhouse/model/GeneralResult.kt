@@ -1,8 +1,9 @@
 package com.example.projetointegradordigitalhouse.model
 
 import android.os.Parcelable
-import com.example.projetointegradordigitalhouse.model.comics.Series
 import kotlinx.android.parcel.Parcelize
+import java.time.LocalDate.now
+import java.time.LocalDate.parse
 
 @Parcelize
 open class GeneralResult(
@@ -14,7 +15,11 @@ open class GeneralResult(
     open var searchTagFlag: Boolean,
     open var favoriteTagFlag: Boolean,
     open var lastUpdate: String
-) : Parcelable
+) : Parcelable {
+    fun needUpdate(): Boolean {
+        return parse(lastUpdate).isBefore(now().minusDays(2L))
+    }
+}
 
 @Parcelize
 class CharacterResult(
@@ -24,7 +29,8 @@ class CharacterResult(
     override val description: String,
     override var searchTagFlag: Boolean,
     override var favoriteTagFlag: Boolean,
-    override var lastUpdate: String
+    override var lastUpdate: String,
+    val series: List<Int>
 ) : GeneralResult(
     id,
     name,

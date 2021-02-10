@@ -1,8 +1,9 @@
 package com.example.projetointegradordigitalhouse.model
 
 import com.example.digitalhousefoods_desafio2.extensions.md5
-import com.example.projetointegradordigitalhouse.model.characters.Characters
-import com.example.projetointegradordigitalhouse.model.characters.Comics
+import com.example.projetointegradordigitalhouse.model.characters.CharacterResponse
+import com.example.projetointegradordigitalhouse.model.comics.ComicResponse
+import com.example.projetointegradordigitalhouse.model.series.SeriesResponse
 import com.example.projetointegradordigitalhouse.util.Constants
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -64,23 +65,20 @@ object MarvelApi {
 
 
 interface MarvelApiQueries {
-        //Spider-Man            ID 1009610
-        //Wolverine             ID 1009718
-        //Captain-America       ID 1009220
 
         @GET("characters")
-        suspend fun CharactersByName(@Query("nameStartsWith")charName: String,@Query("limit")limit: Int = 10,@Query("offset")offset: Int = 0): Response<Characters>
+        suspend fun CharactersByName(@Query("nameStartsWith")charName: String,@Query("limit")limit: Int = 10,@Query("offset")offset: Int = 0): Response<CharacterResponse>
 
         @GET("series")
-        suspend fun SeriesByName(@Query("titleStartsWith")charName: String,@Query("limit")limit: Int = 10,@Query("offset")offset: Int = 0): Response<Characters>
+        suspend fun SeriesByName(@Query("titleStartsWith")charName: String,@Query("limit")limit: Int = 10,@Query("offset")offset: Int = 0): Response<SeriesResponse>
 
         @GET("comics")
-        suspend fun ComicsByName(@Query("titleStartsWith")charName: String,@Query("limit")limit: Int = 10,@Query("offset")offset: Int = 0): Response<Characters>
+        suspend fun ComicsByName(@Query("titleStartsWith")charName: String,@Query("limit")limit: Int = 10,@Query("offset")offset: Int = 0): Response<ComicResponse>
 
         @GET("characters/{characterId}")
-        suspend fun CharactersByID(@Path("characterId") charID: Int): Response<Characters>
+        suspend fun CharactersByID(@Path("characterId") charID: Int): Response<CharacterResponse>
 
         @GET("comics")
-        suspend fun ComicsByCharsID(@Query("characters")charID: List<Int>): Response<Comics>
+        suspend fun ComicsByCharsID(@Query("characters")charID: List<Int>): Response<ComicResponse>
 
 }

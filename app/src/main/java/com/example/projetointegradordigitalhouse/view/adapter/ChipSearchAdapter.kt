@@ -10,11 +10,12 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.projetointegradordigitalhouse.R
+import com.example.projetointegradordigitalhouse.model.CharacterResult
 import com.example.projetointegradordigitalhouse.model.characters.Result
 import com.google.android.material.card.MaterialCardView
 
     class ChipSearchAdapter(
-        private val charactersList: List<Result>,
+        private val charactersList: MutableList<CharacterResult>,
         private val itemClicked: (Int) -> Unit
     ): RecyclerView.Adapter<ChipSearchAdapter.LocalViewHolder>() {
 
@@ -33,7 +34,7 @@ import com.google.android.material.card.MaterialCardView
         override fun onBindViewHolder(holder: LocalViewHolder, position: Int) {
             Log.i("Tela 1", "Criando view ${position}")
             Glide.with(holder.itemView.context)
-                .load(charactersList[position].thumbnail.getThumb())
+                .load(charactersList[position].thumbnail)
                 .fitCenter()
                 .placeholder(R.drawable.button)
                 .into(holder.charImage)
