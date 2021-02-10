@@ -1,6 +1,6 @@
-package com.example.projetointegradordigitalhouse.model.characters
+package com.example.projetointegradordigitalhouse.model.series
 
-data class Characters(
+data class SeriesResponse(
     val attributionHTML: String,
     val attributionText: String,
     val code: Int,

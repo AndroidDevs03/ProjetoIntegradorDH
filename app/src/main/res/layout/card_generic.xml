@@ -2,21 +2,21 @@
 <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/cv_character_background"
-    android:layout_width="wrap_content"
-    android:layout_height="250dp"
+    android:layout_width="match_parent"
+    android:layout_height="270dp"
     android:layout_margin="5dp"
     android:backgroundTint="@color/redBackground"
     app:cardCornerRadius="10dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="@dimen/dim_card_thumb_width"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <ImageView
             android:id="@+id/cv_character_thumb"
             android:layout_width="match_parent"
             android:layout_height="@dimen/dim_card_thumb_height"
-            android:scaleType="fitStart"
+            android:scaleType="fitCenter"
             android:src="@drawable/ex_character_thumb"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -28,6 +28,7 @@
             android:layout_height="wrap_content"
             android:fontFamily="@font/marvel"
             android:gravity="center"
+            android:lines="2"
             android:maxLines="2"
             android:padding="5dp"
             android:shadowColor="@color/black"

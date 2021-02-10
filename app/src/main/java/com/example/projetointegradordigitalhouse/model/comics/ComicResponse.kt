@@ -1,6 +1,6 @@
 package com.example.projetointegradordigitalhouse.model.comics
 
-data class Comic(
+data class ComicResponse(
     val attributionHTML: String,
     val attributionText: String,
     val code: Int,

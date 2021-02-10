@@ -1,4 +1,4 @@
-package com.example.projetointegradordigitalhouse.model.comics
+package com.example.projetointegradordigitalhouse.model.series
 
 import android.os.Parcelable
 import kotlinx.android.parcel.Parcelize

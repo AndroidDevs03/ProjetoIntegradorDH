@@ -17,7 +17,7 @@ import com.example.projetointegradordigitalhouse.viewModel.HomeViewModel
 import com.synnapps.carouselview.ImageClickListener
 import com.synnapps.carouselview.ImageListener
 import java.util.*
-
+@Suppress("UNCHECKED_CAST")
 class HomeActivity : AppCompatActivity() {
 
     private val viewModel by lazy { HomeViewModel(this) }
@@ -81,7 +81,7 @@ class HomeActivity : AppCompatActivity() {
             binding.cvSeries.setImageListener(
                 CarouselListener(
                     this,
-                    seriesList as MutableList<GeneralResult>
+                    seriesList  as MutableList<GeneralResult>
                 )
             )
             binding.cvSeries.pageCount = seriesList.size
@@ -109,7 +109,7 @@ class HomeActivity : AppCompatActivity() {
             val newtag = binding.hmSearchField.editText?.text.toString().trim()
             if (newtag != "") {
                 viewModel.addSearchToLocalDatabase(Search(newtag, 0, Date().toString()))
-                val intent = Intent(this@HomeActivity, NameSearchActivity::class.java)
+                val intent = Intent(this@HomeActivity, ChipSearchActivity::class.java)
                 intent.putExtra(KEY_INTENT_SEARCH, newtag)
                 startActivity(intent)
             }

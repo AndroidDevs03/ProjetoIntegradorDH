@@ -88,6 +88,7 @@ class ChipSearchActivity : AppCompatActivity() {
                     binding.csSearchField.editText?.text?.clear()
                 }
                 viewModel.getCharactersByName(newtag)
+
             }
         }
 
@@ -95,7 +96,7 @@ class ChipSearchActivity : AppCompatActivity() {
         viewModel.searchCharList.observe(this, {
             it?.let { charList ->
                 binding.csRecyclerView.apply {
-                    layoutManager = GridLayoutManager(this@ChipSearchActivity, 3)
+                    layoutManager = GridLayoutManager(this@ChipSearchActivity, 2)
                     adapter = ChipSearchAdapter(charList) { position ->
                         val intent = Intent(this@ChipSearchActivity, CharacterActivity::class.java)
                         intent.putExtra(KEY_INTENT_DATA, charList[position])
