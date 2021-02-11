@@ -53,6 +53,10 @@ class Constants {
         const val NAME_PUBLISHED = "published"
         const val NAME_SERIES_ID = "series"
         const val NAME_PRICE = "price"
+        const val NAME_EMAIL ="email"
+        const val NAME_AVATAR = "avatar_id"
+        const val NAME_FAVORITE_LIST = "favorite_list"
+        const val NAME_USER_ID = "user_id"
 
     }
     object SharedPreferences {

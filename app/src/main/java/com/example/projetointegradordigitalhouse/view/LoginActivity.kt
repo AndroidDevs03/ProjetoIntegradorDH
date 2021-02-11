@@ -7,6 +7,9 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.projetointegradordigitalhouse.R
 import com.example.projetointegradordigitalhouse.databinding.ActivityLoginBinding
+import com.example.projetointegradordigitalhouse.model.FirebaseFirestore
+import com.example.projetointegradordigitalhouse.viewModel.HomeViewModel
+import com.example.projetointegradordigitalhouse.viewModel.LoginViewModel
 import com.facebook.CallbackManager
 import com.firebase.ui.auth.AuthMethodPickerLayout
 import com.firebase.ui.auth.AuthUI
@@ -21,9 +24,10 @@ class LoginActivity : AppCompatActivity(){
 
     private lateinit var binding: ActivityLoginBinding
 
-    private val firebaseAuth by lazy{
-        Firebase.auth
-    }
+    private val firebaseAuth by lazy{ Firebase.auth }
+
+    private val viewModel by lazy { LoginViewModel(this) }
+
 
     private var customLayout = AuthMethodPickerLayout.Builder(R.layout.activity_login)
         .setGoogleButtonId(R.id.btGoogle)
@@ -51,13 +55,6 @@ class LoginActivity : AppCompatActivity(){
 //        sutupObservables()
     }
 
-    override fun onResume(){
-        super.onResume()
-        firebaseAuth.currentUser?.let{
-            //TODO Firestore
-        }
-    }
-
 //    private fun setupObservables() {
 //        binding.btSignUp.setOnClickListener {
 //            startActivity(Intent(this, RegisterActivity::class.java))
@@ -77,6 +74,7 @@ class LoginActivity : AppCompatActivity(){
                 .build(),
             RC_SIGN_IN
         )
+
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int,data: Intent?) {
@@ -88,8 +86,8 @@ class LoginActivity : AppCompatActivity(){
 //            Toast.makeText(this, "requestCode: ${requestCode}", Toast.LENGTH_LONG).show()
             if (resultCode == Activity.RESULT_OK){
                 // Successfully signed in
+                viewModel.registerUser(firebaseAuth.currentUser)
                 startScreen()
-                registerUser(firebaseAuth.currentUser)
             } else{
                 startActivity(Intent(this, SplashActivity::class.java))
                 Toast.makeText(this, "Falha de autenticação: ${response?.getError()?.getErrorCode()}", Toast.LENGTH_LONG).show()
@@ -101,12 +99,6 @@ class LoginActivity : AppCompatActivity(){
     private fun startScreen() {
         startActivity(Intent(this, HomeActivity::class.java))
         finish()
-    }
-
-    private fun registerUser(user: FirebaseUser?) {
-        user?.let{
-            //todo
-        }
     }
 
     companion object {

@@ -9,6 +9,7 @@ import com.example.projetointegradordigitalhouse.model.*
 import kotlinx.coroutines.launch
 import com.example.projetointegradordigitalhouse.util.Constants
 import com.github.cesar1287.desafiopicpayandroid.model.home.MarvelXRepository
+import com.google.firebase.auth.FirebaseUser
 
 internal class HomeViewModel(
     context: Context
