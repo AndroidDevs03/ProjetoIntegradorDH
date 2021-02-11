@@ -42,7 +42,7 @@
         android:layout_weight="1"
         android:orientation="vertical"
         app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-        app:spanCount="3"
+        app:spanCount="2"
         tools:itemCount="13"
         tools:listitem="@layout/card_generic" />
     <com.google.android.material.tabs.TabLayout

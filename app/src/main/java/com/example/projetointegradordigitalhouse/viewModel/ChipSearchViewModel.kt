@@ -13,10 +13,14 @@ import kotlinx.coroutines.launch
 
 class ChipSearchViewModel(
     context: Context
-): ViewModel() {
-    private val repository: MarvelXRepository by lazy {MarvelXRepository()}
+) : ViewModel() {
+    private val repository: MarvelXRepository by lazy { MarvelXRepository() }
     private val localDatabase: SearchDao by lazy { LocalDatabase.getDatabase(context).userDao() }
-    private val sharedPreferences: MarvelXSharedPreferences by lazy {MarvelXSharedPreferences(context)}
+    private val sharedPreferences: MarvelXSharedPreferences by lazy {
+        MarvelXSharedPreferences(
+            context
+        )
+    }
     private val firebaseAuth by lazy { Firebase.auth }
 
 
@@ -25,27 +29,40 @@ class ChipSearchViewModel(
     var searchComicList: MutableLiveData<MutableList<ComicResult>> = MutableLiveData()
     var lastSearchHistory: MutableLiveData<MutableList<String>> = MutableLiveData()
 
-    fun getCharactersByName(name: String, limit: Int=10, offset:Int=0){
+    fun getCharactersByName(name: String, limit: Int = 10, offset: Int = 0) {
         viewModelScope.launch {
-            searchCharList.postValue(repository.getCharactersByName(name,limit,offset))
-            }
-    }
-    fun getSeriesByName(name: String, limit: Int=10, offset:Int=0){
-        viewModelScope.launch {
-            searchSeriesList.postValue(repository.getSeriesByName(name,limit,offset))
+            searchCharList.postValue(repository.getCharactersByName(name, limit, offset))
         }
     }
-    fun getComicsByName(name: String, limit: Int=10, offset:Int=0){
+    fun updateSeriesByCharacterId(charId: Int) {
         viewModelScope.launch {
-            searchComicList.postValue(repository.getComicsByName(name,limit,offset))
+            repository.updateSeriesByCharacterID(charId)
         }
     }
+    fun updateComicsBySeriesId(seriesId: Int) {
+        viewModelScope.launch {
+            repository.updateComicsBySeriesID(seriesId)
+        }
+    }
+    fun getSeriesByName(name: String, limit: Int = 10, offset: Int = 0) {
+        viewModelScope.launch {
+            searchSeriesList.postValue(repository.getSeriesByName(name, limit, offset))
+        }
+    }
+
+    fun getComicsByName(name: String, limit: Int = 10, offset: Int = 0) {
+        viewModelScope.launch {
+            searchComicList.postValue(repository.getComicsByName(name, limit, offset))
+        }
+    }
+
     fun getSearchHistory() {
         viewModelScope.launch {
             lastSearchHistory.postValue(localDatabase.getLastSearchResults() as MutableList<String>)
         }
     }
-    fun addSearchToLocalDatabase(search: Search){
+
+    fun addSearchToLocalDatabase(search: Search) {
         viewModelScope.launch {
             val tempNewList: MutableList<String> = lastSearchHistory.value ?: mutableListOf()
             localDatabase.insert(search)
@@ -53,7 +70,7 @@ class ChipSearchViewModel(
             if (search.busca in tempNewList) {
                 tempNewList.remove(search.busca)
                 tempNewList.add(0, search.busca)
-            } else if (tempNewList.size >= CONST_MAX_SEARCH_RESULTS){
+            } else if (tempNewList.size >= CONST_MAX_SEARCH_RESULTS) {
                 tempNewList.add(0, search.busca)
                 tempNewList.removeLast()
             } else {

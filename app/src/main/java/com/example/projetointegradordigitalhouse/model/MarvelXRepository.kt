@@ -1,5 +1,6 @@
 package com.github.cesar1287.desafiopicpayandroid.model.home
 
+import android.util.Log
 import com.example.projetointegradordigitalhouse.model.*
 import com.example.projetointegradordigitalhouse.model.characters.CharacterResponse
 import com.example.projetointegradordigitalhouse.model.comics.ComicResponse
@@ -33,10 +34,18 @@ class MarvelXRepository {
         // Primeiro, verifica se essa busca já foi feita no histórico do Firebase. Caso positivo, verifica se foi há mais de dois dias.
         if (firebaseFirestore.lastSearchNeedsUpdate(tag)) {
             // Se foi há mais de dois dias, refaz a busca na api da Marvel e atualiza o Firebase
-            val response = marvelApi.CharactersByName(tag, limit, offset)
+            val response = marvelApi.charactersByName(tag, limit, offset)
             if (response.isSuccessful) {
                 tempCharList = convertResponseToCharList(response.body())
-                tempCharList.forEach { firebaseFirestore.insertCharacter(it) }
+                tempCharList.forEach {
+                    firebaseFirestore.insertCharacter(it)
+
+                    // it.series.forEach { itSeries -> getSeriesByCharacterID(itSeries)}
+                }
+                Log.i("Repository", "${tempCharList.size} Characters updated to Firebase")
+
+                Log.i("Repository", "${tag} Search Tag updated to Firebase")
+                firebaseFirestore.insertSearchTag(tag)
                 return tempCharList
             }
         } else {
@@ -46,9 +55,27 @@ class MarvelXRepository {
                 it.name.contains(tag)
             } as MutableList<CharacterResult>
         }
-        firebaseFirestore.insertSearchTag(tag)
         return tempCharList
     }
+
+    suspend fun updateSeriesByCharacterID(charID: Int) {
+        val response = marvelApi.seriesByCharacterID(charID)
+        if (response.isSuccessful) {
+            val tempSeries = convertResponseToSeriesList(response.body())
+            tempSeries.forEach { firebaseFirestore.insertSeries(it)}
+            Log.i("Repository", "${tempSeries.size} Series updated to Firebase")
+        }
+    }
+
+    suspend fun updateComicsBySeriesID(seriesId: Int) {
+        val response = marvelApi.comicsBySeriesID(seriesId)
+        if (response.isSuccessful) {
+            val tempComics = convertResponseToComicList(response.body())
+            tempComics.forEach { firebaseFirestore.insertComic(it)}
+            Log.i("Repository", "${tempComics.size} Comics updated to Firebase")
+        }
+    }
+
     suspend fun getSeriesByName(
         tag: String,
         limit: Int = 10,
@@ -58,10 +85,13 @@ class MarvelXRepository {
         // Primeiro, verifica se essa busca já foi feita no histórico do Firebase. Caso positivo, verifica se foi há mais de dois dias.
         if (firebaseFirestore.lastSearchNeedsUpdate(tag)) {
             // Se foi há mais de dois dias, refaz a busca na api da Marvel e atualiza o Firebase
-            val response = marvelApi.SeriesByName(tag, limit, offset)
+            val response = marvelApi.seriesByName(tag, limit, offset)
             if (response.isSuccessful) {
                 tempSeriesList = convertResponseToSeriesList(response.body())
-                tempSeriesList.forEach { firebaseFirestore.insertSeries(it) }
+                tempSeriesList.forEach {
+                    firebaseFirestore.insertSeries(it)
+                    //Todo:  Buscar as HQs
+                }
                 return tempSeriesList
             }
         } else {
@@ -83,7 +113,7 @@ class MarvelXRepository {
         // Primeiro, verifica se essa busca já foi feita no histórico do Firebase. Caso positivo, verifica se foi há mais de dois dias.
         if (firebaseFirestore.lastSearchNeedsUpdate(tag)) {
             // Se foi há mais de dois dias, refaz a busca na api da Marvel e atualiza o Firebase
-            val response = marvelApi.ComicsByName(tag, limit, offset)
+            val response = marvelApi.comicsByName(tag, limit, offset)
             if (response.isSuccessful) {
                 tempComicList = convertResponseToComicList(response.body())
                 tempComicList.forEach { firebaseFirestore.insertComic(it) }
@@ -108,16 +138,17 @@ class MarvelXRepository {
                 it.series.items.forEach { itSeries ->
                     tempSeriesList.add(itSeries.resourceURI.split("/").last().toInt())
                 }
+                it.description = it.description?: "Description not found"
                 tempList.add(
                     CharacterResult(
                         it.id,
                         it.name,
                         it.thumbnail.getThumb(),
                         it.description,
-                        false,
-                        false,
-                        now().toString(),
-                        tempSeriesList
+                        searchTagFlag = false,
+                        favoriteTagFlag = false,
+                        lastUpdate = now().toString(),
+                        series = tempSeriesList
                     )
                 )
             }
@@ -137,17 +168,18 @@ class MarvelXRepository {
                 it.comics.items.forEach { itSeries ->
                     tempComicsList.add(itSeries.resourceURI.split("/").last().toInt())
                 }
+                it.description = it.description?: "Description not found"
                 tempList.add(
                     SeriesResult(
                         it.id,
                         it.title,
                         it.thumbnail.getThumb(),
                         it.description.toString(),
-                        false,
-                        false,
-                        now().toString(),
-                        tempCharactersList,
-                        tempComicsList
+                        searchTagFlag = false,
+                        favoriteTagFlag = false,
+                        lastUpdate = now().toString(),
+                        charactersList = tempCharactersList,
+                        comicsList = tempComicsList
                     )
                 )
             }
@@ -161,36 +193,35 @@ class MarvelXRepository {
         data.forEach {
             if (it.characters.available != 0){  //pega apenas as séries que tem pelo menos um personagem
                 val tempCharactersList = mutableListOf<Int>()
-                val tempComicsList = mutableListOf<Int>()
                 it.characters.items.forEach { itSeries ->
                     tempCharactersList.add(itSeries.resourceURI.split("/").last().toInt())
                 }
-                tempList.add(
-                    ComicResult(
-                        it.id,
-                        it.title,
-                        it.thumbnail.getThumb(),
-                        it.description,
-                        false,
-                        false,
-                        now().toString(),
-                        tempCharactersList,
-                        it.pageCount.toString(),
-                        it.issueNumber.toString(),
-                        it.series.resourceURI.split("/").last().toLong(),
-                        it.dates[0].date,
-                        it.prices[0].price
-                    )
-                )
-            }
+                it.description = it.description?: "Description not found"
 
+                val tempComic = ComicResult(
+                    it.id,
+                    it.title,
+                    it.thumbnail.getThumb(),
+                    it.description,
+                    searchTagFlag = false,
+                    favoriteTagFlag = false,
+                    lastUpdate = now().toString(),
+                    charactersList = tempCharactersList as List<Int>,
+                    pageCount = it.pageCount.toString(),
+                    issueNumber = it.issueNumber.toString(),
+                    seriesID = it.series.resourceURI.split("/").last().toLong(),
+                    published = it.dates[0].date,
+                    price = it.prices[0].price
+                )
+                tempList.add(tempComic)
+            }
         }
         return tempList
     }
 
     suspend fun getCharactersByID(id: Int): ResponseApi {
         return try {
-            val response = marvelApi.CharactersByID(id)
+            val response = marvelApi.charactersByID(id)
 
             if (response.isSuccessful) {
                 ResponseApi.Success(response.body())

@@ -4,7 +4,7 @@ data class Result(
     val characters: Characters,
     val collectedIssues: List<CollectedIssue>,
     val dates: List<Date>,
-    val description: String,
+    var description: String,
     val id: Int,
     val issueNumber: Int,
     val pageCount: Int,
