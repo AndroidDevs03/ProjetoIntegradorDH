@@ -4,6 +4,7 @@ import com.example.projetointegradordigitalhouse.model.*
 import com.example.projetointegradordigitalhouse.model.characters.CharacterResponse
 import com.example.projetointegradordigitalhouse.model.comics.ComicResponse
 import com.example.projetointegradordigitalhouse.model.series.SeriesResponse
+import com.google.firebase.auth.FirebaseUser
 import java.lang.Exception
 import java.time.LocalDate.now
 
@@ -204,5 +205,14 @@ class MarvelXRepository {
         } catch (exception: Exception) {
             ResponseApi.Error("Erro ao carregar os dados")
         }
+    }
+
+    suspend fun setUser(user: User){
+        try{
+            firebaseFirestore.insertUser(user)
+        }catch (exception: Exception){
+//            todo
+        }
+
     }
 }
