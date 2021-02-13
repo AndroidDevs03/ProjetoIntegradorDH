@@ -108,7 +108,7 @@ class HomeActivity : AppCompatActivity() {
         binding.hmSearchField.setEndIconOnClickListener {
             val newtag = binding.hmSearchField.editText?.text.toString().trim()
             if (newtag != "") {
-                viewModel.addSearchToLocalDatabase(Search(newtag, 0, Date().toString()))
+                viewModel.addSearchToLocalDatabase(Search(newtag, "", Date().toString())) //todo: Arrumar aqui
                 val intent = Intent(this@HomeActivity, ChipSearchActivity::class.java)
                 intent.putExtra(KEY_INTENT_SEARCH, newtag)
                 startActivity(intent)

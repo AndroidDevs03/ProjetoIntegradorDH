@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:state_activated="true"
+        android:state_selected="false"
+        android:drawable="@drawable/star_outline_icon"
+
+        />
+    <item
+        android:state_activated="false"
+        android:state_selected="false"
+        android:drawable="@drawable/star_outline_icon_disabled"
+/>
+    <item
+        android:state_activated="true"
+        android:state_selected="true"
+        android:drawable="@drawable/star_icon"
+        />
+</selector>

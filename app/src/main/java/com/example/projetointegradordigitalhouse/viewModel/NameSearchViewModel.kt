@@ -1,13 +1,14 @@
 package com.example.projetointegradordigitalhouse.viewModel
 
+import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.projetointegradordigitalhouse.model.characters.Result
 import com.github.cesar1287.desafiopicpayandroid.model.home.MarvelXRepository
 
-class NameSearchViewModel: ViewModel()  {
+class NameSearchViewModel(context: Context): ViewModel()  {
     private val repository: MarvelXRepository by lazy {
-        MarvelXRepository()
+        MarvelXRepository(context)
     }
     var searchCharList: MutableLiveData<List<Result>> = MutableLiveData()
 

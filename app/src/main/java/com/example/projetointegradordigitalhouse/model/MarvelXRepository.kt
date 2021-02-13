@@ -1,16 +1,28 @@
 package com.github.cesar1287.desafiopicpayandroid.model.home
 
+import android.content.Context
 import android.util.Log
+import androidx.room.ColumnInfo
+import androidx.room.PrimaryKey
 import com.example.projetointegradordigitalhouse.model.*
 import com.example.projetointegradordigitalhouse.model.characters.CharacterResponse
 import com.example.projetointegradordigitalhouse.model.comics.ComicResponse
 import com.example.projetointegradordigitalhouse.model.series.SeriesResponse
+import com.example.projetointegradordigitalhouse.util.Constants
+import com.example.projetointegradordigitalhouse.util.Constants.FirebaseNames.NAME_CHARACTER_DATABASE
+import com.example.projetointegradordigitalhouse.util.Constants.FirebaseNames.NAME_COMICS_DATABASE
+import com.example.projetointegradordigitalhouse.util.Constants.FirebaseNames.NAME_SERIES_DATABASE
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 import java.lang.Exception
 import java.time.LocalDate.now
 
-class MarvelXRepository {
+class MarvelXRepository(context: Context) {
 
     private val firebaseFirestore: FirebaseFirestore by lazy { FirebaseFirestore() }
+    private val firebaseAuth by lazy { Firebase.auth }
+    private val localDatabaseSearch: SearchDao by lazy { LocalDatabase.getDatabase(context).searchDao() }
+    private val localDatabaseFavorite: FavoriteDao by lazy { LocalDatabase.getDatabase(context).favoriteDao() }
     private val marvelApi = MarvelApi.commands
     private lateinit var allChars: MutableList<CharacterResult>
     private lateinit var allSeries: MutableList<SeriesResult>
@@ -46,6 +58,11 @@ class MarvelXRepository {
 
                 Log.i("Repository", "${tag} Search Tag updated to Firebase")
                 firebaseFirestore.insertSearchTag(tag)
+
+                tempCharList.forEach {itChars ->
+                    updateSeriesByCharacterID(itChars.id)
+                }
+
                 return tempCharList
             }
         } else {
@@ -235,5 +252,34 @@ class MarvelXRepository {
         } catch (exception: Exception) {
             ResponseApi.Error("Erro ao carregar os dados")
         }
+    }
+    suspend fun addToFavorites(result: GeneralResult){
+        val userID = firebaseAuth.currentUser?.uid ?: ""
+        val newFavoriteList = mutableListOf<Int>()
+        localDatabaseFavorite.insert(convertResultToFavorite(result))
+        localDatabaseFavorite.getAllFavorites(NAME_CHARACTER_DATABASE).forEach {
+            newFavoriteList.add(it.id)
+        }
+        firebaseFirestore.updateFavoriteList(newFavoriteList)
+    }
+    suspend fun removeFromFavorites(result: GeneralResult){
+        val userID = firebaseAuth.currentUser?.uid ?: ""
+        val newFavoriteList = mutableListOf<Int>()
+        localDatabaseFavorite.update(convertResultToFavorite(result)) // o result deve estar com o favoriteTagFlag = false
+        localDatabaseFavorite.getAllFavorites(NAME_CHARACTER_DATABASE).forEach {
+            newFavoriteList.add(it.id)
+        }
+        firebaseFirestore.updateFavoriteList(newFavoriteList)
+    }
+    suspend fun convertResultToFavorite(general: GeneralResult): Favorite {
+        val type = when (general) {
+            is CharacterResult -> NAME_CHARACTER_DATABASE
+            is SeriesResult -> NAME_SERIES_DATABASE
+            is ComicResult -> NAME_COMICS_DATABASE
+            else -> ""
+        }
+        val userID = firebaseAuth.currentUser?.uid ?: ""
+        return Favorite(general.id, userID, type, general.name, general.thumbnail, general.description, general.favoriteTagFlag)
+
     }
 }
