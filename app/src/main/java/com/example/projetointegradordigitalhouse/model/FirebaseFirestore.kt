@@ -21,8 +21,8 @@ import com.example.projetointegradordigitalhouse.util.Constants.FirebaseNames.NA
 import com.example.projetointegradordigitalhouse.util.Constants.FirebaseNames.NAME_SERIES_DATABASE
 import com.example.projetointegradordigitalhouse.util.Constants.FirebaseNames.NAME_SERIES_ID
 import com.example.projetointegradordigitalhouse.util.Constants.FirebaseNames.NAME_THUMBNAIL
-import com.example.projetointegradordigitalhouse.util.Constants.FirebaseNames.NAME_USERS_DATABASE
-import com.example.projetointegradordigitalhouse.util.Constants.FirebaseNames.NAME_USER_ID
+import com.example.projetointegradordigitalhouse.util.Constants.FirebaseNames.NAME_USERINFO_DATABASE
+import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.SetOptions
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -34,6 +34,7 @@ import kotlin.coroutines.suspendCoroutine
 class FirebaseFirestore {
 
     private val firebaseDatabase by lazy { Firebase.firestore }
+    private val firebaseAuth by lazy { Firebase.auth }
 
     suspend fun getMostPopularCharacters(limit: Long): MutableList<CharacterResult> = suspendCoroutine{ ret ->
         val tempList = mutableListOf<CharacterResult>()
@@ -276,7 +277,12 @@ class FirebaseFirestore {
                 Log.i("Firebase", "Erro ao receber dados do Firebase. ",exception)
             }
     }
-
+    suspend fun updateFavoriteList(newFavorite: List<Int>){
+        val dataTemp: HashMap<String, Any> = HashMap()
+        dataTemp[NAME_FAVORITED] = newFavorite
+        firebaseAuth.currentUser?.let {
+            firebaseDatabase.collection(NAME_USERINFO_DATABASE).document(it.uid).set(dataTemp, SetOptions.merge())
+        }
     suspend fun insertUser(user: User){
 
         val dataTemp: HashMap<String, Any> = HashMap()
@@ -301,6 +307,5 @@ class FirebaseFirestore {
 
 
     suspend fun updateUser(){
-
     }
 }

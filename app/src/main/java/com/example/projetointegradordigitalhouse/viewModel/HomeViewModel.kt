@@ -19,8 +19,8 @@ internal class HomeViewModel(
     var homeSeriesList: MutableLiveData<List<SeriesResult>> = MutableLiveData()
     var homeComicsList: MutableLiveData<List<ComicResult>> = MutableLiveData()
 
-    private val localDatabase: SearchDao by lazy { LocalDatabase.getDatabase(context).userDao() }
-    private val repository: MarvelXRepository by lazy {MarvelXRepository()}
+    private val localDatabase: SearchDao by lazy { LocalDatabase.getDatabase(context).searchDao() }
+    private val repository: MarvelXRepository by lazy {MarvelXRepository(context)}
     var lastSearchHistory: MutableLiveData<MutableList<String>> = MutableLiveData()
 
     fun getSearchHistory() {

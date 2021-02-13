@@ -1,5 +1,6 @@
 package com.example.projetointegradordigitalhouse.view.adapter
 
+import android.content.Context
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -11,13 +12,19 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.projetointegradordigitalhouse.R
 import com.example.projetointegradordigitalhouse.model.CharacterResult
-import com.example.projetointegradordigitalhouse.model.characters.Result
+import com.example.projetointegradordigitalhouse.view.ChipSearchActivity
+import com.example.projetointegradordigitalhouse.viewModel.ChipSearchViewModel
 import com.google.android.material.card.MaterialCardView
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 
-    class ChipSearchAdapter(
+class ChipSearchAdapter(
         private val charactersList: MutableList<CharacterResult>,
         private val itemClicked: (Int) -> Unit
     ): RecyclerView.Adapter<ChipSearchAdapter.LocalViewHolder>() {
+
+        val viewModel by lazy { ChipSearchViewModel(ChipSearchActivity()) }
+        private val firebaseAuth by lazy { Firebase.auth }
 
         inner class LocalViewHolder(itemView: View): RecyclerView.ViewHolder(itemView){
             var charImage = itemView.findViewById<ImageView>(R.id.cv_character_thumb)
@@ -40,14 +47,30 @@ import com.google.android.material.card.MaterialCardView
                 .into(holder.charImage)
 
             holder.charName.text = charactersList[position].name
-            holder.charBackground.setOnClickListener {
-                itemClicked(position)
+            holder.charBackground.setOnClickListener { itemClicked(position) }
+            holder.charSearch.setOnClickListener { addTag(charactersList[position].name) }
+            firebaseAuth.currentUser?.let{
+                Log.i("Tela 1", "Entrei 1")
+                holder.charFavorite.setOnClickListener { addFav(charactersList[position]) }
+                holder.charFavorite.isSelected = true
+            }?: run{
+                Log.i("Tela 1", "Entrei 2")
+                holder.charFavorite.isSelected = false
+                holder.charFavorite.isEnabled = false
             }
+
             Log.i("Tela 1", "View ${position} criada")
         }
+
         override fun getItemCount(): Int {
             Log.i("Tela 1", "Lista com ${charactersList.size} elementos")
             return charactersList.size
+        }
+        fun addTag(tag: String){
+            viewModel.addSearchTag(tag)
+        }
+        private fun addFav(characterResult: CharacterResult) {
+            viewModel.addFavoriteChar(characterResult)
         }
 
 }

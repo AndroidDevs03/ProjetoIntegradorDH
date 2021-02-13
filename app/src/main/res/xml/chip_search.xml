@@ -2,5 +2,5 @@
 <chip
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    app:chipIcon="@drawable/ic_mjolnifier_blank"
+    app:chipIcon="@drawable/ic_mjolnifier"
     android:text="Teste"/>

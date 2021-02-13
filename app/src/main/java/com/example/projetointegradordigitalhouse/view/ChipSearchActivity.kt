@@ -1,9 +1,11 @@
 package com.example.projetointegradordigitalhouse.view
 
 import android.content.Intent
+import android.graphics.PorterDuff
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import android.widget.Toast
@@ -27,6 +29,7 @@ class ChipSearchActivity : AppCompatActivity() {
     lateinit var searchTags: MutableSet<String?>
     lateinit var newTag: String
     private val characterList = mutableListOf<Result>()
+    private var specialSearchActivated: Boolean = false
 
     // Ao preencher o campo de busca, consultar o banco de dados do Firebase pelas buscas já feitas e colocá-las na hint
     // Ao confirmar a busca, acrescentar a tag no banco de dados local e consultar o banco de dados "searchtags"
@@ -67,8 +70,8 @@ class ChipSearchActivity : AppCompatActivity() {
         binding.csSearchField.setEndIconOnClickListener {
             newTag = binding.csSearchField.editText?.text.toString().trim()
             if (newTag!="") {
-                viewModel.addSearchToLocalDatabase(Search(newTag,0, Date().toString()))
-                if (searchTags.contains(newTag).not()) {
+                viewModel.addSearchToLocalDatabase(newTag)
+                if (specialSearchActivated && searchTags.contains(newTag).not()) {
                     val chipDrawable = Chip(this)
                     chipDrawable.text = newTag
                     chipDrawable.isCloseIconVisible = true
@@ -83,20 +86,20 @@ class ChipSearchActivity : AppCompatActivity() {
                 viewModel.getCharactersByName(newTag)
             }
         }
+        binding.csSearchField.setEndIconOnLongClickListener(View.OnLongClickListener{
+            changeSearchType()
+        })
 
         Log.i("ChipSearchActivity", "Configurando recycler view")
         viewModel.searchCharList.observe(this, {
             it?.let { charList ->
                 binding.csRecyclerView.apply {
                     layoutManager = GridLayoutManager(this@ChipSearchActivity, 2)
-                    adapter = ChipSearchAdapter(charList) { position ->
+                    adapter = ChipSearchAdapter( charList) { position ->
                         val intent = Intent(this@ChipSearchActivity, CharacterActivity::class.java)
                         intent.putExtra(KEY_INTENT_DATA, charList[position])
                         startActivity(intent)
                     }
-                }
-                charList.forEach {itChars ->
-                    viewModel.updateSeriesByCharacterId(itChars.id)
                 }
             }
         })
@@ -145,5 +148,15 @@ class ChipSearchActivity : AppCompatActivity() {
 
     private fun refreshResults() {
         TODO("Not yet implemented")
+    }
+    fun changeSearchType(): Boolean{
+        if (specialSearchActivated) {
+            binding.csSearchField.setEndIconDrawable(R.drawable.ic_baseline_search_24)
+            specialSearchActivated = false
+        } else {
+            binding.csSearchField.setEndIconDrawable(R.drawable.ic_baseline_search_off_24)
+            specialSearchActivated = true
+        }
+        return true
     }
 }

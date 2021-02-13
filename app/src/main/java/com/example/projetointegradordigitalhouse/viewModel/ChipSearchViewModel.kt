@@ -10,12 +10,13 @@ import com.github.cesar1287.desafiopicpayandroid.model.home.MarvelXRepository
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.launch
+import java.time.LocalDate.now
 
 class ChipSearchViewModel(
     context: Context
 ) : ViewModel() {
-    private val repository: MarvelXRepository by lazy { MarvelXRepository() }
-    private val localDatabase: SearchDao by lazy { LocalDatabase.getDatabase(context).userDao() }
+    private val repository: MarvelXRepository by lazy { MarvelXRepository(context) }
+    private val localDatabase: SearchDao by lazy { LocalDatabase.getDatabase(context).searchDao() }
     private val sharedPreferences: MarvelXSharedPreferences by lazy {
         MarvelXSharedPreferences(
             context
@@ -62,7 +63,9 @@ class ChipSearchViewModel(
         }
     }
 
-    fun addSearchToLocalDatabase(search: Search) {
+    fun addSearchToLocalDatabase(tag: String) {
+        val userID = firebaseAuth.currentUser?.uid ?: ""
+        val search = Search(tag, userID, now().toString())
         viewModelScope.launch {
             val tempNewList: MutableList<String> = lastSearchHistory.value ?: mutableListOf()
             localDatabase.insert(search)
@@ -79,5 +82,14 @@ class ChipSearchViewModel(
             lastSearchHistory.postValue(tempNewList)
         }
     }
+
+    fun addSearchTag(tag: String) {
+
+    }
+
+    fun addFavoriteChar(characterResult: CharacterResult) {
+
+    }
+
 
 }

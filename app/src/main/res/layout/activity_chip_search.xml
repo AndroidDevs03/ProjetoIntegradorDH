@@ -14,7 +14,6 @@
         android:layout_height="wrap_content"
         style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu"
         android:theme="@style/search_field"
-        app:endIconTint="@color/white"
         app:boxStrokeColor="@color/white">
         <AutoCompleteTextView
             style="@style/search_input"

@@ -11,17 +11,16 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-
         <ImageView
+            android:clickable="true"
             android:id="@+id/cv_character_thumb"
             android:layout_width="match_parent"
             android:layout_height="@dimen/dim_card_thumb_height"
-            android:scaleType="fitCenter"
+            android:scaleType="fitXY"
             android:src="@drawable/ex_character_thumb"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
-
         <TextView
             android:id="@+id/cv_character_name"
             android:layout_width="match_parent"
@@ -39,22 +38,22 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/cv_character_thumb" />
-
         <ImageButton
+            android:clickable="true"
             android:id="@+id/cv_character_favorite"
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_marginTop="5dp"
             android:layout_marginEnd="5dp"
             android:layout_marginRight="5dp"
-            android:background="#00FFFFFF"
+            android:src="@drawable/favorite_selector"
+            android:background="@drawable/ic_baseline_star_outline_24_"
             android:elevation="10dp"
             android:outlineAmbientShadowColor="@color/black"
             android:scaleType="fitCenter"
-            android:src="@drawable/star_outline_icon"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
+            app:layout_constraintTop_toTopOf="parent"
+            android:focusable="true" />
         <ImageButton
             android:id="@+id/cv_character_search"
             android:layout_width="30dp"
@@ -63,11 +62,10 @@
             android:layout_marginEnd="5dp"
             android:layout_marginRight="5dp"
             android:background="#00FFFFFF"
-            android:elevation="10dp"
+            android:elevation="100dp"
             android:outlineAmbientShadowColor="@color/black"
             android:scaleType="fitCenter"
             android:src="@drawable/search_icon"
-            android:visibility="gone"
             app:layout_constraintEnd_toStartOf="@id/cv_character_favorite"
             app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
