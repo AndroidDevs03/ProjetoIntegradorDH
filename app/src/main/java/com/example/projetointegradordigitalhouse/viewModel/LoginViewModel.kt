@@ -13,7 +13,7 @@ class LoginViewModel(
     context: Context
 ) : ViewModel() {
 
-    private val repository: MarvelXRepository by lazy { MarvelXRepository() }
+    private val repository: MarvelXRepository by lazy { MarvelXRepository(context) }
 
 //    var homeLoginUser: MutableLiveData<List<User>> = MutableLiveData()
 

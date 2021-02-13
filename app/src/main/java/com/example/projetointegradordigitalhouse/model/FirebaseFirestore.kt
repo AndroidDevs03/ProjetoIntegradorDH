@@ -1,7 +1,6 @@
 package com.example.projetointegradordigitalhouse.model
 
 import android.util.Log
-import android.widget.Toast
 import com.example.projetointegradordigitalhouse.util.Constants.FirebaseNames.NAME_AVATAR
 import com.example.projetointegradordigitalhouse.util.Constants.FirebaseNames.NAME_CHARACTER_DATABASE
 import com.example.projetointegradordigitalhouse.util.Constants.FirebaseNames.NAME_CHARACTER_LIST
@@ -21,7 +20,8 @@ import com.example.projetointegradordigitalhouse.util.Constants.FirebaseNames.NA
 import com.example.projetointegradordigitalhouse.util.Constants.FirebaseNames.NAME_SERIES_DATABASE
 import com.example.projetointegradordigitalhouse.util.Constants.FirebaseNames.NAME_SERIES_ID
 import com.example.projetointegradordigitalhouse.util.Constants.FirebaseNames.NAME_THUMBNAIL
-import com.example.projetointegradordigitalhouse.util.Constants.FirebaseNames.NAME_USERINFO_DATABASE
+import com.example.projetointegradordigitalhouse.util.Constants.FirebaseNames.NAME_USERS_DATABASE
+import com.example.projetointegradordigitalhouse.util.Constants.FirebaseNames.NAME_USER_ID
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.SetOptions
 import com.google.firebase.firestore.ktx.firestore
@@ -277,12 +277,14 @@ class FirebaseFirestore {
                 Log.i("Firebase", "Erro ao receber dados do Firebase. ",exception)
             }
     }
-    suspend fun updateFavoriteList(newFavorite: List<Int>){
+    suspend fun updateFavoriteList(newFavorite: List<Int>) {
         val dataTemp: HashMap<String, Any> = HashMap()
         dataTemp[NAME_FAVORITED] = newFavorite
         firebaseAuth.currentUser?.let {
-            firebaseDatabase.collection(NAME_USERINFO_DATABASE).document(it.uid).set(dataTemp, SetOptions.merge())
+            firebaseDatabase.collection(NAME_USERS_DATABASE).document(it.uid)
+                .set(dataTemp, SetOptions.merge())
         }
+    }
     suspend fun insertUser(user: User){
 
         val dataTemp: HashMap<String, Any> = HashMap()
@@ -304,8 +306,6 @@ class FirebaseFirestore {
         Log.i("Firebase", "Usuário registrado. ")
 
     }
-
-
     suspend fun updateUser(){
     }
 }
