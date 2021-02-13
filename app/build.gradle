@@ -109,6 +109,13 @@ dependencies {
     // Lib pra fixar problemas de compatibilidade de versões de Android
     coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.1.1'
 
+    implementation "de.hdodenhof:circleimageview:3.1.0"
+
+    implementation "androidx.drawerlayout:drawerlayout:1.1.1"
+
+    implementation "androidx.recyclerview:recyclerview:1.1.0"
+    implementation "androidx.recyclerview:recyclerview-selection:1.1.0-rc03"
+
 
 //    kapt "com.github.bumptech.glide:compiler:${versions.glide}"
 }
