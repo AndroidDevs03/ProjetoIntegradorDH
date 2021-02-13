@@ -4,16 +4,21 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import android.widget.ImageView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.drawerlayout.widget.DrawerLayout
 import com.bumptech.glide.Glide
 import com.example.projetointegradordigitalhouse.R
 import com.example.projetointegradordigitalhouse.databinding.ActivityHomeBinding
 import com.example.projetointegradordigitalhouse.model.*
 import com.example.projetointegradordigitalhouse.util.Constants.Intent.KEY_INTENT_SEARCH
 import com.example.projetointegradordigitalhouse.viewModel.HomeViewModel
+import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.navigation.NavigationView
 import com.synnapps.carouselview.ImageClickListener
 import com.synnapps.carouselview.ImageListener
 import java.util.*
@@ -39,10 +44,18 @@ class HomeActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityHomeBinding
 
+    private lateinit var drawerLayout: DrawerLayout
+
+    private lateinit var navigationView : NavigationView
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityHomeBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        drawerLayout = binding.dlPerfil
+        navigationView = binding.nvPerfil
+
 
         initComponents()
         setupObservables()
@@ -63,6 +76,7 @@ class HomeActivity : AppCompatActivity() {
         val seriesList = mutableListOf<SeriesResult>()
         val comicsList = mutableListOf<ComicResult>()
         Log.i("HomeActivity", "Setup Observables")
+
         viewModel.homeCharList.observe(this, {
             charsList.addAll(it)
             Log.i("CarouselView", "${charsList.size} Characters")
@@ -117,7 +131,8 @@ class HomeActivity : AppCompatActivity() {
         binding.hmBottomNavigation.setOnNavigationItemSelectedListener {
             when (it.itemId) {
                 R.id.page_1 -> {
-                    startActivity(Intent(this, HomeActivity::class.java))
+//                    startActivity(Intent(this, HomeActivity::class.java))
+                    drawerLayout.open()
                     true
                 }
                 R.id.page_2 -> {
@@ -130,6 +145,7 @@ class HomeActivity : AppCompatActivity() {
                 }
                 R.id.page_4 -> {
                     startActivity(Intent(this, LoginActivity::class.java))
+
                     true
                 }
                 else -> {
@@ -137,6 +153,29 @@ class HomeActivity : AppCompatActivity() {
                 }
             }
         }
+
+        navigationView.setNavigationItemSelectedListener { menuItem ->
+            // Handle menu item selected
+            when (menuItem.itemId){
+                R.id.item1 ->{
+                    drawerLayout.close()
+                    true
+                }
+                R.id.item2 ->{
+                    startActivityForResult(Intent(this, PopUpWindow::class.java),100)
+//                    drawerLayout.close()
+                    true
+                }
+                R.id.item3 ->{
+                    drawerLayout.close()
+                    true
+                }
+                else -> {
+                    false
+                }
+            }
+        }
+
         binding.cvCharacter.setImageClickListener{
             val intent = Intent(this, CharacterActivity::class.java)
             intent.putExtra("blablabla", charsList[it].id)
@@ -150,6 +189,11 @@ class HomeActivity : AppCompatActivity() {
         binding.cvSeries.setImageClickListener {
             startActivity(Intent(this, SeriesActivity::class.java))
         }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        val item = data?.getIntExtra("foto",0)
     }
 }
 

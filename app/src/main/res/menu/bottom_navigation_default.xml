@@ -4,8 +4,8 @@
     <item
         android:id="@+id/page_1"
         android:enabled="true"
-        android:icon="@drawable/ic_baseline_home_24"
-        android:title="Home"/>
+        android:icon="@drawable/ic_groot"
+        android:title="User"/>
     <item
         android:id="@+id/page_2"
         android:enabled="true"
@@ -19,6 +19,6 @@
     <item
         android:id="@+id/page_4"
         android:enabled="true"
-        android:icon="@drawable/ic_groot"
-        android:title="User"/>
+        android:icon="@drawable/ic_baseline_home_24"
+        android:title="Home"/>
 </menu>

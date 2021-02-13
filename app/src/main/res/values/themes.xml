@@ -1,6 +1,7 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Theme.ProjetoIntegradorDigitalHouse" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+    <style name="Theme.ProjetoIntegradorDigitalHouse"
+        parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/black</item>
         <item name="colorPrimaryVariant">@color/black</item>
@@ -12,6 +13,7 @@
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorOnSecondary</item>
         <!-- Customize your theme here. -->
+        <item name="android:windowTranslucentStatus" tools:ignore="NewApi">true</item>
     </style>
 
     <style name="bottom_navigation">
@@ -110,4 +112,13 @@
         <item name="android:paddingEnd">30dp</item>
         <item name="android:paddingRight">30dp</item>
     </style>
+
+    <style name="Theme.PopMe"
+        parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowCloseOnTouchOutside">true</item>
+    </style>
+
+    <style name="Theme">theme_pop</style>
+
 </resources>
