@@ -13,4 +13,6 @@
     <string name="text_label_movie_director">Directed by:</string>
     <string name="text_label_movie_release_date">Release date:</string>
     <string name="text_movie_release_date">May 7, 2021</string>
+    <string name="facebook_application_id" translatable="false">733817520903883</string>
+    <string name="facebook_login_protocol_scheme" translatable="false">fb733817520903883</string>
 </resources>

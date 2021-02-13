@@ -5,12 +5,9 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.projetointegradordigitalhouse.model.*
-import com.example.projetointegradordigitalhouse.model.characters.Characters
-import com.example.projetointegradordigitalhouse.model.characters.Result
 import com.example.projetointegradordigitalhouse.util.Constants.Values.CONST_MAX_SEARCH_RESULTS
 import com.github.cesar1287.desafiopicpayandroid.model.home.MarvelXRepository
 import com.google.firebase.auth.ktx.auth
-import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.launch
 
@@ -23,19 +20,24 @@ class ChipSearchViewModel(
     private val firebaseAuth by lazy { Firebase.auth }
 
 
-    var searchCharList: MutableLiveData<List<Result>> = MutableLiveData()
+    var searchCharList: MutableLiveData<MutableList<CharacterResult>> = MutableLiveData()
+    var searchSeriesList: MutableLiveData<MutableList<SeriesResult>> = MutableLiveData()
+    var searchComicList: MutableLiveData<MutableList<ComicResult>> = MutableLiveData()
     var lastSearchHistory: MutableLiveData<MutableList<String>> = MutableLiveData()
 
     fun getCharactersByName(name: String, limit: Int=10, offset:Int=0){
         viewModelScope.launch {
-            when (val response = repository.getCharactersByName(name,limit,offset)) {
-                is ResponseApi.Success -> {
-                    val data = response.data as Characters
-                    searchCharList.postValue(data.data.results.take(4))
-                }
-                is ResponseApi.Error -> {
-                }
+            searchCharList.postValue(repository.getCharactersByName(name,limit,offset))
             }
+    }
+    fun getSeriesByName(name: String, limit: Int=10, offset:Int=0){
+        viewModelScope.launch {
+            searchSeriesList.postValue(repository.getSeriesByName(name,limit,offset))
+        }
+    }
+    fun getComicsByName(name: String, limit: Int=10, offset:Int=0){
+        viewModelScope.launch {
+            searchComicList.postValue(repository.getComicsByName(name,limit,offset))
         }
     }
     fun getSearchHistory() {

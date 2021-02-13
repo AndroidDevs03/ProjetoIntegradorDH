@@ -6,18 +6,15 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.projetointegradordigitalhouse.model.*
-import com.example.projetointegradordigitalhouse.model.characters.Characters
-import com.github.cesar1287.desafiopicpayandroid.model.home.HomeBusiness
 import kotlinx.coroutines.launch
-import com.example.projetointegradordigitalhouse.model.characters.Result
 import com.example.projetointegradordigitalhouse.util.Constants
 import com.github.cesar1287.desafiopicpayandroid.model.home.MarvelXRepository
+import com.google.firebase.auth.FirebaseUser
 
 internal class HomeViewModel(
     context: Context
 ) : ViewModel() {
 
-    private val homeBusiness = HomeBusiness()
     var homeCharList: MutableLiveData<List<CharacterResult>> = MutableLiveData()
     var homeSeriesList: MutableLiveData<List<SeriesResult>> = MutableLiveData()
     var homeComicsList: MutableLiveData<List<ComicResult>> = MutableLiveData()
@@ -48,7 +45,6 @@ internal class HomeViewModel(
             lastSearchHistory.postValue(tempNewList)
         }
     }
-
     fun getHomeCharacters() {
 //    1009664 Thor
 //    1009610 Spider-Man

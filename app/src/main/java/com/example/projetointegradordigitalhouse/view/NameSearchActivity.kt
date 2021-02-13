@@ -42,7 +42,7 @@ class NameSearchActivity : AppCompatActivity() {
             if (activeSearch!="") {
                 binding.nsSearchField.editText?.text?.clear()
                 characterList.clear()
-                viewModel.getCharactersByName(activeSearch)
+                //viewModel.getCharactersByName(activeSearch)
             }
         }
         binding.nsBottomNavigation.setOnNavigationItemSelectedListener(){
@@ -84,6 +84,6 @@ class NameSearchActivity : AppCompatActivity() {
     private fun refreshResults() {
         characterList.clear()
         binding.nsRvChars.removeAllViewsInLayout()
-        viewModel.getCharactersByName(activeSearch)
+        //viewModel.getCharactersByName(activeSearch)
     }
 }
