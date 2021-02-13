@@ -27,6 +27,6 @@
     <string name="welcome_to_the_marvel_community">welcome to the marvel community</string>
     <string name="home">home</string>
     <string name="sign_in_no_account">Sign In no account</string>
-    <string name="facebook_app_id">795155574550651</string>
-    <string name="fb_login_protocol_scheme">fb795155574550651</string>
+    <string name="facebook_application_id" translatable="false">733817520903883</string>
+    <string name="facebook_login_protocol_scheme" translatable="false">fb733817520903883</string>
 </resources>

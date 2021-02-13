@@ -1,12 +1,16 @@
 package com.example.projetointegradordigitalhouse.model
 
 import android.util.Log
+import android.widget.Toast
+import com.example.projetointegradordigitalhouse.util.Constants.FirebaseNames.NAME_AVATAR
 import com.example.projetointegradordigitalhouse.util.Constants.FirebaseNames.NAME_CHARACTER_DATABASE
 import com.example.projetointegradordigitalhouse.util.Constants.FirebaseNames.NAME_CHARACTER_LIST
 import com.example.projetointegradordigitalhouse.util.Constants.FirebaseNames.NAME_COMICS_DATABASE
 import com.example.projetointegradordigitalhouse.util.Constants.FirebaseNames.NAME_COMIC_LIST
 import com.example.projetointegradordigitalhouse.util.Constants.FirebaseNames.NAME_DESCRIPTION
+import com.example.projetointegradordigitalhouse.util.Constants.FirebaseNames.NAME_EMAIL
 import com.example.projetointegradordigitalhouse.util.Constants.FirebaseNames.NAME_FAVORITED
+import com.example.projetointegradordigitalhouse.util.Constants.FirebaseNames.NAME_FAVORITE_LIST
 import com.example.projetointegradordigitalhouse.util.Constants.FirebaseNames.NAME_ISSUE_NUMBER
 import com.example.projetointegradordigitalhouse.util.Constants.FirebaseNames.NAME_LAST_UPDATE
 import com.example.projetointegradordigitalhouse.util.Constants.FirebaseNames.NAME_NAME
@@ -279,5 +283,29 @@ class FirebaseFirestore {
         firebaseAuth.currentUser?.let {
             firebaseDatabase.collection(NAME_USERINFO_DATABASE).document(it.uid).set(dataTemp, SetOptions.merge())
         }
+    suspend fun insertUser(user: User){
+
+        val dataTemp: HashMap<String, Any> = HashMap()
+        Log.i("Firebase", "Usuário 1. ")
+
+        dataTemp[NAME_USER_ID] = user.id
+        Log.i("Firebase", "Usuário 2. ")
+        dataTemp[NAME_AVATAR] = user.avatarId
+        dataTemp[NAME_NAME] = user.name
+        dataTemp[NAME_EMAIL]= user.email
+        dataTemp[NAME_FAVORITE_LIST] = ""
+        user.favoritesItens?.let{
+            dataTemp[NAME_FAVORITE_LIST] = it
+        }
+        firebaseDatabase.collection(NAME_USERS_DATABASE)
+//            .document(user.id)
+            .document(dataTemp[NAME_USER_ID].toString())
+            .set(dataTemp, SetOptions.merge())
+        Log.i("Firebase", "Usuário registrado. ")
+
+    }
+
+
+    suspend fun updateUser(){
     }
 }

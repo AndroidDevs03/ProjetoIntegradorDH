@@ -14,6 +14,7 @@ import com.example.projetointegradordigitalhouse.util.Constants.FirebaseNames.NA
 import com.example.projetointegradordigitalhouse.util.Constants.FirebaseNames.NAME_SERIES_DATABASE
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.auth.FirebaseUser
 import java.lang.Exception
 import java.time.LocalDate.now
 
@@ -253,6 +254,7 @@ class MarvelXRepository(context: Context) {
             ResponseApi.Error("Erro ao carregar os dados")
         }
     }
+
     suspend fun addToFavorites(result: GeneralResult){
         val userID = firebaseAuth.currentUser?.uid ?: ""
         val newFavoriteList = mutableListOf<Int>()
@@ -281,5 +283,12 @@ class MarvelXRepository(context: Context) {
         val userID = firebaseAuth.currentUser?.uid ?: ""
         return Favorite(general.id, userID, type, general.name, general.thumbnail, general.description, general.favoriteTagFlag)
 
+
+    suspend fun setUser(user: User){
+        try{
+            firebaseFirestore.insertUser(user)
+        }catch (exception: Exception){
+//            todo
+        }
     }
 }

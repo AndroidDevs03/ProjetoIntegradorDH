@@ -3,6 +3,8 @@ plugins {
     id 'kotlin-android'
     id 'kotlin-kapt'
     id 'kotlin-android-extensions'
+//    id 'kotlin-parcelize'
+
 
     // Firebase
     id 'com.google.gms.google-services'
@@ -29,6 +31,8 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        resConfigs "en" // And any other languages you support
+
     }
 
     buildTypes {
@@ -87,17 +91,30 @@ dependencies {
     //firebase
     implementation platform('com.google.firebase:firebase-bom:26.4.0')
     implementation 'com.google.firebase:firebase-auth-ktx'
+    implementation 'com.google.firebase:firebase-auth'
     implementation 'com.google.firebase:firebase-analytics-ktx'
     implementation 'com.google.firebase:firebase-messaging-ktx'
     implementation 'com.google.firebase:firebase-crashlytics-ktx'
     implementation 'com.google.firebase:firebase-storage-ktx'
     implementation 'com.google.firebase:firebase-firestore-ktx:22.0.2'
+    implementation 'com.firebaseui:firebase-ui-auth:7.1.1'
+
+    //facebook
+    implementation 'com.facebook.android:facebook-android-sdk:7.1.0'
+
 
     //Shared Preferences
     implementation "androidx.preference:preference-ktx:1.1.1"
 
     // Lib pra fixar problemas de compatibilidade de versões de Android
     coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.1.1'
+
+    implementation "de.hdodenhof:circleimageview:3.1.0"
+
+    implementation "androidx.drawerlayout:drawerlayout:1.1.1"
+
+    implementation "androidx.recyclerview:recyclerview:1.1.0"
+    implementation "androidx.recyclerview:recyclerview-selection:1.1.0-rc03"
 
 
 //    kapt "com.github.bumptech.glide:compiler:${versions.glide}"
