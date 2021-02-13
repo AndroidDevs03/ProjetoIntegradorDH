@@ -1,17 +1,12 @@
 package com.example.projetointegradordigitalhouse.view
 
-import android.content.Context
 import android.content.Intent
-import android.content.res.ColorStateList
-import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import android.widget.Toast
-import androidx.core.content.ContentProviderCompat.requireContext
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.projetointegradordigitalhouse.R
 import com.example.projetointegradordigitalhouse.databinding.ActivityChipSearchBinding
@@ -20,16 +15,8 @@ import com.example.projetointegradordigitalhouse.model.characters.Result
 import com.example.projetointegradordigitalhouse.util.Constants.Intent.KEY_INTENT_DATA
 import com.example.projetointegradordigitalhouse.view.adapter.ChipSearchAdapter
 import com.example.projetointegradordigitalhouse.viewModel.ChipSearchViewModel
-import com.example.projetointegradordigitalhouse.viewModel.HomeViewModel
 import com.google.android.material.chip.Chip
-import com.google.android.material.chip.ChipGroup
 import com.google.android.material.tabs.TabLayout
-import com.google.android.material.textfield.TextInputLayout
-import com.google.firebase.auth.ktx.auth
-import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.ktx.Firebase
-import com.google.firebase.storage.ktx.storage
-import java.time.LocalDateTime
 import java.util.*
 
 class ChipSearchActivity : AppCompatActivity() {
@@ -38,6 +25,7 @@ class ChipSearchActivity : AppCompatActivity() {
     private val viewModel by lazy {ChipSearchViewModel(this)}
     //private lateinit var viewModel: ChipSearchViewModel
     lateinit var searchTags: MutableSet<String?>
+    lateinit var newTag: String
     private val characterList = mutableListOf<Result>()
 
     // Ao preencher o campo de busca, consultar o banco de dados do Firebase pelas buscas já feitas e colocá-las na hint
@@ -64,31 +52,35 @@ class ChipSearchActivity : AppCompatActivity() {
         binding.csBottomNavigation.menu.getItem(2).setChecked(true).setEnabled(false)
         binding.csTabLayout.addTab(binding.csTabLayout.newTab().setText("Characters"))
         binding.csTabLayout.addTab(binding.csTabLayout.newTab().setText("Series"))
-        binding.csTabLayout.addTab(binding.csTabLayout.newTab().setText("Comics"))
 
         // Carregando histórico de busca feito no aplicativo
         viewModel.getSearchHistory()
 
     }
     private fun setupObservables() {
+        viewModel.lastSearchHistory.observe(this, {
+            it?.let { searchTags ->
+                val adapter = ArrayAdapter(this@ChipSearchActivity, R.layout.list_item, searchTags)
+                (binding.csSearchField.editText as? AutoCompleteTextView)?.setAdapter(adapter)
+            }
+        })
         binding.csSearchField.setEndIconOnClickListener {
-            val newtag = binding.csSearchField.editText?.text.toString().trim()
-            if (newtag!="") {
-                viewModel.addSearchToLocalDatabase(Search(newtag,0, Date().toString()))
-                if (searchTags.contains(newtag).not()) {
+            newTag = binding.csSearchField.editText?.text.toString().trim()
+            if (newTag!="") {
+                viewModel.addSearchToLocalDatabase(Search(newTag,0, Date().toString()))
+                if (searchTags.contains(newTag).not()) {
                     val chipDrawable = Chip(this)
-                    chipDrawable.text = newtag
+                    chipDrawable.text = newTag
                     chipDrawable.isCloseIconVisible = true
                     chipDrawable.setOnCloseIconClickListener {
                         binding.csChipGroup.removeView(chipDrawable)
                         searchTags.remove(chipDrawable.text)
                     }
                     binding.csChipGroup.addView(chipDrawable)
-                    searchTags.add(newtag)
+                    searchTags.add(newTag)
                     binding.csSearchField.editText?.text?.clear()
                 }
-                viewModel.getCharactersByName(newtag)
-
+                viewModel.getCharactersByName(newTag)
             }
         }
 
@@ -102,6 +94,9 @@ class ChipSearchActivity : AppCompatActivity() {
                         intent.putExtra(KEY_INTENT_DATA, charList[position])
                         startActivity(intent)
                     }
+                }
+                charList.forEach {itChars ->
+                    viewModel.updateSeriesByCharacterId(itChars.id)
                 }
             }
         })

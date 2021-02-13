@@ -3,7 +3,7 @@ package com.example.projetointegradordigitalhouse.model.series
 data class Result(
     val characters: Characters,
     val comics: Comics,
-    val description: Any,
+    var description: Any,
     val id: Int,
     val startYear: Int,
     val stories: Stories,

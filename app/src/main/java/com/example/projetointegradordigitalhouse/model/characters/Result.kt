@@ -6,7 +6,7 @@ import kotlinx.android.parcel.Parcelize
 @Parcelize
 data class Result(
 
-    val description: String,
+    var description: String,
     val id: Int,
     val modified: String,
     val name: String,

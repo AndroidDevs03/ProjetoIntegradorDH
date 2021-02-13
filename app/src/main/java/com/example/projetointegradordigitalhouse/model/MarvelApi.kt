@@ -30,9 +30,9 @@ object MarvelApi {
                 loggingInterceptor.level = HttpLoggingInterceptor.Level.BODY
 
                 val interceptor = OkHttpClient.Builder()
-                        .connectTimeout(5, TimeUnit.SECONDS)
-                        .readTimeout(10, TimeUnit.SECONDS)
-                        .writeTimeout(10, TimeUnit.SECONDS)
+                        .connectTimeout(10, TimeUnit.SECONDS)
+                        .readTimeout(30, TimeUnit.SECONDS)
+                        .writeTimeout(30, TimeUnit.SECONDS)
                         .addInterceptor(loggingInterceptor)
 
 //                Authentication for Server-Side Applications
@@ -67,18 +67,22 @@ object MarvelApi {
 interface MarvelApiQueries {
 
         @GET("characters")
-        suspend fun CharactersByName(@Query("nameStartsWith")charName: String,@Query("limit")limit: Int = 10,@Query("offset")offset: Int = 0): Response<CharacterResponse>
+        suspend fun charactersByName(@Query("nameStartsWith")charName: String, @Query("limit")limit: Int = 20, @Query("offset")offset: Int = 0): Response<CharacterResponse>
 
         @GET("series")
-        suspend fun SeriesByName(@Query("titleStartsWith")charName: String,@Query("limit")limit: Int = 10,@Query("offset")offset: Int = 0): Response<SeriesResponse>
+        suspend fun seriesByName(@Query("titleStartsWith")charName: String, @Query("limit")limit: Int = 10, @Query("offset")offset: Int = 0): Response<SeriesResponse>
 
         @GET("comics")
-        suspend fun ComicsByName(@Query("titleStartsWith")charName: String,@Query("limit")limit: Int = 10,@Query("offset")offset: Int = 0): Response<ComicResponse>
+        suspend fun comicsByName(@Query("titleStartsWith")charName: String, @Query("limit")limit: Int = 10, @Query("offset")offset: Int = 0): Response<ComicResponse>
 
         @GET("characters/{characterId}")
-        suspend fun CharactersByID(@Path("characterId") charID: Int): Response<CharacterResponse>
+        suspend fun charactersByID(@Path("characterId") charID: Int): Response<CharacterResponse>
 
-        @GET("comics")
-        suspend fun ComicsByCharsID(@Query("characters")charID: List<Int>): Response<ComicResponse>
+        //https://gateway.marvel.com:443/v1/public/characters/1009664/series?orderBy=-modified&limit=100&apikey=c32125ee0eec7c5e61969691516f131c
+        @GET("characters/{characterId}/series")
+        suspend fun seriesByCharacterID(@Path("characterId") charID: Int,  @Query("limit")limit: Int = 20, @Query("orderBy")orderBy: String = "-modified"): Response<SeriesResponse>
+
+        @GET("comics/{comicId}")
+        suspend fun comicsBySeriesID(@Path("comicId")comicID: Int): Response<ComicResponse>
 
 }
