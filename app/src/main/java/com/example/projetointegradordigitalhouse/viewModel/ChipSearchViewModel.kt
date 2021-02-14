@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.projetointegradordigitalhouse.model.*
-import com.example.projetointegradordigitalhouse.util.Constants.Values.CONST_MAX_SEARCH_RESULTS
+import com.example.projetointegradordigitalhouse.util.Constants.Values.CONST_MAX_SEARCH_HISTORY
 import com.github.cesar1287.desafiopicpayandroid.model.home.MarvelXRepository
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
@@ -25,14 +25,13 @@ class ChipSearchViewModel(
     private val firebaseAuth by lazy { Firebase.auth }
 
 
-    var searchCharList: MutableLiveData<MutableList<CharacterResult>> = MutableLiveData()
+    var searchResultList: MutableLiveData<Pair<MutableList<CharacterResult>,MutableList<SeriesResult>>> = MutableLiveData()
     var searchSeriesList: MutableLiveData<MutableList<SeriesResult>> = MutableLiveData()
-    var searchComicList: MutableLiveData<MutableList<ComicResult>> = MutableLiveData()
     var lastSearchHistory: MutableLiveData<MutableList<String>> = MutableLiveData()
 
-    fun getCharactersByName(name: String, limit: Int = 10, offset: Int = 0) {
+    fun searchByName(name: String) {
         viewModelScope.launch {
-            searchCharList.postValue(repository.getCharactersByName(name, limit, offset))
+            searchResultList.postValue(repository.searchByName(name, 15, 0))
         }
     }
     fun updateSeriesByCharacterId(charId: Int) {
@@ -48,12 +47,6 @@ class ChipSearchViewModel(
     fun getSeriesByName(name: String, limit: Int = 10, offset: Int = 0) {
         viewModelScope.launch {
             searchSeriesList.postValue(repository.getSeriesByName(name, limit, offset))
-        }
-    }
-
-    fun getComicsByName(name: String, limit: Int = 10, offset: Int = 0) {
-        viewModelScope.launch {
-            searchComicList.postValue(repository.getComicsByName(name, limit, offset))
         }
     }
 
@@ -73,7 +66,7 @@ class ChipSearchViewModel(
             if (search.busca in tempNewList) {
                 tempNewList.remove(search.busca)
                 tempNewList.add(0, search.busca)
-            } else if (tempNewList.size >= CONST_MAX_SEARCH_RESULTS) {
+            } else if (tempNewList.size >= CONST_MAX_SEARCH_HISTORY) {
                 tempNewList.add(0, search.busca)
                 tempNewList.removeLast()
             } else {
@@ -87,8 +80,15 @@ class ChipSearchViewModel(
 
     }
 
-    fun addFavoriteChar(characterResult: CharacterResult) {
-
+    fun addFavorite(result: Any, tabPosition: Int) {
+        viewModelScope.launch {
+            repository.addToFavorites(result, tabPosition)
+        }
+    }
+    fun remFavorite(result: Any, tabPosition: Int) {
+        viewModelScope.launch {
+            repository.removeFromFavorites(result, tabPosition)
+        }
     }
 
 

@@ -2,19 +2,16 @@ package com.github.cesar1287.desafiopicpayandroid.model.home
 
 import android.content.Context
 import android.util.Log
-import androidx.room.ColumnInfo
-import androidx.room.PrimaryKey
 import com.example.projetointegradordigitalhouse.model.*
 import com.example.projetointegradordigitalhouse.model.characters.CharacterResponse
 import com.example.projetointegradordigitalhouse.model.comics.ComicResponse
 import com.example.projetointegradordigitalhouse.model.series.SeriesResponse
-import com.example.projetointegradordigitalhouse.util.Constants
 import com.example.projetointegradordigitalhouse.util.Constants.FirebaseNames.NAME_CHARACTER_DATABASE
 import com.example.projetointegradordigitalhouse.util.Constants.FirebaseNames.NAME_COMICS_DATABASE
 import com.example.projetointegradordigitalhouse.util.Constants.FirebaseNames.NAME_SERIES_DATABASE
+import com.example.projetointegradordigitalhouse.util.Constants.FirebaseNames.NAME_USER_ID
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
-import com.google.firebase.auth.FirebaseUser
 import java.lang.Exception
 import java.time.LocalDate.now
 
@@ -22,12 +19,8 @@ class MarvelXRepository(context: Context) {
 
     private val firebaseFirestore: FirebaseFirestore by lazy { FirebaseFirestore() }
     private val firebaseAuth by lazy { Firebase.auth }
-    private val localDatabaseSearch: SearchDao by lazy {
-        LocalDatabase.getDatabase(context).searchDao()
-    }
-    private val localDatabaseFavorite: FavoriteDao by lazy {
-        LocalDatabase.getDatabase(context).favoriteDao()
-    }
+    private val localDatabaseSearch: SearchDao by lazy { LocalDatabase.getDatabase(context).searchDao() }
+    private val localDatabaseFavorite: FavoriteDao by lazy { LocalDatabase.getDatabase(context).favoriteDao() }
     private val marvelApi = MarvelApi.commands
     private lateinit var allChars: MutableList<CharacterResult>
     private lateinit var allSeries: MutableList<SeriesResult>
@@ -45,42 +38,41 @@ class MarvelXRepository(context: Context) {
         return firebaseFirestore.getMostPopularComics(limit)
     }
 
-    suspend fun getCharactersByName(
+    suspend fun searchByName(
         tag: String,
         limit: Int = 10,
         offset: Int = 0
-    ): MutableList<CharacterResult> {
+    ): Pair<MutableList<CharacterResult> , MutableList<SeriesResult>> {
         var tempCharList = mutableListOf<CharacterResult>()
+        var tempSeriesList = mutableListOf<SeriesResult>()
         // Primeiro, verifica se essa busca já foi feita no histórico do Firebase. Caso positivo, verifica se foi há mais de dois dias.
         if (firebaseFirestore.lastSearchNeedsUpdate(tag)) {
             // Se foi há mais de dois dias, refaz a busca na api da Marvel e atualiza o Firebase
-            val response = marvelApi.charactersByName(tag, limit, offset)
-            if (response.isSuccessful) {
-                tempCharList = convertResponseToCharList(response.body())
-                tempCharList.forEach {
-                    firebaseFirestore.insertCharacter(it)
-
-                    // it.series.forEach { itSeries -> getSeriesByCharacterID(itSeries)}
-                }
+            val responseChars = marvelApi.charactersByName(tag, limit, offset)
+            val responseSeries = marvelApi.seriesByName(tag, limit, offset)
+            if (responseChars.isSuccessful) {
+                tempCharList = convertResponseToCharList(responseChars.body())
+                tempCharList.forEach { firebaseFirestore.insertCharacter(it) }
                 Log.i("Repository", "${tempCharList.size} Characters updated to Firebase")
-
-                Log.i("Repository", "${tag} Search Tag updated to Firebase")
-                firebaseFirestore.insertSearchTag(tag)
-
-                tempCharList.forEach { itChars ->
-                    updateSeriesByCharacterID(itChars.id)
-                }
-
-                return tempCharList
+                tempCharList.forEach { updateSeriesByCharacterID(it.id) }
             }
+            if (responseSeries.isSuccessful) {
+                tempSeriesList = convertResponseToSeriesList(responseSeries.body())
+                tempSeriesList.forEach { firebaseFirestore.insertSeries(it) }
+                Log.i("Repository", "${tempSeriesList.size} Series updated to Firebase")
+                tempSeriesList.forEach { updateComicsBySeriesID(it.id) }
+            }
+            Log.i("Repository", "${tag} Search Tag updated to Firebase")
+            firebaseFirestore.insertSearchTag(tag)
+            return Pair(tempCharList,tempSeriesList)
         } else {
             // Se foi há menos de dois dias, busca os dados no Firebase.
             allChars = firebaseFirestore.getAllChars()
-            tempCharList = allChars.filter {
-                it.name.contains(tag)
-            } as MutableList<CharacterResult>
+            allSeries = firebaseFirestore.getAllSeries()
+            tempCharList = allChars.filter { it.name.contains(tag) } as MutableList<CharacterResult>
+            tempSeriesList = allSeries.filter { it.name.contains(tag) } as MutableList<SeriesResult>
         }
-        return tempCharList
+        return Pair(tempCharList,tempSeriesList)
     }
 
     suspend fun updateSeriesByCharacterID(charID: Int) {
@@ -162,9 +154,9 @@ class MarvelXRepository(context: Context) {
         val tempList = mutableListOf<CharacterResult>()
         data.forEach {
             if (it.series.available != 0) {  //pega apenas os personagens que aparecem em pelo menos uma série
-                val tempSeriesList = mutableListOf<Int>()
+                val tempSeriesList = mutableListOf<Long>()
                 it.series.items.forEach { itSeries ->
-                    tempSeriesList.add(itSeries.resourceURI.split("/").last().toInt())
+                    tempSeriesList.add(itSeries.resourceURI.split("/").last().toLong())
                 }
                 it.description = it.description ?: "Description not found"
                 tempList.add(
@@ -190,13 +182,13 @@ class MarvelXRepository(context: Context) {
         val tempList = mutableListOf<SeriesResult>()
         data.forEach {
             if (it.comics.available != 0) {  //pega apenas os personagens que aparecem em pelo menos uma série
-                val tempCharactersList = mutableListOf<Int>()
-                val tempComicsList = mutableListOf<Int>()
+                val tempCharactersList = mutableListOf<Long>()
+                val tempComicsList = mutableListOf<Long>()
                 it.characters.items.forEach { itSeries ->
-                    tempCharactersList.add(itSeries.resourceURI.split("/").last().toInt())
+                    tempCharactersList.add(itSeries.resourceURI.split("/").last().toLong())
                 }
                 it.comics.items.forEach { itSeries ->
-                    tempComicsList.add(itSeries.resourceURI.split("/").last().toInt())
+                    tempComicsList.add(itSeries.resourceURI.split("/").last().toLong())
                 }
                 it.description = it.description ?: "Description not found"
                 tempList.add(
@@ -224,9 +216,9 @@ class MarvelXRepository(context: Context) {
         val tempList = mutableListOf<ComicResult>()
         data.forEach {
             if (it.characters.available != 0) {  //pega apenas as séries que tem pelo menos um personagem
-                val tempCharactersList = mutableListOf<Int>()
+                val tempCharactersList = mutableListOf<Long>()
                 it.characters.items.forEach { itSeries ->
-                    tempCharactersList.add(itSeries.resourceURI.split("/").last().toInt())
+                    tempCharactersList.add(itSeries.resourceURI.split("/").last().toLong())
                 }
                 it.description = it.description ?: "Description not found"
 
@@ -238,7 +230,7 @@ class MarvelXRepository(context: Context) {
                     searchTagFlag = false,
                     favoriteTagFlag = false,
                     lastUpdate = now().toString(),
-                    charactersList = tempCharactersList as List<Int>,
+                    charactersList = tempCharactersList as List<Long>,
                     pageCount = it.pageCount.toString(),
                     issueNumber = it.issueNumber.toString(),
                     seriesID = it.series.resourceURI.split("/").last().toLong(),
@@ -269,45 +261,86 @@ class MarvelXRepository(context: Context) {
         }
     }
 
-    suspend fun addToFavorites(result: GeneralResult) {
+    suspend fun addToFavorites(result: Any, tabPosition: Int) {
         val userID = firebaseAuth.currentUser?.uid ?: ""
-        val newFavoriteList = mutableListOf<Int>()
-        localDatabaseFavorite.insert(convertResultToFavorite(result))
-        localDatabaseFavorite.getAllFavorites(NAME_CHARACTER_DATABASE).forEach {
-            newFavoriteList.add(it.id)
+        // 1) Adiciona o favorito na database local
+        when (tabPosition) {
+            0 -> { localDatabaseFavorite.insertChar(convertResultToFavoriteChar(result as CharacterResult)) }
+            1 -> { localDatabaseFavorite.insertSeries(convertResultToFavoriteSeries(result as SeriesResult)) }
+            2 -> { localDatabaseFavorite.insertComic(convertResultToFavoriteComic(result as ComicResult)) }
         }
-        firebaseFirestore.updateFavoriteList(newFavoriteList)
+
+        // 2) Incrementa o item no Firebase
+        firebaseFirestore.incrementFavorited((result as GeneralResult).id, tabPosition)
+
+        // 3) Atualiza a lista de favoritos do Firebase
+        // 3.1) Recupera a lista atualizada da database local
+        val newFavoriteList = mutableListOf<Int>()
+        when (tabPosition) {
+            0 -> { localDatabaseFavorite.getAllFavoriteCharacters(userID).forEach { newFavoriteList.add(it.id) } }
+            1 -> { localDatabaseFavorite.getAllFavoriteSeries(userID).forEach { newFavoriteList.add(it.id) } }
+            2 -> { localDatabaseFavorite.getAllFavoriteComics(userID).forEach { newFavoriteList.add(it.id) } }
+        }
+        // 3.2) atualiza a lista no firebase
+        firebaseFirestore.updateFavoriteList(newFavoriteList, tabPosition)
     }
 
-    suspend fun removeFromFavorites(result: GeneralResult) {
+    suspend fun removeFromFavorites(result: Any, tabPosition: Int) {
         val userID = firebaseAuth.currentUser?.uid ?: ""
-        val newFavoriteList = mutableListOf<Int>()
-        localDatabaseFavorite.update(convertResultToFavorite(result)) // o result deve estar com o favoriteTagFlag = false
-        localDatabaseFavorite.getAllFavorites(NAME_CHARACTER_DATABASE).forEach {
-            newFavoriteList.add(it.id)
+        // 1) Adiciona o favorito na database local
+        when (tabPosition) {
+            0 -> { localDatabaseFavorite.insertChar(convertResultToFavoriteChar(result as CharacterResult)) }
+            1 -> { localDatabaseFavorite.insertSeries(convertResultToFavoriteSeries(result as SeriesResult)) }
+            2 -> { localDatabaseFavorite.insertComic(convertResultToFavoriteComic(result as ComicResult)) }
         }
-        firebaseFirestore.updateFavoriteList(newFavoriteList)
-    }
 
-    suspend fun convertResultToFavorite(general: GeneralResult): Favorite {
-        val type = when (general) {
-            is CharacterResult -> NAME_CHARACTER_DATABASE
-            is SeriesResult -> NAME_SERIES_DATABASE
-            is ComicResult -> NAME_COMICS_DATABASE
-            else -> ""
+        // 2) Decrementa o item no Firebase
+        firebaseFirestore.decrementFavorited((result as GeneralResult).id, tabPosition)
+
+        // 3) Atualiza a lista de favoritos do Firebase
+        // 3.1) Recupera a lista atualizada da database local
+        val newFavoriteList = mutableListOf<Int>()
+        when (tabPosition) {
+            0 -> { localDatabaseFavorite.getAllFavoriteCharacters(userID).forEach { newFavoriteList.add(it.id) } }
+            1 -> { localDatabaseFavorite.getAllFavoriteSeries(userID).forEach { newFavoriteList.add(it.id) } }
+            2 -> { localDatabaseFavorite.getAllFavoriteComics(userID).forEach { newFavoriteList.add(it.id) } }
         }
+        // 3.2) atualiza a lista no firebase
+        firebaseFirestore.updateFavoriteList(newFavoriteList, tabPosition)
+    }
+    suspend fun convertResultToFavoriteChar(result: CharacterResult): FavoriteChar {
         val userID = firebaseAuth.currentUser?.uid ?: ""
-        return Favorite(
-            general.id,
+        return FavoriteChar(
+            result.id,
             userID,
-            type,
-            general.name,
-            general.thumbnail,
-            general.description,
-            general.favoriteTagFlag
+            result.name,
+            result.thumbnail,
+            result.description,
+            result.favoriteTagFlag
         )
     }
-
+    suspend fun convertResultToFavoriteSeries(result: SeriesResult): FavoriteSeries {
+        val userID = firebaseAuth.currentUser?.uid ?: ""
+        return FavoriteSeries(
+            result.id,
+            userID,
+            result.name,
+            result.thumbnail,
+            result.description,
+            result.favoriteTagFlag
+        )
+    }
+    suspend fun convertResultToFavoriteComic(result: ComicResult): FavoriteComic {
+        val userID = firebaseAuth.currentUser?.uid ?: ""
+        return FavoriteComic(
+            result.id,
+            userID,
+            result.name,
+            result.thumbnail,
+            result.description,
+            result.favoriteTagFlag
+        )
+    }
 
         suspend fun setUser(user: User) {
             try {
@@ -317,3 +350,4 @@ class MarvelXRepository(context: Context) {
             }
         }
     }
+

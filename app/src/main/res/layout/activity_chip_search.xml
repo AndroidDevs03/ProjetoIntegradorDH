@@ -16,6 +16,7 @@
         android:theme="@style/search_field"
         app:boxStrokeColor="@color/white">
         <AutoCompleteTextView
+            android:id="@+id/cs_auto_complete"
             style="@style/search_input"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

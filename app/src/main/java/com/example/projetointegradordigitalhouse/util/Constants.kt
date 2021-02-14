@@ -32,7 +32,8 @@ class Constants {
     }
 
     object Values {
-        const val CONST_MAX_SEARCH_RESULTS = 4
+        const val CONST_MAX_SEARCH_HISTORY = 4
+        const val CONST_DAYS_TO_UPDATE = 7L
     }
 
     object FirebaseNames {
@@ -55,7 +56,9 @@ class Constants {
         const val NAME_PRICE = "price"
         const val NAME_EMAIL ="email"
         const val NAME_AVATAR = "avatar_id"
-        const val NAME_FAVORITE_LIST = "favorite_list"
+        const val NAME_FAVORITE_CHARACTER_LIST = "favorite_character_list"
+        const val NAME_FAVORITE_SERIES_LIST = "favorite_series_list"
+        const val NAME_FAVORITE_COMIC_LIST = "favorite_comic_list"
         const val NAME_USER_ID = "user_id"
 
     }
