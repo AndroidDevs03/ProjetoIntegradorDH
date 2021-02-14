@@ -4,6 +4,7 @@ import android.os.Parcelable
 import kotlinx.android.parcel.Parcelize
 import java.time.LocalDate.now
 import java.time.LocalDate.parse
+import java.time.LocalDateTime
 
 @Parcelize
 open class GeneralResult(
@@ -17,7 +18,7 @@ open class GeneralResult(
     open var lastUpdate: String
 ) : Parcelable {
     fun needUpdate(): Boolean {
-        return parse(lastUpdate).isBefore(now().minusDays(2L))
+        return LocalDateTime.parse(lastUpdate).isBefore(LocalDateTime.now().minusDays(2L))
     }
 }
 
