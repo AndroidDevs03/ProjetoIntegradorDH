@@ -9,7 +9,9 @@ import com.example.projetointegradordigitalhouse.util.Constants.FirebaseNames.NA
 import com.example.projetointegradordigitalhouse.util.Constants.FirebaseNames.NAME_DESCRIPTION
 import com.example.projetointegradordigitalhouse.util.Constants.FirebaseNames.NAME_EMAIL
 import com.example.projetointegradordigitalhouse.util.Constants.FirebaseNames.NAME_FAVORITED
-import com.example.projetointegradordigitalhouse.util.Constants.FirebaseNames.NAME_FAVORITE_LIST
+import com.example.projetointegradordigitalhouse.util.Constants.FirebaseNames.NAME_FAVORITE_CHARACTER_LIST
+import com.example.projetointegradordigitalhouse.util.Constants.FirebaseNames.NAME_FAVORITE_COMIC_LIST
+import com.example.projetointegradordigitalhouse.util.Constants.FirebaseNames.NAME_FAVORITE_SERIES_LIST
 import com.example.projetointegradordigitalhouse.util.Constants.FirebaseNames.NAME_ISSUE_NUMBER
 import com.example.projetointegradordigitalhouse.util.Constants.FirebaseNames.NAME_LAST_UPDATE
 import com.example.projetointegradordigitalhouse.util.Constants.FirebaseNames.NAME_NAME
@@ -22,6 +24,7 @@ import com.example.projetointegradordigitalhouse.util.Constants.FirebaseNames.NA
 import com.example.projetointegradordigitalhouse.util.Constants.FirebaseNames.NAME_THUMBNAIL
 import com.example.projetointegradordigitalhouse.util.Constants.FirebaseNames.NAME_USERS_DATABASE
 import com.example.projetointegradordigitalhouse.util.Constants.FirebaseNames.NAME_USER_ID
+import com.example.projetointegradordigitalhouse.util.Constants.Values.CONST_DAYS_TO_UPDATE
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.SetOptions
 import com.google.firebase.firestore.ktx.firestore
@@ -49,7 +52,7 @@ class FirebaseFirestore {
                         false,
                         false,
                         document[NAME_LAST_UPDATE].toString(),
-                        document[NAME_SERIES_ID] as List<Int>
+                        document[NAME_SERIES_ID] as List<Long>
                     )
                     tempList.add(tempData)
                 }
@@ -73,8 +76,8 @@ class FirebaseFirestore {
                         false,
                         false,
                         document[NAME_LAST_UPDATE].toString(),
-                        document[NAME_CHARACTER_LIST] as List<Int>,
-                        document[NAME_COMIC_LIST] as List<Int>
+                        document[NAME_CHARACTER_LIST] as List<Long>,
+                        document[NAME_COMIC_LIST] as List<Long>
                     )
                     tempList.add(tempData)
                 }
@@ -96,7 +99,7 @@ class FirebaseFirestore {
                         false,
                         false,
                         document[NAME_LAST_UPDATE].toString(),
-                        document[NAME_CHARACTER_LIST] as List<Int>,
+                        document[NAME_CHARACTER_LIST] as List<Long>,
                         document[NAME_PAGE_COUNT] as String,
                         document[NAME_ISSUE_NUMBER] as String,
                         document[NAME_SERIES_ID] as Long,
@@ -115,6 +118,7 @@ class FirebaseFirestore {
         dataTemp[NAME_THUMBNAIL] = result.thumbnail
         dataTemp[NAME_DESCRIPTION] = result.description
         dataTemp[NAME_SERIES_ID] = result.series
+        dataTemp[NAME_FAVORITED] = 0L
 
         firebaseDatabase.collection(NAME_CHARACTER_DATABASE).document(result.id.toString())
             .set(dataTemp, SetOptions.merge())
@@ -126,6 +130,7 @@ class FirebaseFirestore {
         dataTemp[NAME_DESCRIPTION] = result.description
         dataTemp[NAME_CHARACTER_LIST] = result.charactersList
         dataTemp[NAME_COMIC_LIST] = result.comicsList
+        dataTemp[NAME_FAVORITED] = 0L
 
         firebaseDatabase.collection(NAME_SERIES_DATABASE).document(result.id.toString())
             .set(dataTemp, SetOptions.merge())
@@ -141,6 +146,7 @@ class FirebaseFirestore {
         dataTemp[NAME_PUBLISHED] = result.published
         dataTemp[NAME_SERIES_ID] = result.seriesID
         dataTemp[NAME_PRICE] = result.price
+        dataTemp[NAME_FAVORITED] = 0L
 
         firebaseDatabase.collection(NAME_COMICS_DATABASE).document(result.id.toString())
             .set(dataTemp, SetOptions.merge())
@@ -151,33 +157,33 @@ class FirebaseFirestore {
         firebaseDatabase.collection(NAME_SEARCHES_DATABASE).document(tag)
             .set(dataTemp, SetOptions.merge())
     }
-    fun incrementFavorited(result: GeneralResult) {
-        val database = when (result) {
-            is CharacterResult -> NAME_CHARACTER_DATABASE
-            is SeriesResult -> NAME_SERIES_DATABASE
-            is ComicResult -> NAME_COMICS_DATABASE
+    fun incrementFavorited(resultID: Int, tabPosition: Int) {
+        val database = when (tabPosition) {
+            0 -> NAME_CHARACTER_DATABASE
+            1 -> NAME_SERIES_DATABASE
+            2 -> NAME_COMICS_DATABASE
             else -> ""
         }
-        firebaseDatabase.collection(database).document(result.id.toString()).get()
+        firebaseDatabase.collection(database).document(resultID.toString()).get()
             .addOnSuccessListener {
-                val favorited = it[NAME_FAVORITED] as Long
+                val favorited = (it[NAME_FAVORITED]?: 0L) as Long
                 val dataTemp = hashMapOf(NAME_FAVORITED to (favorited + 1))
-                firebaseDatabase.collection(database).document(result.id.toString())
+                firebaseDatabase.collection(database).document(resultID.toString())
                     .set(dataTemp, SetOptions.merge())
             }
     }
-    fun decrementFavorited(result: GeneralResult) {
-        val database = when (result) {
-            is CharacterResult -> NAME_CHARACTER_DATABASE
-            is SeriesResult -> NAME_SERIES_DATABASE
-            is ComicResult -> NAME_COMICS_DATABASE
+    fun decrementFavorited(resultID: Int, tabPosition: Int) {
+        val database = when (tabPosition) {
+            0 -> NAME_CHARACTER_DATABASE
+            1 -> NAME_SERIES_DATABASE
+            2 -> NAME_COMICS_DATABASE
             else -> ""
         }
-        firebaseDatabase.collection(database).document(result.id.toString()).get()
+        firebaseDatabase.collection(database).document(resultID.toString()).get()
             .addOnSuccessListener {
-                val favorited = it[NAME_FAVORITED] as Long
+                val favorited = (it[NAME_FAVORITED]?: 0L) as Long
                 val dataTemp = hashMapOf(NAME_FAVORITED to (favorited - 1))
-                firebaseDatabase.collection(database).document(result.id.toString())
+                firebaseDatabase.collection(database).document(resultID.toString())
                     .set(dataTemp, SetOptions.merge())
             }
     }
@@ -188,7 +194,7 @@ class FirebaseFirestore {
                     Log.i("Firebase", "Busca '$tag' encontrada.")
                     ret.resume(
                         LocalDate.parse(result[NAME_LAST_UPDATE].toString())
-                            .isBefore(LocalDate.now().minusDays(2L))
+                            .isBefore(LocalDate.now().minusDays(CONST_DAYS_TO_UPDATE))
                     )
                 }?: run{
                     Log.i("Firebase", "Busca '$tag' não encontrada.")
@@ -212,7 +218,7 @@ class FirebaseFirestore {
                         false,
                         false,
                         document[NAME_LAST_UPDATE].toString(),
-                        document[NAME_SERIES_ID] as List<Int>
+                        document[NAME_SERIES_ID] as List<Long>
                     )
                     tempList.add(tempData)
                 }
@@ -236,8 +242,8 @@ class FirebaseFirestore {
                         false,
                         false,
                         document[NAME_LAST_UPDATE].toString(),
-                        document[NAME_CHARACTER_LIST] as List<Int>,
-                        document[NAME_SERIES_ID] as List<Int>
+                        document[NAME_CHARACTER_LIST] as List<Long>,
+                        document[NAME_COMIC_LIST] as List<Long>
                     )
                     tempList.add(tempData)
                 }
@@ -261,7 +267,7 @@ class FirebaseFirestore {
                         false,
                         false,
                         document[NAME_LAST_UPDATE].toString(),
-                        document[NAME_CHARACTER_LIST] as List<Int>,
+                        document[NAME_CHARACTER_LIST] as List<Long>,
                         document[NAME_PAGE_COUNT].toString(),
                         document[NAME_ISSUE_NUMBER].toString(),
                         document[NAME_SERIES_ID] as Long,
@@ -277,12 +283,17 @@ class FirebaseFirestore {
                 Log.i("Firebase", "Erro ao receber dados do Firebase. ",exception)
             }
     }
-    suspend fun updateFavoriteList(newFavorite: List<Int>) {
+    suspend fun updateFavoriteList(newFavorite: List<Int>, tabPosition: Int) {
         val dataTemp: HashMap<String, Any> = HashMap()
-        dataTemp[NAME_FAVORITED] = newFavorite
+        val type = when (tabPosition) {
+            0 -> NAME_FAVORITE_CHARACTER_LIST
+            1 -> NAME_FAVORITE_SERIES_LIST
+            2 -> NAME_FAVORITE_COMIC_LIST
+            else -> ""
+        }
+        dataTemp[type] = newFavorite
         firebaseAuth.currentUser?.let {
-            firebaseDatabase.collection(NAME_USERS_DATABASE).document(it.uid)
-                .set(dataTemp, SetOptions.merge())
+            firebaseDatabase.collection(NAME_USERS_DATABASE).document(it.uid).set(dataTemp, SetOptions.merge())
         }
     }
     suspend fun insertUser(user: User){
@@ -295,9 +306,11 @@ class FirebaseFirestore {
         dataTemp[NAME_AVATAR] = user.avatarId
         dataTemp[NAME_NAME] = user.name
         dataTemp[NAME_EMAIL]= user.email
-        dataTemp[NAME_FAVORITE_LIST] = ""
+        dataTemp[NAME_FAVORITE_CHARACTER_LIST] = ""
+        dataTemp[NAME_FAVORITE_SERIES_LIST] = ""
+        dataTemp[NAME_FAVORITE_COMIC_LIST] = ""
         user.favoritesItens?.let{
-            dataTemp[NAME_FAVORITE_LIST] = it
+            dataTemp[NAME_FAVORITE_CHARACTER_LIST] = it
         }
         firebaseDatabase.collection(NAME_USERS_DATABASE)
 //            .document(user.id)
@@ -307,5 +320,9 @@ class FirebaseFirestore {
 
     }
     suspend fun updateUser(){
+    }
+
+    fun getCharById(resultID: Int): Any {
+        return ""
     }
 }

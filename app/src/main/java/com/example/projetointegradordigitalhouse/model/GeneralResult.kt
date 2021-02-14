@@ -8,7 +8,7 @@ import java.time.LocalDate.parse
 @Parcelize
 open class GeneralResult(
     // Common properties
-    open val id: Int,
+    internal open val id: Int,
     open val name: String,
     open val thumbnail: String,
     open val description: String,
@@ -30,7 +30,7 @@ class CharacterResult(
     override var searchTagFlag: Boolean,
     override var favoriteTagFlag: Boolean,
     override var lastUpdate: String,
-    val series: List<Int>
+    val series: List<Long>
 ) : GeneralResult(
     id,
     name,
@@ -50,8 +50,8 @@ class SeriesResult(
     override var searchTagFlag: Boolean,
     override var favoriteTagFlag: Boolean,
     override var lastUpdate: String,
-    val charactersList: List<Int>,
-    val comicsList: List<Int>
+    val charactersList: List<Long>,
+    val comicsList: List<Long>
 ) : GeneralResult(
     id,
     name,
@@ -70,7 +70,7 @@ class ComicResult(
     override var searchTagFlag: Boolean,
     override var favoriteTagFlag: Boolean,
     override var lastUpdate: String,
-    val charactersList: List<Int>,
+    val charactersList: List<Long>,
     val pageCount: String,
     val issueNumber: String,
     val seriesID: Long,

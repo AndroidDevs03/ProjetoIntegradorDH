@@ -1,7 +1,6 @@
 package com.example.projetointegradordigitalhouse.view
 
 import android.content.Intent
-import android.graphics.PorterDuff
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -12,8 +11,10 @@ import android.widget.Toast
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.projetointegradordigitalhouse.R
 import com.example.projetointegradordigitalhouse.databinding.ActivityChipSearchBinding
-import com.example.projetointegradordigitalhouse.model.Search
-import com.example.projetointegradordigitalhouse.model.characters.Result
+import com.example.projetointegradordigitalhouse.model.CharacterResult
+import com.example.projetointegradordigitalhouse.model.GeneralResult
+import com.example.projetointegradordigitalhouse.model.SeriesResult
+import com.example.projetointegradordigitalhouse.util.Constants
 import com.example.projetointegradordigitalhouse.util.Constants.Intent.KEY_INTENT_DATA
 import com.example.projetointegradordigitalhouse.view.adapter.ChipSearchAdapter
 import com.example.projetointegradordigitalhouse.viewModel.ChipSearchViewModel
@@ -24,12 +25,12 @@ import java.util.*
 class ChipSearchActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityChipSearchBinding
-    private val viewModel by lazy {ChipSearchViewModel(this)}
-    //private lateinit var viewModel: ChipSearchViewModel
+    private val viewModel by lazy { ChipSearchViewModel(this) }
+    private val incomingSearch: String? by lazy { intent.getStringExtra(Constants.Intent.KEY_INTENT_SEARCH) }
     lateinit var searchTags: MutableSet<String?>
-    lateinit var newTag: String
-    private val characterList = mutableListOf<Result>()
+    var tabPosition: Int = 0
     private var specialSearchActivated: Boolean = false
+    private lateinit var activeSearch: String
 
     // Ao preencher o campo de busca, consultar o banco de dados do Firebase pelas buscas já feitas e colocá-las na hint
     // Ao confirmar a busca, acrescentar a tag no banco de dados local e consultar o banco de dados "searchtags"
@@ -50,7 +51,12 @@ class ChipSearchActivity : AppCompatActivity() {
     }
 
     private fun initComponents() {
-        //viewModel = ViewModelProvider(this).get(ChipSearchViewModel(this)::class.java)
+        incomingSearch?.let {
+            executeSearch(it)
+        } ?: run {
+            activeSearch = ""
+        }
+        binding.csSearchField.editText?.setText(activeSearch)
         searchTags = mutableSetOf()
         binding.csBottomNavigation.menu.getItem(2).setChecked(true).setEnabled(false)
         binding.csTabLayout.addTab(binding.csTabLayout.newTab().setText("Characters"))
@@ -60,6 +66,7 @@ class ChipSearchActivity : AppCompatActivity() {
         viewModel.getSearchHistory()
 
     }
+
     private fun setupObservables() {
         viewModel.lastSearchHistory.observe(this, {
             it?.let { searchTags ->
@@ -67,40 +74,20 @@ class ChipSearchActivity : AppCompatActivity() {
                 (binding.csSearchField.editText as? AutoCompleteTextView)?.setAdapter(adapter)
             }
         })
-        binding.csSearchField.setEndIconOnClickListener {
-            newTag = binding.csSearchField.editText?.text.toString().trim()
-            if (newTag!="") {
-                viewModel.addSearchToLocalDatabase(newTag)
-                if (specialSearchActivated && searchTags.contains(newTag).not()) {
-                    val chipDrawable = Chip(this)
-                    chipDrawable.text = newTag
-                    chipDrawable.isCloseIconVisible = true
-                    chipDrawable.setOnCloseIconClickListener {
-                        binding.csChipGroup.removeView(chipDrawable)
-                        searchTags.remove(chipDrawable.text)
-                    }
-                    binding.csChipGroup.addView(chipDrawable)
-                    searchTags.add(newTag)
-                    binding.csSearchField.editText?.text?.clear()
-                }
-                viewModel.getCharactersByName(newTag)
-            }
+        binding.csAutoComplete.setOnItemClickListener { _, view, position, id ->
+            executeSearch(binding.csSearchField.editText?.text.toString().trim())
         }
-        binding.csSearchField.setEndIconOnLongClickListener(View.OnLongClickListener{
+        binding.csSearchField.setEndIconOnClickListener {
+            executeSearch(binding.csSearchField.editText?.text.toString().trim())
+        }
+        binding.csSearchField.setEndIconOnLongClickListener(View.OnLongClickListener {
             changeSearchType()
         })
 
         Log.i("ChipSearchActivity", "Configurando recycler view")
-        viewModel.searchCharList.observe(this, {
+        viewModel.searchResultList.observe(this, {
             it?.let { charList ->
-                binding.csRecyclerView.apply {
-                    layoutManager = GridLayoutManager(this@ChipSearchActivity, 2)
-                    adapter = ChipSearchAdapter( charList) { position ->
-                        val intent = Intent(this@ChipSearchActivity, CharacterActivity::class.java)
-                        intent.putExtra(KEY_INTENT_DATA, charList[position])
-                        startActivity(intent)
-                    }
-                }
+                updateRecyclerView(tabPosition, charList)
             }
         })
         viewModel.lastSearchHistory.observe(this, {
@@ -110,10 +97,12 @@ class ChipSearchActivity : AppCompatActivity() {
             }
         })
 
-        binding.csTabLayout.addOnTabSelectedListener(object: TabLayout.OnTabSelectedListener {
+        binding.csTabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {
-
-                Toast.makeText(this@ChipSearchActivity, "Busca ${tab?.text}", Toast.LENGTH_LONG).show()
+                tabPosition = tab?.position ?: 0
+                viewModel.searchResultList.value?.let { updateRecyclerView(tabPosition, it) }
+                Toast.makeText(this@ChipSearchActivity, "Busca ${tab?.text}", Toast.LENGTH_LONG)
+                    .show()
             }
 
             override fun onTabUnselected(tab: TabLayout.Tab?) {
@@ -123,10 +112,10 @@ class ChipSearchActivity : AppCompatActivity() {
             }
         })
 
-        binding.csBottomNavigation.setOnNavigationItemSelectedListener(){
-            when(it.itemId){
+        binding.csBottomNavigation.setOnNavigationItemSelectedListener {
+            when (it.itemId) {
                 R.id.page_1 -> {
-                    startActivity(Intent(this, HomeActivity::class.java))
+                    //drawerLayout.open()
                     true
                 }
                 R.id.page_2 -> {
@@ -138,10 +127,84 @@ class ChipSearchActivity : AppCompatActivity() {
                     true
                 }
                 R.id.page_4 -> {
-                    startActivity(Intent(this, LoginActivity::class.java))
+                    startActivity(Intent(this, HomeActivity::class.java))
                     true
                 }
-                else -> {false}
+                else -> {
+                    false
+                }
+            }
+        }
+    }
+
+    private fun executeSearch(search: String) {
+        activeSearch = search
+        if (search != "") {
+            viewModel.addSearchToLocalDatabase(search)
+            if (specialSearchActivated && searchTags.contains(search).not()) {
+                val chipDrawable = Chip(this)
+                chipDrawable.text = search
+                chipDrawable.isCloseIconVisible = true
+                chipDrawable.setOnCloseIconClickListener {
+                    binding.csChipGroup.removeView(chipDrawable)
+                    searchTags.remove(chipDrawable.text)
+                }
+                binding.csChipGroup.addView(chipDrawable)
+                searchTags.add(search)
+                binding.csSearchField.editText?.text?.clear()
+            }
+            viewModel.searchByName(search)
+        }
+    }
+
+    private fun updateRecyclerView(
+        tab: Int,
+        resultLists: Pair<MutableList<CharacterResult>, MutableList<SeriesResult>>
+    ) {
+        if (tab == 0) {
+            val charList = resultLists.first
+
+            binding.csRecyclerView.apply {
+                layoutManager = GridLayoutManager(this@ChipSearchActivity, 1)
+                adapter = ChipSearchAdapter(
+                    viewModel,
+                    charList as MutableList<GeneralResult>,
+                    0,
+                    { position ->
+                        val intent = Intent(this@ChipSearchActivity, CharacterActivity::class.java)
+                        intent.putExtra(KEY_INTENT_DATA, charList[position])
+                        startActivity(intent)
+                    },
+                    { add, position ->
+                        if (add){
+                            viewModel.addFavorite(charList[position],0)
+                        }
+                        else {
+                            viewModel.remFavorite(charList[position],0)
+                        }
+                    })
+            }
+        } else {
+            val serieslist = resultLists.second
+            binding.csRecyclerView.apply {
+                layoutManager = GridLayoutManager(this@ChipSearchActivity, 1)
+                adapter = ChipSearchAdapter(
+                    viewModel,
+                    serieslist as MutableList<GeneralResult>,
+                    1,
+                { position ->
+                    val intent = Intent(this@ChipSearchActivity, SeriesActivity::class.java)
+                    intent.putExtra(KEY_INTENT_DATA, serieslist[position])
+                    startActivity(intent)
+                },
+                    { add, position ->
+                        if (add){
+                            viewModel.addFavorite(serieslist[position],1)
+                        }
+                        else {
+                            viewModel.remFavorite(serieslist[position],1)
+                        }
+                    })
             }
         }
     }
@@ -149,7 +212,8 @@ class ChipSearchActivity : AppCompatActivity() {
     private fun refreshResults() {
         TODO("Not yet implemented")
     }
-    fun changeSearchType(): Boolean{
+
+    fun changeSearchType(): Boolean {
         if (specialSearchActivated) {
             binding.csSearchField.setEndIconDrawable(R.drawable.ic_baseline_search_24)
             specialSearchActivated = false

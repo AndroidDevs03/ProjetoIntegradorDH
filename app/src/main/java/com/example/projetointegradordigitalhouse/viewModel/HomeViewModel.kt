@@ -9,7 +9,6 @@ import com.example.projetointegradordigitalhouse.model.*
 import kotlinx.coroutines.launch
 import com.example.projetointegradordigitalhouse.util.Constants
 import com.github.cesar1287.desafiopicpayandroid.model.home.MarvelXRepository
-import com.google.firebase.auth.FirebaseUser
 
 internal class HomeViewModel(
     context: Context
@@ -36,7 +35,7 @@ internal class HomeViewModel(
             if (search.busca in tempNewList) {
                 tempNewList.remove(search.busca)
                 tempNewList.add(0, search.busca)
-            } else if (tempNewList.size >= Constants.Values.CONST_MAX_SEARCH_RESULTS){
+            } else if (tempNewList.size >= Constants.Values.CONST_MAX_SEARCH_HISTORY){
                 tempNewList.add(0, search.busca)
                 tempNewList.removeLast()
             } else {

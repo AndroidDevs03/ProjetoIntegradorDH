@@ -2,20 +2,37 @@ package com.example.projetointegradordigitalhouse.model
 
 import android.content.Context
 import androidx.room.*
-import com.example.projetointegradordigitalhouse.util.Constants.Values.CONST_MAX_SEARCH_RESULTS
+import com.example.projetointegradordigitalhouse.util.Constants.Values.CONST_MAX_SEARCH_HISTORY
 
 //tabelas
 @Entity(tableName = "searchResults")
 data class Search(
     @PrimaryKey val busca: String,
-    @ColumnInfo(name = "user") val user: String,
+    @ColumnInfo(name = "user_id") val userId: String,
     @ColumnInfo(name = "date") val date: String
 )
-@Entity(tableName = "userFavorites")
-data class Favorite(
+@Entity(tableName = "favoriteCharacters")
+data class FavoriteChar(
     @PrimaryKey val id: Int,
-    @ColumnInfo(name = "user") val user: String,
-    @ColumnInfo(name = "type") val type: String,
+    @ColumnInfo(name = "user_id") val userId: String,
+    @ColumnInfo(name = "name") val name: String,
+    @ColumnInfo(name = "thumbnail") val thumbnail: String,
+    @ColumnInfo(name = "description") val description: String,
+    @ColumnInfo(name = "favorite") val favorite: Boolean
+)
+@Entity(tableName = "favoriteSeries")
+data class FavoriteSeries(
+    @PrimaryKey val id: Int,
+    @ColumnInfo(name = "user_id") val userId: String,
+    @ColumnInfo(name = "name") val name: String,
+    @ColumnInfo(name = "thumbnail") val thumbnail: String,
+    @ColumnInfo(name = "description") val description: String,
+    @ColumnInfo(name = "favorite") val favorite: Boolean
+)
+@Entity(tableName = "favoriteComics")
+data class FavoriteComic(
+    @PrimaryKey val id: Int,
+    @ColumnInfo(name = "user_id") val userId: String,
     @ColumnInfo(name = "name") val name: String,
     @ColumnInfo(name = "thumbnail") val thumbnail: String,
     @ColumnInfo(name = "description") val description: String,
@@ -25,7 +42,7 @@ data class Favorite(
 //métodos de acesso
 @Dao
 interface SearchDao {
-    @Query("SELECT busca FROM searchResults ORDER BY date DESC LIMIT ${CONST_MAX_SEARCH_RESULTS}")
+    @Query("SELECT busca FROM searchResults ORDER BY date DESC LIMIT ${CONST_MAX_SEARCH_HISTORY}")
     suspend fun getLastSearchResults(): List<String>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
@@ -37,22 +54,30 @@ interface SearchDao {
 
 @Dao
 interface FavoriteDao {
-    @Query("SELECT * FROM userFavorites WHERE type = :typeResult" ) // + "AND user = :userID"
-    suspend fun getAllFavorites(typeResult: String): Array<Favorite> // userID: String,
+    @Query("SELECT * FROM favoriteCharacters WHERE user_id = :userID")
+    suspend fun getAllFavoriteCharacters(userID: String ): Array<FavoriteChar>
+    @Query("SELECT * FROM favoriteSeries WHERE user_id = :userID")
+    suspend fun getAllFavoriteSeries(userID: String ): Array<FavoriteSeries>
+    @Query("SELECT * FROM favoriteComics WHERE user_id = :userID")
+    suspend fun getAllFavoriteComics(userID: String ): Array<FavoriteComic>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insert(vararg favorite: Favorite)
+    suspend fun insertChar(vararg favorite: FavoriteChar)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertSeries(vararg favorite: FavoriteSeries)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertComic(vararg favorite: FavoriteComic)
 
     @Delete
-    suspend fun delete(favorite: Favorite)
-
-    @Update
-    suspend fun update(vararg favorite: Favorite)
-
+    suspend fun delete(vararg favorite: FavoriteChar)
+    @Delete
+    suspend fun delete(vararg favorite: FavoriteSeries)
+    @Delete
+    suspend fun delete(vararg favorite: FavoriteComic)
 }
 
 object LocalDatabase {
-    @Database(entities = arrayOf(Search::class, Favorite::class), version = 1,exportSchema = false)
+    @Database(entities = arrayOf(Search::class, FavoriteChar::class, FavoriteSeries::class, FavoriteComic::class), version = 1,exportSchema = false)
     abstract class LocalRoomDatabase : RoomDatabase() {
         abstract fun searchDao(): SearchDao
         abstract fun favoriteDao(): FavoriteDao
