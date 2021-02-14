@@ -31,6 +31,7 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import java.time.LocalDate
 import java.time.LocalDate.now
+import java.time.LocalDateTime
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 @Suppress("UNCHECKED_CAST")
@@ -153,7 +154,7 @@ class FirebaseFirestore {
     }
     fun insertSearchTag(tag: String) {
         val dataTemp: HashMap<String, Any> = HashMap()
-        dataTemp[NAME_LAST_UPDATE] = now().toString()
+        dataTemp[NAME_LAST_UPDATE] = LocalDateTime.now().toString()
         firebaseDatabase.collection(NAME_SEARCHES_DATABASE).document(tag)
             .set(dataTemp, SetOptions.merge())
     }
@@ -193,8 +194,8 @@ class FirebaseFirestore {
                 result[NAME_LAST_UPDATE]?.let {
                     Log.i("Firebase", "Busca '$tag' encontrada.")
                     ret.resume(
-                        LocalDate.parse(result[NAME_LAST_UPDATE].toString())
-                            .isBefore(LocalDate.now().minusDays(CONST_DAYS_TO_UPDATE))
+                        LocalDateTime.parse(result[NAME_LAST_UPDATE].toString())
+                            .isBefore(LocalDateTime.now().minusDays(CONST_DAYS_TO_UPDATE))
                     )
                 }?: run{
                     Log.i("Firebase", "Busca '$tag' não encontrada.")
