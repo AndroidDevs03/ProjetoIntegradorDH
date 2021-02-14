@@ -11,6 +11,7 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.launch
 import java.time.LocalDate.now
+import java.time.LocalDateTime
 
 class ChipSearchViewModel(
     context: Context
@@ -25,7 +26,8 @@ class ChipSearchViewModel(
     private val firebaseAuth by lazy { Firebase.auth }
 
 
-    var searchResultList: MutableLiveData<Pair<MutableList<CharacterResult>,MutableList<SeriesResult>>> = MutableLiveData()
+    var searchResultList: MutableLiveData<Pair<MutableList<CharacterResult>, MutableList<SeriesResult>>> =
+        MutableLiveData()
     var searchSeriesList: MutableLiveData<MutableList<SeriesResult>> = MutableLiveData()
     var lastSearchHistory: MutableLiveData<MutableList<String>> = MutableLiveData()
 
@@ -34,16 +36,19 @@ class ChipSearchViewModel(
             searchResultList.postValue(repository.searchByName(name, 15, 0))
         }
     }
+
     fun updateSeriesByCharacterId(charId: Int) {
         viewModelScope.launch {
             repository.updateSeriesByCharacterID(charId)
         }
     }
+
     fun updateComicsBySeriesId(seriesId: Int) {
         viewModelScope.launch {
             repository.updateComicsBySeriesID(seriesId)
         }
     }
+
     fun getSeriesByName(name: String, limit: Int = 10, offset: Int = 0) {
         viewModelScope.launch {
             searchSeriesList.postValue(repository.getSeriesByName(name, limit, offset))
@@ -51,14 +56,12 @@ class ChipSearchViewModel(
     }
 
     fun getSearchHistory() {
-        viewModelScope.launch {
-            lastSearchHistory.postValue(localDatabase.getLastSearchResults() as MutableList<String>)
-        }
+        viewModelScope.launch { lastSearchHistory.postValue(localDatabase.getLastSearchResults() as MutableList<String>) }
     }
 
     fun addSearchToLocalDatabase(tag: String) {
         val userID = firebaseAuth.currentUser?.uid ?: ""
-        val search = Search(tag, userID, now().toString())
+        val search = Search(tag, userID, LocalDateTime.now().toString())
         viewModelScope.launch {
             val tempNewList: MutableList<String> = lastSearchHistory.value ?: mutableListOf()
             localDatabase.insert(search)
@@ -85,6 +88,7 @@ class ChipSearchViewModel(
             repository.addToFavorites(result, tabPosition)
         }
     }
+
     fun remFavorite(result: Any, tabPosition: Int) {
         viewModelScope.launch {
             repository.removeFromFavorites(result, tabPosition)

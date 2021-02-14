@@ -14,6 +14,7 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import java.lang.Exception
 import java.time.LocalDate.now
+import java.time.LocalDateTime
 
 class MarvelXRepository(context: Context) {
 
@@ -167,7 +168,7 @@ class MarvelXRepository(context: Context) {
                         it.description,
                         searchTagFlag = false,
                         favoriteTagFlag = false,
-                        lastUpdate = now().toString(),
+                        lastUpdate = LocalDateTime.now().toString(),
                         series = tempSeriesList
                     )
                 )
@@ -199,7 +200,7 @@ class MarvelXRepository(context: Context) {
                         it.description.toString(),
                         searchTagFlag = false,
                         favoriteTagFlag = false,
-                        lastUpdate = now().toString(),
+                        lastUpdate = LocalDateTime.now().toString(),
                         charactersList = tempCharactersList,
                         comicsList = tempComicsList
                     )
@@ -229,7 +230,7 @@ class MarvelXRepository(context: Context) {
                     it.description,
                     searchTagFlag = false,
                     favoriteTagFlag = false,
-                    lastUpdate = now().toString(),
+                    lastUpdate = LocalDateTime.now().toString(),
                     charactersList = tempCharactersList as List<Long>,
                     pageCount = it.pageCount.toString(),
                     issueNumber = it.issueNumber.toString(),
