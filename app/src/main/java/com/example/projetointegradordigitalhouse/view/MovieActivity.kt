@@ -1,13 +1,22 @@
 package com.example.projetointegradordigitalhouse.view
 
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.drawable.BitmapDrawable
+import android.media.Image
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.provider.MediaStore
 import android.view.View
 import android.widget.ImageButton
+import android.widget.TextView
 import com.example.projetointegradordigitalhouse.R
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.synnapps.carouselview.CarouselView
+import kotlinx.android.synthetic.main.activity_comic.*
+import kotlinx.android.synthetic.main.activity_movie.*
+import java.io.ByteArrayOutputStream
 
 class MovieActivity : AppCompatActivity() {
 
@@ -51,6 +60,10 @@ class MovieActivity : AppCompatActivity() {
             startActivity(Intent(this,CharacterActivity::class.java))
         }
 
+        findViewById<ImageButton>(R.id.ibMovieShare).setOnClickListener {
+            share()
+        }
+
         BottomNavigationView.OnNavigationItemReselectedListener {
             when (it.itemId){
                 R.id.page_1 -> {
@@ -68,11 +81,20 @@ class MovieActivity : AppCompatActivity() {
 
             }
         }
-
-
-
-
-
-
+    }
+    private fun share(){
+        val intent : Intent = Intent(Intent.ACTION_SEND)
+        intent.setType("image/png")
+        val drawable : BitmapDrawable = ivMoviePicture.drawable as BitmapDrawable
+        val bitmap = drawable.bitmap
+        val bytes : ByteArrayOutputStream = ByteArrayOutputStream()
+        val description : String = findViewById<TextView>(R.id.tvMovieDescription).text.toString()
+        bitmap.compress(Bitmap.CompressFormat.PNG,100,bytes)
+        val path : String = MediaStore.Images.Media.insertImage(contentResolver,bitmap,"Favorite Character",null)
+        val uri : Uri = Uri.parse(path)
+        intent.putExtra(Intent.EXTRA_COMPONENT_NAME, "Introducing content previews")
+        intent.putExtra(Intent.EXTRA_STREAM,uri)
+        intent.putExtra(Intent.EXTRA_TEXT, description)
+        startActivity(Intent.createChooser(intent,"Compartilhar nas redes sociais"))
     }
 }
