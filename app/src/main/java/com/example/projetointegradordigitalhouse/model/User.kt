@@ -19,7 +19,6 @@ open class User(
     fun needUpdate(): Boolean {
         return LocalDateTime.parse(lastUpdate).isBefore(LocalDateTime.now().minusDays(2L))
     }
-
 }
 
 @Parcelize
