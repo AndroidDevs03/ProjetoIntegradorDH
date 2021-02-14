@@ -19,6 +19,9 @@ import com.example.projetointegradordigitalhouse.util.Constants.Intent.KEY_INTEN
 import com.example.projetointegradordigitalhouse.viewModel.HomeViewModel
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.navigation.NavigationView
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 import com.synnapps.carouselview.ImageClickListener
 import com.synnapps.carouselview.ImageListener
 import java.util.*
@@ -47,6 +50,8 @@ class HomeActivity : AppCompatActivity() {
     private lateinit var drawerLayout: DrawerLayout
 
     private lateinit var navigationView : NavigationView
+
+//    private lateinit var auth : FirebaseAuth
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -167,7 +172,10 @@ class HomeActivity : AppCompatActivity() {
                     true
                 }
                 R.id.item3 ->{
-                    drawerLayout.close()
+                    Firebase.auth.signOut()
+                    finishAffinity()
+                    startActivity(Intent(this, LoginActivity::class.java))
+//                    drawerLayout.close()
                     true
                 }
                 else -> {
