@@ -300,10 +300,7 @@ class FirebaseFirestore {
     suspend fun insertUser(user: User){
 
         val dataTemp: HashMap<String, Any> = HashMap()
-        Log.i("Firebase", "Usuário 1. ")
-
         dataTemp[NAME_USER_ID] = user.id
-        Log.i("Firebase", "Usuário 2. ")
         dataTemp[NAME_AVATAR] = user.avatarId
         dataTemp[NAME_NAME] = user.name
         dataTemp[NAME_EMAIL]= user.email
@@ -320,7 +317,21 @@ class FirebaseFirestore {
         Log.i("Firebase", "Usuário registrado. ")
 
     }
-    suspend fun updateUser(){
+    suspend fun getFavoritesCharacters(userID: String): MutableSet<FavoriteChar>{
+        val tempSet = mutableSetOf<FavoriteChar>()
+
+        firebaseAuth?.let{ firebase ->
+            firebaseDatabase.collection(NAME_USERS_DATABASE)
+                .document(firebase.currentUser?.uid.toString())
+                .get()
+                .addOnSuccessListener {
+                    // todo tratar recuperação de dados
+
+
+                }
+                .addOnFailureListener {  }
+        }
+
     }
 
     fun getCharById(resultID: Int): Any {

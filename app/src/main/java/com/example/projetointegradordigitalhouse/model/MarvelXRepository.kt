@@ -343,12 +343,35 @@ class MarvelXRepository(context: Context) {
         )
     }
 
-        suspend fun setUser(user: User) {
-            try {
-                firebaseFirestore.insertUser(user)
-            } catch (exception: Exception) {
+//    suspend fun getAllFavorites(userID: String): MutableList<Any> {
+//        val favoriteCharacters = localDatabaseFavorite.getAllFavoriteCharacters(userID)
+//        val favoriteSeries = localDatabaseFavorite.getAllFavoriteSeries(userID)
+//        val favoriteComics = localDatabaseFavorite.getAllFavoriteComics(userID)
+//
+//        return mutableListOf(favoriteCharacters,favoriteSeries,favoriteComics)
+//    }
+    suspend fun getFavoritesCharacters(userID: String): MutableSet<FavoriteChar> {
+        val tempLocal = localDatabaseFavorite.getAllFavoriteCharacters(userID)
+
+        return tempLocal.toMutableSet()
+    }
+    suspend fun getFavoritesSeries(userID: String): MutableSet<FavoriteSeries> {
+        val temp = localDatabaseFavorite.getAllFavoriteSeries(userID)
+        return temp.toMutableSet()
+    }
+    suspend fun getFavoritesComics(userID: String): MutableSet<FavoriteComic> {
+        val temp = localDatabaseFavorite.getAllFavoriteComics(userID)
+        return temp.toMutableSet()
+    }
+
+    suspend fun setUser(user: User) {
+        try {
+            firebaseFirestore.insertUser(user)
+        } catch (exception: Exception) {
 //            todo
-            }
         }
+    }
+
+
     }
 
