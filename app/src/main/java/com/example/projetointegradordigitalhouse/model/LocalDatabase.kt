@@ -1,8 +1,10 @@
 package com.example.projetointegradordigitalhouse.model
 
 import android.content.Context
+import android.os.Parcelable
 import androidx.room.*
 import com.example.projetointegradordigitalhouse.util.Constants.Values.CONST_MAX_SEARCH_HISTORY
+import kotlinx.android.parcel.Parcelize
 
 //tabelas
 @Entity(tableName = "searchResults")
@@ -12,6 +14,7 @@ data class Search(
     @ColumnInfo(name = "date") val date: String
 )
 @Entity(tableName = "favoriteCharacters")
+@Parcelize
 data class FavoriteChar(
     @PrimaryKey val id: Int,
     @ColumnInfo(name = "user_id") val userId: String,
@@ -19,7 +22,8 @@ data class FavoriteChar(
     @ColumnInfo(name = "thumbnail") val thumbnail: String,
     @ColumnInfo(name = "description") val description: String,
     @ColumnInfo(name = "favorite") val favorite: Boolean
-)
+):Parcelable
+@Parcelize
 @Entity(tableName = "favoriteSeries")
 data class FavoriteSeries(
     @PrimaryKey val id: Int,
@@ -28,7 +32,8 @@ data class FavoriteSeries(
     @ColumnInfo(name = "thumbnail") val thumbnail: String,
     @ColumnInfo(name = "description") val description: String,
     @ColumnInfo(name = "favorite") val favorite: Boolean
-)
+):Parcelable
+@Parcelize
 @Entity(tableName = "favoriteComics")
 data class FavoriteComic(
     @PrimaryKey val id: Int,
@@ -37,8 +42,7 @@ data class FavoriteComic(
     @ColumnInfo(name = "thumbnail") val thumbnail: String,
     @ColumnInfo(name = "description") val description: String,
     @ColumnInfo(name = "favorite") val favorite: Boolean
-)
-
+):Parcelable
 //métodos de acesso
 @Dao
 interface SearchDao {

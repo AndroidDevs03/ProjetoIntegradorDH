@@ -350,10 +350,18 @@ class MarvelXRepository(context: Context) {
 //
 //        return mutableListOf(favoriteCharacters,favoriteSeries,favoriteComics)
 //    }
-    suspend fun getFavoritesCharacters(userID: String): MutableSet<FavoriteChar> {
-        val tempLocal = localDatabaseFavorite.getAllFavoriteCharacters(userID)
+    suspend fun getFavoritesCharacters(userID: String): List<FavoriteChar> {
+        Log.i("FavoritesRepository", "Characters")
 
-        return tempLocal.toMutableSet()
+        val tempLocal = mutableListOf<FavoriteChar>()
+//        val tempLocal = localDatabaseFavorite.getAllFavoriteCharacters(userID)
+        val tempCloud = firebaseFirestore.getFavoritesCharacters(userID)
+
+        tempCloud?.forEach {
+    //            val tempChar = localDatabaseFavorite.getAllFavoriteCharacters(charID)
+    //            tempLocal.add(tempChar).to
+        }
+        return tempLocal
     }
     suspend fun getFavoritesSeries(userID: String): MutableSet<FavoriteSeries> {
         val temp = localDatabaseFavorite.getAllFavoriteSeries(userID)

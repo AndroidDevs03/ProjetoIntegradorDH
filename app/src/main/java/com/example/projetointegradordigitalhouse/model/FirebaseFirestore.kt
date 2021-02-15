@@ -28,6 +28,7 @@ import com.example.projetointegradordigitalhouse.util.Constants.Values.CONST_DAY
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.SetOptions
 import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 import java.time.LocalDate
 import java.time.LocalDate.now
@@ -300,16 +301,13 @@ class FirebaseFirestore {
     suspend fun insertUser(user: User){
 
         val dataTemp: HashMap<String, Any> = HashMap()
-        dataTemp[NAME_USER_ID] = user.id
-        dataTemp[NAME_AVATAR] = user.avatarId
+        dataTemp[NAME_USER_ID] = user.user_id
+        dataTemp[NAME_AVATAR] = user.avatar_id
         dataTemp[NAME_NAME] = user.name
         dataTemp[NAME_EMAIL]= user.email
         dataTemp[NAME_FAVORITE_CHARACTER_LIST] = ""
         dataTemp[NAME_FAVORITE_SERIES_LIST] = ""
         dataTemp[NAME_FAVORITE_COMIC_LIST] = ""
-        user.favoritesItens?.let{
-            dataTemp[NAME_FAVORITE_CHARACTER_LIST] = it
-        }
         firebaseDatabase.collection(NAME_USERS_DATABASE)
 //            .document(user.id)
             .document(dataTemp[NAME_USER_ID].toString())
@@ -317,20 +315,39 @@ class FirebaseFirestore {
         Log.i("Firebase", "Usuário registrado. ")
 
     }
-    suspend fun getFavoritesCharacters(userID: String): MutableSet<FavoriteChar>{
-        val tempSet = mutableSetOf<FavoriteChar>()
+    suspend fun getFavoritesCharacters(userID: String): List<Long>?{
+        Log.i("FavoritesFirestore", "Characters 1")
+
+        val tempSet:  List<Long>? = null
+        Log.i("FavoritesFirestore", "Characters 2")
 
         firebaseAuth?.let{ firebase ->
+            Log.i("FavoritesFirestore", "Characters 3")
             firebaseDatabase.collection(NAME_USERS_DATABASE)
                 .document(firebase.currentUser?.uid.toString())
                 .get()
-                .addOnSuccessListener {
-                    // todo tratar recuperação de dados
+                .addOnSuccessListener { result ->
+                    Log.i("FavoritesFirestore", "Characters 4")
+
+                    result?.let{
+                        Log.i("FavoritesFirestore", "Characters 5")
+
+                        val temp = it?.toObject<User>()
+                        Log.i("FavoritesFirestore", "Characters 6")
+
+                        temp?.favorite_character_list?.forEach { item->
+                            Log.i("FavoritesFirestore", "Characters: ${item}")
+                        }
+                    }
+                    Log.i("FavoritesFirestore", "Characters 7")
 
 
                 }
-                .addOnFailureListener {  }
+                .addOnFailureListener {
+                    Log.i("Firebase Characters", " Falha na recuperação")
+                }
         }
+        return tempSet
 
     }
 

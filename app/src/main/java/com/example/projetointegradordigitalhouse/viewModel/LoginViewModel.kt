@@ -30,6 +30,8 @@ class LoginViewModel(
                     it.displayName.toString(),
                     it.email.toString(),
                     null,
+                    null,
+                    null,
                     "Data"
                 )
                 viewModelScope.launch {

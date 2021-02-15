@@ -17,7 +17,7 @@ class FavoritesViewModel(context: Context): ViewModel() {
 //    private val charactersLocalDb: FavoriteDao by lazy { LocalDatabase.getDatabase(context).favoriteDao() }
 //    private val sharedPreferences: MarvelXSharedPreferences by lazy { MarvelXSharedPreferences(context) }
 //    private val firebaseAuth by lazy { Firebase.auth }
-    var favoriteCharList: MutableLiveData<Set<FavoriteChar>> = MutableLiveData()
+    var favoriteCharList: MutableLiveData<List<FavoriteChar>> = MutableLiveData()
     var favoriteSeriesList: MutableLiveData<Set<FavoriteSeries>> = MutableLiveData()
     var favoriteComicsList: MutableLiveData<Set<FavoriteComic>> = MutableLiveData()
 
@@ -31,9 +31,9 @@ class FavoritesViewModel(context: Context): ViewModel() {
         Log.i("FavoritesViewModel", "Characters")
         viewModelScope.launch {
             val temp = repository.getFavoritesCharacters(userID)
-            temp.forEach {
-                Log.i("Favoritos Character: ", "${it.id} ${it.name}")
-            }
+//            temp.forEach {
+//                Log.i("Favoritos Character: ", "${it.id} ${it.name}")
+//            }
             favoriteCharList.postValue(temp)
 
         }
