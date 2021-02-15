@@ -5,10 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.widget.ArrayAdapter
-import android.widget.AutoCompleteTextView
-import android.widget.ImageView
-import android.widget.Toast
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.drawerlayout.widget.DrawerLayout
 import com.bumptech.glide.Glide
@@ -20,10 +17,13 @@ import com.example.projetointegradordigitalhouse.viewModel.HomeViewModel
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.synnapps.carouselview.ImageClickListener
 import com.synnapps.carouselview.ImageListener
+import de.hdodenhof.circleimageview.CircleImageView
 import java.util.*
 @Suppress("UNCHECKED_CAST")
 class HomeActivity : AppCompatActivity() {
@@ -51,7 +51,13 @@ class HomeActivity : AppCompatActivity() {
 
     private lateinit var navigationView : NavigationView
 
-//    private lateinit var auth : FirebaseAuth
+    private val firebaseFirestore by lazy {
+        Firebase.firestore
+    }
+
+    private val auth by lazy {
+        Firebase.auth
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -136,8 +142,28 @@ class HomeActivity : AppCompatActivity() {
         binding.hmBottomNavigation.setOnNavigationItemSelectedListener {
             when (it.itemId) {
                 R.id.page_1 -> {
-//                    startActivity(Intent(this, HomeActivity::class.java))
+                    val usuario = auth.currentUser
+                    auth.currentUser?.let{
+                        firebaseFirestore.collection("users").document(it.uid).get()
+                            .addOnSuccessListener { snapshot ->
+                                val userData = snapshot.data
+                                val headerView = navigationView.getHeaderView(0)
+                                val namePerfil = headerView.findViewById<TextView>(R.id.tvNamePerfil)
+                                val emailPerfil = headerView.findViewById<TextView>(R.id.tvEmailPerfil)
+                                val imagem = headerView.findViewById<CircleImageView>(R.id.ivAvatar)
+                                val position = userData?.get("avatar_id") as Number
+                                namePerfil.text = userData?.get("name") as String
+                                emailPerfil.text = userData?.get("email") as String
+                                Glide.with(this).load(Avatar.avatar[position.toInt()]).into(imagem)
+                            }
+                            .addOnFailureListener {
+                                Toast.makeText(this, it.localizedMessage, Toast.LENGTH_LONG).show()
+                            }
+                    }?: run {
+
+                    }
                     drawerLayout.open()
+
                     true
                 }
                 R.id.page_2 -> {
@@ -202,6 +228,25 @@ class HomeActivity : AppCompatActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         val item = data?.getIntExtra("foto",0)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        auth.currentUser?.let{
+            firebaseFirestore.collection("users").document(it.uid).get()
+                .addOnSuccessListener { snapshot ->
+                    val userData = snapshot.data
+                    val headerView = navigationView.getHeaderView(0)
+                    val imagem = headerView.findViewById<CircleImageView>(R.id.ivAvatar)
+                    val position = userData?.get("avatar_id") as Number
+                    Glide.with(this).load(Avatar.avatar[position.toInt()]).into(imagem)
+                }
+                .addOnFailureListener {
+                    Toast.makeText(this, it.localizedMessage, Toast.LENGTH_LONG).show()
+                }
+        }?: run {
+
+        }
     }
 }
 
