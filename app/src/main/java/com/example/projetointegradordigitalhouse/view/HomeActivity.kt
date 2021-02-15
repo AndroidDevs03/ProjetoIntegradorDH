@@ -190,6 +190,7 @@ class HomeActivity : AppCompatActivity() {
             // Handle menu item selected
             when (menuItem.itemId){
                 R.id.item1 ->{
+                    startActivity(Intent(this, RegisterActivity::class.java))
                     drawerLayout.close()
                     true
                 }

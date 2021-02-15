@@ -29,4 +29,5 @@
     <string name="sign_in_no_account">Sign In no account</string>
     <string name="facebook_application_id" translatable="false">733817520903883</string>
     <string name="facebook_login_protocol_scheme" translatable="false">fb733817520903883</string>
+    <string name="edit_perfil">Edit Perfil</string>
 </resources>
