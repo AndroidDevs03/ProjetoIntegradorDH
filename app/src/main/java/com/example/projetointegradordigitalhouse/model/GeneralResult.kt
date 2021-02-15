@@ -4,11 +4,12 @@ import android.os.Parcelable
 import kotlinx.android.parcel.Parcelize
 import java.time.LocalDate.now
 import java.time.LocalDate.parse
+import java.time.LocalDateTime
 
 @Parcelize
 open class GeneralResult(
     // Common properties
-    open val id: Int,
+    internal open val id: Int,
     open val name: String,
     open val thumbnail: String,
     open val description: String,
@@ -17,7 +18,7 @@ open class GeneralResult(
     open var lastUpdate: String
 ) : Parcelable {
     fun needUpdate(): Boolean {
-        return parse(lastUpdate).isBefore(now().minusDays(2L))
+        return LocalDateTime.parse(lastUpdate).isBefore(LocalDateTime.now().minusDays(2L))
     }
 }
 
@@ -30,7 +31,7 @@ class CharacterResult(
     override var searchTagFlag: Boolean,
     override var favoriteTagFlag: Boolean,
     override var lastUpdate: String,
-    val series: List<Int>
+    val series: List<Long>
 ) : GeneralResult(
     id,
     name,
@@ -50,8 +51,8 @@ class SeriesResult(
     override var searchTagFlag: Boolean,
     override var favoriteTagFlag: Boolean,
     override var lastUpdate: String,
-    val charactersList: List<Int>,
-    val comicsList: List<Int>
+    val charactersList: List<Long>,
+    val comicsList: List<Long>
 ) : GeneralResult(
     id,
     name,
@@ -70,7 +71,7 @@ class ComicResult(
     override var searchTagFlag: Boolean,
     override var favoriteTagFlag: Boolean,
     override var lastUpdate: String,
-    val charactersList: List<Int>,
+    val charactersList: List<Long>,
     val pageCount: String,
     val issueNumber: String,
     val seriesID: Long,

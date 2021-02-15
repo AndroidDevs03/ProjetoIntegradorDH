@@ -1,13 +1,22 @@
 package com.example.projetointegradordigitalhouse.view
 
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.drawable.BitmapDrawable
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.provider.MediaStore
+import android.provider.MediaStore.Images.Media.insertImage
 import android.view.View
 import android.widget.ImageButton
+import android.widget.ImageView
+import android.widget.TextView
 import com.example.projetointegradordigitalhouse.R
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.synnapps.carouselview.CarouselView
+import kotlinx.android.synthetic.main.activity_character.*
+import java.io.ByteArrayOutputStream
 
 class CharacterActivity : AppCompatActivity() {
 
@@ -77,6 +86,9 @@ class CharacterActivity : AppCompatActivity() {
         findViewById<CarouselView>(R.id.cvCharacterMovies).setImageClickListener {
             startActivity(Intent(this, MovieActivity::class.java))
         }
+        findViewById<ImageButton>(R.id.ibCharacterShare).setOnClickListener {
+            share()
+        }
 
         findViewById<BottomNavigationView>(R.id.bnvCharacter).setOnNavigationItemSelectedListener {
             when(it.itemId){
@@ -99,5 +111,20 @@ class CharacterActivity : AppCompatActivity() {
                 else -> {false}
             }
         }
+    }
+    private fun share(){
+        val intent : Intent = Intent(Intent.ACTION_SEND)
+        intent.setType("image/png")
+        val drawable : BitmapDrawable  = ivCharacterPicture.drawable as BitmapDrawable
+        val bitmap = drawable.bitmap
+        val bytes : ByteArrayOutputStream  = ByteArrayOutputStream()
+        val description : String = findViewById<TextView>(R.id.tvCharacterDescription).text.toString()
+        bitmap.compress(Bitmap.CompressFormat.PNG,100,bytes)
+        val path : String = MediaStore.Images.Media.insertImage(contentResolver,bitmap,"Favorite Character",null)
+        val uri :Uri = Uri.parse(path)
+        intent.putExtra(Intent.EXTRA_COMPONENT_NAME, "Introducing content previews")
+        intent.putExtra(Intent.EXTRA_STREAM,uri)
+        intent.putExtra(Intent.EXTRA_TEXT, description)
+        startActivity(Intent.createChooser(intent,"Compartilhar nas redes sociais"))
     }
 }

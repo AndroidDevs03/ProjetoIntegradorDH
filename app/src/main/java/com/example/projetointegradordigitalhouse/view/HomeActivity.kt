@@ -7,6 +7,9 @@ import android.util.Log
 import android.view.MenuItem
 import android.view.View
 import android.widget.*
+import android.widget.ArrayAdapter
+import android.widget.AutoCompleteTextView
+import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.menu.MenuItemImpl
 import androidx.drawerlayout.widget.DrawerLayout
@@ -16,7 +19,6 @@ import com.example.projetointegradordigitalhouse.databinding.ActivityHomeBinding
 import com.example.projetointegradordigitalhouse.model.*
 import com.example.projetointegradordigitalhouse.util.Constants.Intent.KEY_INTENT_SEARCH
 import com.example.projetointegradordigitalhouse.viewModel.HomeViewModel
-import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
@@ -24,6 +26,8 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.synnapps.carouselview.ImageClickListener
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 import com.synnapps.carouselview.ImageListener
 import de.hdodenhof.circleimageview.CircleImageView
 import java.util.*
@@ -31,26 +35,9 @@ import java.util.*
 class HomeActivity : AppCompatActivity() {
 
     private val viewModel by lazy { HomeViewModel(this) }
-
-    private val imgsSeries = intArrayOf(
-        R.drawable.daredevil_serie,
-        R.drawable.ironfist_serie,
-        R.drawable.jessica_serie,
-        R.drawable.defenders_serie,
-        R.drawable.luke_serie
-    )
-    private val imgsComics = intArrayOf(
-        R.drawable.comic2,
-        R.drawable.comic3,
-        R.drawable.comic4,
-        R.drawable.comic5,
-        R.drawable.comic6
-    )
-
+    private val firebaseAuth by lazy{ Firebase.auth }
     private lateinit var binding: ActivityHomeBinding
-
     private lateinit var drawerLayout: DrawerLayout
-
     private lateinit var navigationView : NavigationView
 
     private val firebaseFirestore by lazy {
@@ -77,11 +64,14 @@ class HomeActivity : AppCompatActivity() {
     private fun initComponents() {
         Log.i("HomeActivity", "InitComponents")
 
-        viewModel.getHomeCharacters()
-        viewModel.getHomeSeries()
-        viewModel.getHomeComics()
-        viewModel.getSearchHistory()
-
+        firebaseAuth.currentUser?.let{
+            viewModel.getHomeCharacters()
+            viewModel.getHomeSeries()
+            viewModel.getHomeComics()
+            viewModel.getSearchHistory()
+        }?: run{
+            startActivity(Intent(this, LoginActivity::class.java))
+        }
     }
 
     private fun setupObservables() {
@@ -163,6 +153,7 @@ class HomeActivity : AppCompatActivity() {
                     }?: run {
 
                     }
+
                     drawerLayout.open()
 
                     true
@@ -176,7 +167,7 @@ class HomeActivity : AppCompatActivity() {
                     true
                 }
                 R.id.page_4 -> {
-                    startActivity(Intent(this, LoginActivity::class.java))
+                    startActivity(Intent(this, HomeActivity::class.java))
 
                     true
                 }
