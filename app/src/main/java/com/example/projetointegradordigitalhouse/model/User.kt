@@ -9,7 +9,7 @@ import java.time.LocalDate.parse
 open class User(
 
     val id: String,
-    var avatarId: Int = 0,
+    var avatarId: Number,
     var name: String,
     var email: String,
     var favoritesItens: UserFavorites? = null,
