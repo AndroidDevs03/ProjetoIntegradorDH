@@ -4,10 +4,14 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.MenuItem
+import android.view.View
+import android.widget.*
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.view.menu.MenuItemImpl
 import androidx.drawerlayout.widget.DrawerLayout
 import com.bumptech.glide.Glide
 import com.example.projetointegradordigitalhouse.R
@@ -16,11 +20,18 @@ import com.example.projetointegradordigitalhouse.model.*
 import com.example.projetointegradordigitalhouse.util.Constants.Intent.KEY_INTENT_SEARCH
 import com.example.projetointegradordigitalhouse.viewModel.HomeViewModel
 import com.google.android.material.navigation.NavigationView
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
+import com.synnapps.carouselview.ImageClickListener
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.synnapps.carouselview.ImageListener
+import de.hdodenhof.circleimageview.CircleImageView
 import java.util.*
-@Suppress("UNCHECKED_CAST")
+@Suppress("UNCHECKED_CAST", "SENSELESS_NULL_IN_WHEN")
 class HomeActivity : AppCompatActivity() {
 
     private val viewModel by lazy { HomeViewModel(this) }
@@ -28,6 +39,14 @@ class HomeActivity : AppCompatActivity() {
     private lateinit var binding: ActivityHomeBinding
     private lateinit var drawerLayout: DrawerLayout
     private lateinit var navigationView : NavigationView
+
+    private val firebaseFirestore by lazy {
+        Firebase.firestore
+    }
+
+    private val auth by lazy {
+        Firebase.auth
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -115,7 +134,28 @@ class HomeActivity : AppCompatActivity() {
         binding.hmBottomNavigation.setOnNavigationItemSelectedListener {
             when (it.itemId) {
                 R.id.page_1 -> {
+                    auth.currentUser?.let{
+                        firebaseFirestore.collection("users").document(it.uid).get()
+                            .addOnSuccessListener { snapshot ->
+                                val userData = snapshot.data
+                                val headerView = navigationView.getHeaderView(0)
+                                val namePerfil = headerView.findViewById<TextView>(R.id.tvNamePerfil)
+                                val emailPerfil = headerView.findViewById<TextView>(R.id.tvEmailPerfil)
+                                val imagem = headerView.findViewById<CircleImageView>(R.id.ivAvatar)
+                                val position = userData?.get("avatar_id") as Number
+                                namePerfil.text = userData?.get("name") as String
+                                emailPerfil.text = userData?.get("email") as String
+                                Glide.with(this).load(Avatar.avatar[position.toInt()]).into(imagem)
+                            }
+                            .addOnFailureListener {
+                                Toast.makeText(this, it.localizedMessage, Toast.LENGTH_LONG).show()
+                            }
+                    }?: run {
+
+                    }
+
                     drawerLayout.open()
+
                     true
                 }
                 R.id.page_2 -> {
@@ -141,6 +181,7 @@ class HomeActivity : AppCompatActivity() {
             // Handle menu item selected
             when (menuItem.itemId){
                 R.id.item1 ->{
+                    startActivity(Intent(this, RegisterActivity::class.java))
                     drawerLayout.close()
                     true
                 }
@@ -150,7 +191,13 @@ class HomeActivity : AppCompatActivity() {
                     true
                 }
                 R.id.item3 ->{
-                    drawerLayout.close()
+                    if(auth.currentUser?.isAnonymous == false){
+                        Firebase.auth.signOut()
+                        finishAffinity()
+                        startActivity(Intent(this, LoginActivity::class.java))
+                    } else {
+                        navigationView.menu.findItem(R.id.item3).isEnabled = false
+                    }
                     true
                 }
                 else -> {
@@ -176,7 +223,34 @@ class HomeActivity : AppCompatActivity() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        val item = data?.getIntExtra("foto",0)
+//        val item = data?.getIntExtra("foto",0)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        auth.currentUser?.let{
+            firebaseFirestore.collection("users").document(it.uid).get()
+                .addOnSuccessListener { snapshot ->
+                    val userData = snapshot.data
+                    val headerView = navigationView.getHeaderView(0)
+                    val imagem = headerView.findViewById<CircleImageView>(R.id.ivAvatar)
+                    when (userData) {
+                        null -> {
+                            Glide.with(this).load(Avatar.avatar[0]).into(imagem)
+                        }
+                        else -> {
+                            val position = userData?.get("avatar_id") as Number
+                            Glide.with(this).load(Avatar.avatar[position.toInt()]).into(imagem)
+                        }
+                    }
+
+                }
+                .addOnFailureListener {
+                    Toast.makeText(this, it.localizedMessage, Toast.LENGTH_LONG).show()
+                }
+        }?: run {
+
+        }
     }
 }
 

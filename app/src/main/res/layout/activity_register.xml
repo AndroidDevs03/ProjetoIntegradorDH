@@ -31,7 +31,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="14dp"
-                android:text="@string/sign_up"
+                android:text="@string/edit_perfil"
                 android:textAllCaps="true"
                 android:fontFamily="@font/marvel"
                 android:textColor="@color/black"
@@ -55,24 +55,24 @@
                 </com.google.android.material.textfield.TextInputEditText>
             </com.google.android.material.textfield.TextInputLayout>
 
-            <com.google.android.material.textfield.TextInputLayout
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:id="@+id/tilBirthDate"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="24dp"
-                android:layout_marginTop="14dp"
-                android:layout_marginEnd="24dp"
-                android:hint="@string/birth_date">
+<!--            <com.google.android.material.textfield.TextInputLayout-->
+<!--                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"-->
+<!--                android:id="@+id/tilBirthDate"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginStart="24dp"-->
+<!--                android:layout_marginTop="14dp"-->
+<!--                android:layout_marginEnd="24dp"-->
+<!--                android:hint="@string/birth_date">-->
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/etBithDate"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="date">
+<!--                <com.google.android.material.textfield.TextInputEditText-->
+<!--                    android:id="@+id/etBithDate"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:inputType="date">-->
 
-                </com.google.android.material.textfield.TextInputEditText>
-            </com.google.android.material.textfield.TextInputLayout>
+<!--                </com.google.android.material.textfield.TextInputEditText>-->
+<!--            </com.google.android.material.textfield.TextInputLayout>-->
 
             <com.google.android.material.textfield.TextInputLayout
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
@@ -92,41 +92,41 @@
                 </com.google.android.material.textfield.TextInputEditText>
             </com.google.android.material.textfield.TextInputLayout>
 
-            <com.google.android.material.textfield.TextInputLayout
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="24dp"
-                android:layout_marginTop="14dp"
-                android:layout_marginEnd="24dp"
-                android:hint="@string/password">
+<!--            <com.google.android.material.textfield.TextInputLayout-->
+<!--                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginStart="24dp"-->
+<!--                android:layout_marginTop="14dp"-->
+<!--                android:layout_marginEnd="24dp"-->
+<!--                android:hint="@string/password">-->
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/etPasswordSU"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="textPassword">
+<!--                <com.google.android.material.textfield.TextInputEditText-->
+<!--                    android:id="@+id/etPasswordSU"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:inputType="textPassword">-->
 
-                </com.google.android.material.textfield.TextInputEditText>
-            </com.google.android.material.textfield.TextInputLayout>
+<!--                </com.google.android.material.textfield.TextInputEditText>-->
+<!--            </com.google.android.material.textfield.TextInputLayout>-->
 
-            <com.google.android.material.textfield.TextInputLayout
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="24dp"
-                android:layout_marginTop="14dp"
-                android:layout_marginEnd="24dp"
-                android:hint="@string/confirm_password">
+<!--            <com.google.android.material.textfield.TextInputLayout-->
+<!--                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginStart="24dp"-->
+<!--                android:layout_marginTop="14dp"-->
+<!--                android:layout_marginEnd="24dp"-->
+<!--                android:hint="@string/confirm_password">-->
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/etConfirmPassword"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="textPassword">
+<!--                <com.google.android.material.textfield.TextInputEditText-->
+<!--                    android:id="@+id/etConfirmPassword"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:inputType="textPassword">-->
 
-                </com.google.android.material.textfield.TextInputEditText>
-            </com.google.android.material.textfield.TextInputLayout>
+<!--                </com.google.android.material.textfield.TextInputEditText>-->
+<!--            </com.google.android.material.textfield.TextInputLayout>-->
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btRegister"
@@ -138,7 +138,7 @@
                 android:layout_marginEnd="24dp"
                 android:layout_marginBottom="30dp"
                 android:fontFamily="@font/marvel"
-                android:text="@string/register" />
+                android:text="Salvar" />
 
         </LinearLayout>
         </ScrollView>
