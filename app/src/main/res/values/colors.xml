@@ -18,6 +18,7 @@
     <color name="greenBackground">#1E2E05</color>
     <color name="greenBackgroundBar">#131C03</color>
     <color name="pinkBackgound">#F8F2F2</color>
+    <color name="pinkBackgoundfocus">#80F8F2F2</color>
     <color name="backgroundDrawer">#F8DDDD</color>
     <color name="greenCheck">#1C5713</color>
 </resources>

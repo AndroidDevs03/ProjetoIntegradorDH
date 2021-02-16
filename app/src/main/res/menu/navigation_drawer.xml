@@ -17,5 +17,10 @@
             android:icon="@drawable/ic_baseline_power_settings_new_24"
             android:title="Sign out" />
 
+        <item
+            android:id="@+id/item4"
+            android:icon="@drawable/ic_baseline_login_24"
+            android:title="Sign in" />
+
     </group>
 </menu>

@@ -24,15 +24,15 @@ class PopUpWindow : Activity() {
         overridePendingTransition(0, 0)
         setContentView(binding.root)
 
-        val displayMetrics = DisplayMetrics()
-        windowManager.defaultDisplay.getMetrics(displayMetrics)
-        val width = displayMetrics.widthPixels
-        val height = displayMetrics.heightPixels
-
-        window.setLayout((width*.8).toInt(), (height*.5).toInt())
-
-        val params : WindowManager.LayoutParams = window.attributes
-        params.gravity = Gravity.CENTER
+//        val displayMetrics = DisplayMetrics()
+//        windowManager.defaultDisplay.getMetrics(displayMetrics)
+//        val width = displayMetrics.widthPixels
+//        val height = displayMetrics.heightPixels
+//
+//        window.setLayout((width*.8).toInt(), (height*.5).toInt())
+//
+//        val params : WindowManager.LayoutParams = window.attributes
+//        params.gravity = Gravity.CENTER
 
         listAvatar = Avatar.avatar
 
