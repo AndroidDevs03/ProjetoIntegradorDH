@@ -315,41 +315,41 @@ class FirebaseFirestore {
         Log.i("Firebase", "Usuário registrado. ")
 
     }
-    suspend fun getFavoritesCharacters(userID: String): List<Long>?{
-        Log.i("FavoritesFirestore", "Characters 1")
-
-        val tempSet:  List<Long>? = null
-        Log.i("FavoritesFirestore", "Characters 2")
-
-        firebaseAuth?.let{ firebase ->
-            Log.i("FavoritesFirestore", "Characters 3")
-            firebaseDatabase.collection(NAME_USERS_DATABASE)
-                .document(firebase.currentUser?.uid.toString())
-                .get()
-                .addOnSuccessListener { result ->
-                    Log.i("FavoritesFirestore", "Characters 4")
-
-                    result?.let{
-                        Log.i("FavoritesFirestore", "Characters 5")
-
-                        val temp = it?.toObject<User>()
-                        Log.i("FavoritesFirestore", "Characters 6")
-
-                        temp?.favorite_character_list?.forEach { item->
-                            Log.i("FavoritesFirestore", "Characters: ${item}")
-                        }
-                    }
-                    Log.i("FavoritesFirestore", "Characters 7")
-
-
-                }
-                .addOnFailureListener {
-                    Log.i("Firebase Characters", " Falha na recuperação")
-                }
-        }
-        return tempSet
-
-    }
+//    suspend fun getFavoritesCharacters(userID: String): List<Long>?{
+//        Log.i("FavoritesFirestore", "Characters 1")
+//
+//        val tempSet:  List<Long>? = null
+//        Log.i("FavoritesFirestore", "Characters 2")
+//
+//        firebaseAuth?.let{ firebase ->
+//            Log.i("FavoritesFirestore", "Characters 3")
+//            firebaseDatabase.collection(NAME_USERS_DATABASE)
+//                .document(firebase.currentUser?.uid.toString())
+//                .get()
+//                .addOnSuccessListener { result ->
+//                    Log.i("FavoritesFirestore", "Characters 4")
+//
+//                    result?.let{
+//                        Log.i("FavoritesFirestore", "Characters 5")
+//
+//                        val temp = it?.toObject<User>()
+//                        Log.i("FavoritesFirestore", "Characters 6")
+//
+//                        temp?.favorite_character_list?.forEach { item->
+//                            Log.i("FavoritesFirestore", "Characters: ${item}")
+//                        }
+//                    }
+//                    Log.i("FavoritesFirestore", "Characters 7")
+//
+//
+//                }
+//                .addOnFailureListener {
+//                    Log.i("Firebase Characters", " Falha na recuperação")
+//                }
+//        }
+//        return tempSet
+//
+//    }
 
     fun getCharById(resultID: Int): Any {
         return ""

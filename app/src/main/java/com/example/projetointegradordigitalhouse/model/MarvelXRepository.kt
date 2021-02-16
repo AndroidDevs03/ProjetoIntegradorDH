@@ -350,26 +350,25 @@ class MarvelXRepository(context: Context) {
 //
 //        return mutableListOf(favoriteCharacters,favoriteSeries,favoriteComics)
 //    }
-    suspend fun getFavoritesCharacters(userID: String): List<FavoriteChar> {
+    suspend fun getFavoritesCharacters(userID: String): Array<FavoriteChar> {
         Log.i("FavoritesRepository", "Characters")
 
-        val tempLocal = mutableListOf<FavoriteChar>()
 //        val tempLocal = localDatabaseFavorite.getAllFavoriteCharacters(userID)
-        val tempCloud = firebaseFirestore.getFavoritesCharacters(userID)
+//        val tempCloud = firebaseFirestore.getFavoritesCharacters(userID)
 
-        tempCloud?.forEach {
-    //            val tempChar = localDatabaseFavorite.getAllFavoriteCharacters(charID)
-    //            tempLocal.add(tempChar).to
-        }
-        return tempLocal
+//        tempCloud?.forEach {
+//    //            val tempChar = localDatabaseFavorite.getAllFavoriteCharacters(charID)
+//    //            tempLocal.add(tempChar).to
+//        }
+        return localDatabaseFavorite.getAllFavoriteCharacters(userID)
     }
-    suspend fun getFavoritesSeries(userID: String): MutableSet<FavoriteSeries> {
-        val temp = localDatabaseFavorite.getAllFavoriteSeries(userID)
-        return temp.toMutableSet()
+    suspend fun getFavoritesSeries(userID: String): Array<FavoriteSeries> {
+//        val temp = localDatabaseFavorite.getAllFavoriteSeries(userID)
+        return localDatabaseFavorite.getAllFavoriteSeries(userID)
     }
-    suspend fun getFavoritesComics(userID: String): MutableSet<FavoriteComic> {
-        val temp = localDatabaseFavorite.getAllFavoriteComics(userID)
-        return temp.toMutableSet()
+    suspend fun getFavoritesComics(userID: String): Array<FavoriteComic> {
+//        val temp = localDatabaseFavorite.getAllFavoriteComics(userID)
+        return localDatabaseFavorite.getAllFavoriteComics(userID)
     }
 
     suspend fun setUser(user: User) {
