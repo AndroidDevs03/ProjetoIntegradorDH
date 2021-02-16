@@ -11,6 +11,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.projetointegradordigitalhouse.R
 import com.example.projetointegradordigitalhouse.model.GeneralResult
+import com.example.projetointegradordigitalhouse.util.Constants
+import com.example.projetointegradordigitalhouse.util.Constants.SharedPreferences.PREFIX_CHAR
 import com.example.projetointegradordigitalhouse.viewModel.ChipSearchViewModel
 import com.google.android.material.card.MaterialCardView
 import com.google.firebase.auth.ktx.auth
@@ -19,8 +21,8 @@ import com.google.firebase.ktx.Firebase
 class ChipSearchAdapter(
     val viewModel: ChipSearchViewModel,
     private val listResult: MutableList<GeneralResult>,
-    private val tabPosition: Int,
     private val itemClicked: (Int) -> Unit,
+    private val searchClicked: (Boolean, Int) -> Unit,
     private val favoriteClicked: (Boolean, Int) -> Unit
     ): RecyclerView.Adapter<ChipSearchAdapter.LocalViewHolder>() {
 
@@ -45,12 +47,20 @@ class ChipSearchAdapter(
                 .load(genResult.thumbnail)
                 .into(holder.cardImage)
             holder.cardName.text = genResult.name
-            holder.cardBackground.setOnClickListener {
-                itemClicked(position)
-            }
-            holder.cardSearch.setOnClickListener { addTag(genResult.name) }
+            holder.cardBackground.setOnClickListener { itemClicked(position) }
+            holder.cardSearch.isSelected = genResult.searchTagFlag
+            holder.cardSearch.setOnClickListener {
+                if (holder.cardFavorite.isSelected){
+                    searchClicked(false, position) // true = adicionar, false = remover
+                    holder.cardSearch.isSelected = false
+                } else {
+                    searchClicked(true, position) // true = adicionar, false = remover
+                    holder.cardSearch.isSelected = true
+                }
+             }
             firebaseAuth.currentUser?.let{
                 Log.i("RecyclerView", "Usuário identificado")
+                holder.cardFavorite.isSelected = genResult.favoriteTagFlag
                 holder.cardFavorite.setOnClickListener {
                     if (holder.cardFavorite.isSelected){
                         favoriteClicked(false, position) // true = adicionar, false = remover
@@ -68,13 +78,8 @@ class ChipSearchAdapter(
 
             Log.i("RecyclerView", "View ${position} criada")
         }
-
         override fun getItemCount(): Int {
             Log.i("RecyclerView", "Lista com ${listResult.size} elementos")
             return listResult.size
         }
-        fun addTag(tag: String){
-            viewModel.addSearchTag(tag)
-        }
-
 }

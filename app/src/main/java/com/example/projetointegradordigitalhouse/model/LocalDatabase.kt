@@ -13,7 +13,7 @@ data class Search(
 )
 @Entity(tableName = "favoriteCharacters")
 data class FavoriteChar(
-    @PrimaryKey val id: Int,
+    @PrimaryKey val id: Long,
     @ColumnInfo(name = "user_id") val userId: String,
     @ColumnInfo(name = "name") val name: String,
     @ColumnInfo(name = "thumbnail") val thumbnail: String,
@@ -22,7 +22,7 @@ data class FavoriteChar(
 )
 @Entity(tableName = "favoriteSeries")
 data class FavoriteSeries(
-    @PrimaryKey val id: Int,
+    @PrimaryKey val id: Long,
     @ColumnInfo(name = "user_id") val userId: String,
     @ColumnInfo(name = "name") val name: String,
     @ColumnInfo(name = "thumbnail") val thumbnail: String,
@@ -31,7 +31,7 @@ data class FavoriteSeries(
 )
 @Entity(tableName = "favoriteComics")
 data class FavoriteComic(
-    @PrimaryKey val id: Int,
+    @PrimaryKey val id: Long,
     @ColumnInfo(name = "user_id") val userId: String,
     @ColumnInfo(name = "name") val name: String,
     @ColumnInfo(name = "thumbnail") val thumbnail: String,

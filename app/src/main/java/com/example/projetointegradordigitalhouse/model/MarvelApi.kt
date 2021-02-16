@@ -76,13 +76,13 @@ interface MarvelApiQueries {
         suspend fun comicsByName(@Query("titleStartsWith")charName: String, @Query("limit")limit: Int = 10, @Query("offset")offset: Int = 0): Response<ComicResponse>
 
         @GET("characters/{characterId}")
-        suspend fun charactersByID(@Path("characterId") charID: Int): Response<CharacterResponse>
+        suspend fun charactersByID(@Path("characterId") charID: Long): Response<CharacterResponse>
 
         //https://gateway.marvel.com:443/v1/public/characters/1009664/series?orderBy=-modified&limit=100&apikey=c32125ee0eec7c5e61969691516f131c
         @GET("characters/{characterId}/series")
-        suspend fun seriesByCharacterID(@Path("characterId") charID: Int,  @Query("limit")limit: Int = 20, @Query("orderBy")orderBy: String = "-modified"): Response<SeriesResponse>
+        suspend fun seriesByCharacterID(@Path("characterId") charID: Long,  @Query("limit")limit: Int = 20, @Query("orderBy")orderBy: String = "-modified"): Response<SeriesResponse>
 
         @GET("comics/{comicId}")
-        suspend fun comicsBySeriesID(@Path("comicId")comicID: Int): Response<ComicResponse>
+        suspend fun comicsBySeriesID(@Path("comicId")comicID: Long): Response<ComicResponse>
 
 }

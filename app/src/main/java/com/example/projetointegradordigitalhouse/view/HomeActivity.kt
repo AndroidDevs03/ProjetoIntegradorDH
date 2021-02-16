@@ -252,6 +252,11 @@ class HomeActivity : AppCompatActivity() {
 
         }
     }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        viewModel.removeAllChips()
+    }
 }
 
 class CarouselListener(

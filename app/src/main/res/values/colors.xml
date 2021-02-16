@@ -10,6 +10,7 @@
 
     <!--Add as cores de acordo com o nosso projeto no adobeXd-->
     <color name="redBackground">#710505</color>
+    <color name="redChipBackground">#CA7272</color>
     <color name="redBackgroundBar">#4B0000</color>
     <color name="blueBackground">#473682</color>
     <color name="blueBackgroundBar">#29204B</color>
