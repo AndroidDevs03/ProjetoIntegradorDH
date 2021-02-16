@@ -65,5 +65,9 @@ class Constants {
     object SharedPreferences {
         const val NAME_SP_DBNAME = "sp_database"
         const val NAME_SP_CURRENT_SEARCH= "current_search"
+        const val PREFIX_ALL= "ALL"
+        const val PREFIX_CHAR= "CHAR"
+        const val PREFIX_SERIES= "SERIES"
+        const val PREFIX_COMIC= "COMIC"
     }
 }

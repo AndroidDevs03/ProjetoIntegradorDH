@@ -178,6 +178,11 @@ class HomeActivity : AppCompatActivity() {
         super.onActivityResult(requestCode, resultCode, data)
         val item = data?.getIntExtra("foto",0)
     }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        viewModel.removeAllChips()
+    }
 }
 
 class CarouselListener(

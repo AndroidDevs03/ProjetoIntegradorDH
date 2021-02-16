@@ -2,14 +2,12 @@ package com.example.projetointegradordigitalhouse.model
 
 import android.os.Parcelable
 import kotlinx.android.parcel.Parcelize
-import java.time.LocalDate.now
-import java.time.LocalDate.parse
 import java.time.LocalDateTime
 
 @Parcelize
 open class GeneralResult(
     // Common properties
-    internal open val id: Int,
+    internal open val id: Long,
     open val name: String,
     open val thumbnail: String,
     open val description: String,
@@ -20,11 +18,17 @@ open class GeneralResult(
     fun needUpdate(): Boolean {
         return LocalDateTime.parse(lastUpdate).isBefore(LocalDateTime.now().minusDays(2L))
     }
+    fun checkSearchTag(searchTagList: MutableSet<String>){
+        searchTagFlag = searchTagList.contains(id)
+    }
+    fun checkFavoriteTag(favoriteTagList: MutableList<Long>){
+        favoriteTagFlag = favoriteTagList.contains(id)
+    }
 }
 
 @Parcelize
 class CharacterResult(
-    override val id: Int,
+    override val id: Long,
     override val name: String,
     override val thumbnail: String,
     override val description: String,
@@ -44,7 +48,7 @@ class CharacterResult(
 
 @Parcelize
 class SeriesResult(
-    override val id: Int,
+    override val id: Long,
     override val name: String,
     override val thumbnail: String,
     override val description: String,
@@ -64,7 +68,7 @@ class SeriesResult(
 )
 @Parcelize
 class ComicResult(
-    override val id: Int,
+    override val id: Long,
     override val name: String,
     override val thumbnail: String,
     override val description: String,

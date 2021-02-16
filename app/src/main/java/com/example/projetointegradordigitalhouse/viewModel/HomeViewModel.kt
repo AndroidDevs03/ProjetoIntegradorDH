@@ -90,4 +90,8 @@ internal class HomeViewModel(
             homeComicsList.postValue(tempList)
         }
     }
+
+    fun removeAllChips() {
+        repository.removeAllChips()
+    }
 }
