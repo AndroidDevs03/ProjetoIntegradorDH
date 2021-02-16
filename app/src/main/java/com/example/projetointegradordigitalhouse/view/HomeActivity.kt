@@ -26,8 +26,6 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.synnapps.carouselview.ImageClickListener
-import com.google.firebase.auth.ktx.auth
-import com.google.firebase.ktx.Firebase
 import com.synnapps.carouselview.ImageListener
 import de.hdodenhof.circleimageview.CircleImageView
 import java.util.*
