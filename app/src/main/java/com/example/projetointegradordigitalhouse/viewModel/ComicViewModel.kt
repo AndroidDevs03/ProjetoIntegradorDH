@@ -27,7 +27,7 @@ class ComicViewModel(context: Context): ViewModel() {
                 charactersListID?.forEach { serieID ->
                     if(serieID == it.id){
                         comicChars.add(it)
-//                        Log.i("ComicViewModel", " ADD: ${it.id} ${it.name} Chars Total - ${comicChars.size}")
+                        Log.i("ComicViewModel", " ADD: ${it.id} ${it.name} Chars Total - ${comicChars.size}")
                     }
                 }
             }

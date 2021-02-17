@@ -7,6 +7,7 @@ import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
+import android.util.Log
 import android.view.View
 import android.widget.ImageButton
 import android.widget.TextView
@@ -15,6 +16,8 @@ import com.example.projetointegradordigitalhouse.R
 import com.example.projetointegradordigitalhouse.databinding.ActivityCharacterBinding
 import com.example.projetointegradordigitalhouse.databinding.ActivitySeriesBinding
 import com.example.projetointegradordigitalhouse.model.CharacterResult
+import com.example.projetointegradordigitalhouse.model.ComicResult
+import com.example.projetointegradordigitalhouse.model.GeneralResult
 import com.example.projetointegradordigitalhouse.model.SeriesResult
 import com.example.projetointegradordigitalhouse.util.Constants
 import com.example.projetointegradordigitalhouse.util.Constants.Intent.KEY_INTENT_SERIE
@@ -37,21 +40,9 @@ class SeriesActivity : AppCompatActivity() {
     private val firebaseAuth by lazy{ Firebase.auth }
     private val viewModel by lazy { SeriesViewModel(this) }
 
+    private var comicsList = mutableListOf<ComicResult>()
+    private var charsList = mutableListOf<CharacterResult>()
 
-    private val imgsCharacters = intArrayOf(
-        R.drawable.black_widow,
-        R.drawable.iron_man,
-        R.drawable.captain_marvel,
-        R.drawable.spider_man,
-        R.drawable.hero2
-    )
-    private val imgsComics = intArrayOf(
-        R.drawable.comic2,
-        R.drawable.comic3,
-        R.drawable.comic4,
-        R.drawable.comic5,
-        R.drawable.comic6
-    )
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -73,6 +64,8 @@ class SeriesActivity : AppCompatActivity() {
                 }
                 serieResult.comicsList?.let{
                     viewModel.getSeriesComics(it)
+                    val check = viewModel.seriesComicsList
+
                 }
                 serieResult.name?.let{
                     binding.tvSeriesTitle.text = it
@@ -83,48 +76,42 @@ class SeriesActivity : AppCompatActivity() {
                 serieResult.thumbnail?.let{
                     Glide.with(this).load(it).into(binding.ivSeriesPicture)
                 }
+                initCharacters()
+                initComics()
             }
         }?: run{
             startActivity(Intent(this, LoginActivity::class.java))
         }
 
-
-
-
-
-
-
-        findViewById<CarouselView>(R.id.cvSeriesCharacters).pageCount = imgsCharacters.size
-        findViewById<CarouselView>(R.id.cvSeriesCharacters).setImageListener {
-                position, imageView -> imageView.setImageResource(imgsCharacters[position])
-        }
-        findViewById<CarouselView>(R.id.cvSeriesComics).pageCount = imgsComics.size
-        findViewById<CarouselView>(R.id.cvSeriesComics).setImageListener {
-            position, imageView -> imageView.setImageResource(imgsComics[position])
-        }
-        findViewById<ImageButton>(R.id.ibSeriesSearch).setOnClickListener {
-            startActivity(Intent(this,ChipSearchActivity::class.java))
-        }
-
-        findViewById<ImageButton>(R.id.ibSeriesFavoriteNO).setOnClickListener {
-            findViewById<ImageButton>(R.id.ibSeriesFavoriteYes).visibility = View.VISIBLE
-            findViewById<ImageButton>(R.id.ibSeriesFavoriteNO).visibility = View.INVISIBLE
-        }
-        findViewById<ImageButton>(R.id.ibSeriesFavoriteYes).setOnClickListener {
-            findViewById<ImageButton>(R.id.ibSeriesFavoriteNO).visibility = View.VISIBLE
-            findViewById<ImageButton>(R.id.ibSeriesFavoriteYes).visibility = View.INVISIBLE
-        }
+ //        findViewById<ImageButton>(R.id.ibSeriesSearch).setOnClickListener {
+//            startActivity(Intent(this,ChipSearchActivity::class.java))
+//        }
+//
+//        findViewById<ImageButton>(R.id.ibSeriesFavoriteNO).setOnClickListener {
+//            findViewById<ImageButton>(R.id.ibSeriesFavoriteYes).visibility = View.VISIBLE
+//            findViewById<ImageButton>(R.id.ibSeriesFavoriteNO).visibility = View.INVISIBLE
+//        }
+//        findViewById<ImageButton>(R.id.ibSeriesFavoriteYes).setOnClickListener {
+//            findViewById<ImageButton>(R.id.ibSeriesFavoriteNO).visibility = View.VISIBLE
+//            findViewById<ImageButton>(R.id.ibSeriesFavoriteYes).visibility = View.INVISIBLE
+//        }
 
         findViewById<ImageButton>(R.id.ibSeriesShare).setOnClickListener {
             share()
         }
 
         findViewById<CarouselView>(R.id.cvSeriesCharacters).setImageClickListener {
-            startActivity(Intent(this,CharacterActivity::class.java))
+            val intent = Intent(this, CharacterActivity::class.java)
+            val temp = charsList[it]
+            intent.putExtra(Constants.Intent.KEY_INTENT_CHARACTER,temp)
+            startActivity(intent)
         }
 
         findViewById<CarouselView>(R.id.cvSeriesComics).setImageClickListener {
-            startActivity(Intent(this,ComicActivity::class.java))
+            val intent = Intent(this, ComicActivity::class.java)
+            val temp = comicsList[it]
+            intent.putExtra(Constants.Intent.KEY_INTENT_COMIC,temp)
+            startActivity(intent)
         }
 
         BottomNavigationView.OnNavigationItemReselectedListener {
@@ -146,6 +133,41 @@ class SeriesActivity : AppCompatActivity() {
         }
 
     }
+
+    private fun initComics() {
+        viewModel.seriesComicsList.observe(
+            this, {
+                comicsList.addAll(it)
+                Log.i("CarouselView", "${comicsList.size} Comics")
+                binding.cvSeriesComics.setImageListener(
+                    CarouselListener(
+                        this,
+                        comicsList  as MutableList<GeneralResult>
+                    )
+                )
+                binding.cvSeriesComics.pageCount = comicsList.size
+
+            }
+        )
+    }
+
+    private fun initCharacters() {
+        viewModel.seriesCharsList.observe(
+            this, {
+                charsList.addAll(it)
+                Log.i("CarouselView", "${charsList.size} Characters")
+                binding.cvSeriesCharacters.setImageListener(
+                    CarouselListener(
+                        this,
+                        charsList  as MutableList<GeneralResult>
+                    )
+                )
+                binding.cvSeriesCharacters.pageCount = charsList.size
+
+            }
+        )
+    }
+
     private fun share(){
         val intent : Intent = Intent(Intent.ACTION_SEND)
         intent.setType("image/png")

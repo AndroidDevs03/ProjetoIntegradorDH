@@ -1,4 +1,4 @@
-package com.example.projetointegradordigitalhouse.view
+package com.example.projetointegradordigitalhouse.view.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
