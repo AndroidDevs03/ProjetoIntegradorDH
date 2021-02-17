@@ -66,8 +66,8 @@ class CharacterActivity : AppCompatActivity() {
         firebaseAuth?.let{ auth ->
             character?.let{
                 viewModel.getCharacterComics(it.id)
-                it.series?.let{
-                    viewModel.getCharacterSeries(it)
+                it.series?.let{ seriesListID ->
+                    viewModel.getCharacterSeries(seriesListID)
                 }
                 it.name?.let{
                     binding.tvCharacterTitle.text = it

@@ -12,7 +12,6 @@ import android.widget.ImageButton
 import android.widget.TextView
 import com.bumptech.glide.Glide
 import com.example.projetointegradordigitalhouse.R
-import com.example.projetointegradordigitalhouse.databinding.ActivityCharacterBinding
 import com.example.projetointegradordigitalhouse.databinding.ActivityComicBinding
 import com.example.projetointegradordigitalhouse.model.CharacterResult
 import com.example.projetointegradordigitalhouse.model.ComicResult
@@ -61,7 +60,11 @@ class ComicActivity : AppCompatActivity() {
 
         firebaseAuth?.let{ auth ->
             comic?.let{
-//                viewModel.getCharacterComics(it.id)
+              it.charactersList?.let { charactersListID ->
+                  viewModel.getComicCharacters(charactersListID)
+              }
+
+//              viewModel.getCharacterComics(it.id)
                 it.name?.let{
                     binding.tvComicTitle.text = it
                 }
