@@ -94,20 +94,22 @@
             android:src="@drawable/spider_man" />
 
         <!-- Character's Desciption        -->
-        <TextView
-            android:id="@+id/tvCharacterDescription"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="25dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginRight="25dp"
-            android:autoSizeTextType="uniform"
-            android:text="@string/character_text_Description"
-            android:textColor="@color/white"
-            android:textSize="14sp" />
 
-        <!-- Label Comics list            -->
-        <TextView
+            <!-- Label Comics list            -->
+            <TextView
+                android:id="@+id/tvCharacterDescription"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="25dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="25dp"
+                android:autoSizeTextType="uniform"
+                android:text="@string/character_text_Description"
+                android:textColor="@color/white"
+                android:textSize="14sp"
+                android:justificationMode="inter_word"/>
+
+            <TextView
             android:id="@+id/tvCharacterComicList"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -151,27 +153,6 @@
             app:disableAutoPlayOnUserInteraction="true"
             app:pageTransformer="depth" />
 
-        <!-- Label Movies list            -->
-        <TextView
-            android:id="@+id/tvCharacterMoviesList"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="25dp"
-            android:layout_marginTop="15dp"
-            android:layout_marginRight="25dp"
-            android:text="@string/label_text_movies_list"
-            android:textColor="@color/white"
-            android:textSize="20sp"/>
-
-        <!-- Movies List          -->
-        <com.synnapps.carouselview.CarouselView
-            android:id="@+id/cvCharacterMovies"
-            android:layout_width="match_parent"
-            android:layout_height="180dp"
-            android:layout_marginLeft="25dp"
-            android:layout_marginRight="25dp"
-            app:disableAutoPlayOnUserInteraction="true"
-            app:pageTransformer="depth" />
         </LinearLayout>
     </ScrollView>
     <!--  Menu - Bottom Navigation       -->

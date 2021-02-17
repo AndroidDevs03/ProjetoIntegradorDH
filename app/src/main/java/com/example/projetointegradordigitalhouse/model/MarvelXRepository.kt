@@ -74,6 +74,9 @@ class MarvelXRepository(context: Context) {
     suspend fun getAllSeries(): MutableList<SeriesResult>{
         return firebaseFirestore.getAllSeries()
     }
+    suspend fun getAllComics(): MutableList<ComicResult>{
+        return firebaseFirestore.getAllComics()
+    }
     suspend fun updateSeriesByCharacterID(charID: Long) {
         val response = marvelApi.seriesByCharacterID(charID)
         if (response.isSuccessful) {
