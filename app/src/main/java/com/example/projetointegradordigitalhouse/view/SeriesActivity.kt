@@ -88,12 +88,6 @@ class SeriesActivity : AppCompatActivity() {
             startActivity(Intent(this, LoginActivity::class.java))
         }
 
-
-
-
-
-
-
         findViewById<CarouselView>(R.id.cvSeriesCharacters).pageCount = imgsCharacters.size
         findViewById<CarouselView>(R.id.cvSeriesCharacters).setImageListener {
                 position, imageView -> imageView.setImageResource(imgsCharacters[position])
