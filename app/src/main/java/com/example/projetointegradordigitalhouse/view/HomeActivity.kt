@@ -17,6 +17,7 @@ import com.bumptech.glide.Glide
 import com.example.projetointegradordigitalhouse.R
 import com.example.projetointegradordigitalhouse.databinding.ActivityHomeBinding
 import com.example.projetointegradordigitalhouse.model.*
+import com.example.projetointegradordigitalhouse.util.Constants.Intent.KEY_INTENT_CHARACTER
 import com.example.projetointegradordigitalhouse.util.Constants.Intent.KEY_INTENT_SEARCH
 import com.example.projetointegradordigitalhouse.viewModel.HomeViewModel
 import com.google.android.material.navigation.NavigationView
@@ -26,8 +27,6 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.synnapps.carouselview.ImageClickListener
-import com.google.firebase.auth.ktx.auth
-import com.google.firebase.ktx.Firebase
 import com.synnapps.carouselview.ImageListener
 import de.hdodenhof.circleimageview.CircleImageView
 import java.util.*
@@ -44,9 +43,9 @@ class HomeActivity : AppCompatActivity() {
         Firebase.firestore
     }
 
-    private val auth by lazy {
-        Firebase.auth
-    }
+//    private val auth by lazy {
+//        Firebase.auth
+//    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -134,7 +133,7 @@ class HomeActivity : AppCompatActivity() {
         binding.hmBottomNavigation.setOnNavigationItemSelectedListener {
             when (it.itemId) {
                 R.id.page_1 -> {
-                    auth.currentUser?.let{
+                    firebaseAuth.currentUser?.let{
                         firebaseFirestore.collection("users").document(it.uid).get()
                             .addOnSuccessListener { snapshot ->
                                 val userData = snapshot.data
@@ -191,7 +190,7 @@ class HomeActivity : AppCompatActivity() {
                     true
                 }
                 R.id.item3 ->{
-                    if(auth.currentUser?.isAnonymous == false){
+                    if(firebaseAuth.currentUser?.isAnonymous == false){
                         Firebase.auth.signOut()
                         finishAffinity()
                         startActivity(Intent(this, LoginActivity::class.java))
@@ -208,7 +207,8 @@ class HomeActivity : AppCompatActivity() {
 
         binding.cvCharacter.setImageClickListener{
             val intent = Intent(this, CharacterActivity::class.java)
-            intent.putExtra("blablabla", charsList[it].id)
+            val temp = charsList[it]
+            intent.putExtra(KEY_INTENT_CHARACTER,temp)
             startActivity(intent)
         }
 
@@ -228,7 +228,7 @@ class HomeActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        auth.currentUser?.let{
+        firebaseAuth.currentUser?.let{
             firebaseFirestore.collection("users").document(it.uid).get()
                 .addOnSuccessListener { snapshot ->
                     val userData = snapshot.data

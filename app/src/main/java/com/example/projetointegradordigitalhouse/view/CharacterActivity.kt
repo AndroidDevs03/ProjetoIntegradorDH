@@ -12,13 +12,28 @@ import android.view.View
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
+import com.bumptech.glide.Glide
 import com.example.projetointegradordigitalhouse.R
+import com.example.projetointegradordigitalhouse.databinding.ActivityCharacterBinding
+import com.example.projetointegradordigitalhouse.model.CharacterResult
+import com.example.projetointegradordigitalhouse.util.Constants.Intent.KEY_INTENT_CHARACTER
+import com.example.projetointegradordigitalhouse.viewModel.CharacterViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 import com.synnapps.carouselview.CarouselView
 import kotlinx.android.synthetic.main.activity_character.*
 import java.io.ByteArrayOutputStream
 
 class CharacterActivity : AppCompatActivity() {
+
+    private lateinit var binding: ActivityCharacterBinding
+    private var character : CharacterResult? = null
+    private var characterSeries: List<Long>? = null
+    private val firebaseAuth by lazy{ Firebase.auth }
+    private val viewModel by lazy { CharacterViewModel(this) }
+
+
 
     private val imgsComics = intArrayOf(
             R.drawable.comic2,
@@ -34,24 +49,46 @@ class CharacterActivity : AppCompatActivity() {
             R.drawable.defenders_serie,
             R.drawable.luke_serie
     )
-    private val imgFilmes = intArrayOf(
-            R.drawable.avangers_filmes,
-            R.drawable.captainamerica_filme,
-            R.drawable.doctor_filmes,
-            R.drawable.guardians_filme,
-            R.drawable.doctor_filmes
-    )
+
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_character)
+
+        binding = ActivityCharacterBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
+        character = intent.getParcelableExtra(KEY_INTENT_CHARACTER)
 
         initComponents()
 
     }
 
     private fun initComponents() {
+
+        firebaseAuth?.let{ auth ->
+            character?.let{
+                viewModel.getCharacterComics(it.id)
+                it.series?.let{
+                    viewModel.getCharacterSeries(it)
+                }
+                it.name?.let{
+                    binding.tvCharacterTitle.text = character?.name
+                }
+                it.description?.let{
+                    binding.tvCharacterDescription.text = character?.description
+                }
+                it.thumbnail?.let{
+                    Glide.with(this).load(character?.thumbnail).into(binding.ivCharacterPicture)
+                }
+            }
+        }?: run{
+            startActivity(Intent(this, LoginActivity::class.java))
+        }
+
+
+
+
         findViewById<CarouselView>(R.id.cvCharacterComics).pageCount = imgsComics.size
         findViewById<CarouselView>(R.id.cvCharacterComics).setImageListener {
             position, imageView -> imageView.setImageResource(imgsComics[position])
@@ -60,11 +97,6 @@ class CharacterActivity : AppCompatActivity() {
         findViewById<CarouselView>(R.id.cvCharacterSeries).pageCount = imgsSeries.size
         findViewById<CarouselView>(R.id.cvCharacterSeries).setImageListener {
             position, imageView -> imageView.setImageResource(imgsSeries[position])
-        }
-
-        findViewById<CarouselView>(R.id.cvCharacterMovies).pageCount = imgFilmes.size
-        findViewById<CarouselView>(R.id.cvCharacterMovies).setImageListener {
-            position, imageView -> imageView.setImageResource(imgFilmes[position])
         }
 
         findViewById<ImageButton>(R.id.ibCharacterSearch).setOnClickListener {
@@ -83,9 +115,6 @@ class CharacterActivity : AppCompatActivity() {
             startActivity(Intent(this, SeriesActivity::class.java))
         }
 
-        findViewById<CarouselView>(R.id.cvCharacterMovies).setImageClickListener {
-            startActivity(Intent(this, MovieActivity::class.java))
-        }
         findViewById<ImageButton>(R.id.ibCharacterShare).setOnClickListener {
             share()
         }
