@@ -43,7 +43,6 @@ class CharacterViewModel(context: Context): ViewModel() {
             val allcomics = repository.getAllComics()
 
             allcomics?.forEach { comic ->
-
                 comic.charactersList?.let { listCharsID ->
                     listCharsID.forEach {
                         if (it == charID){

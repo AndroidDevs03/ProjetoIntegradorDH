@@ -31,7 +31,7 @@ class ComicActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityComicBinding
     private var comic : ComicResult? = null
-    private var comicChars: List<Long>? = null
+//    private var comicChars: List<Long>? = null
     private val firebaseAuth by lazy{ Firebase.auth }
     private val viewModel by lazy { ComicViewModel(this) }
 
@@ -59,20 +59,21 @@ class ComicActivity : AppCompatActivity() {
     private fun initComponents() {
 
         firebaseAuth?.let{ auth ->
-            comic?.let{
-              it.charactersList?.let { charactersListID ->
+            comic?.let{ comicResult ->
+                comicResult.charactersList?.let { charactersListID ->
                   viewModel.getComicCharacters(charactersListID)
               }
-
-//              viewModel.getCharacterComics(it.id)
-                it.name?.let{
+                comicResult.name?.let{
                     binding.tvComicTitle.text = it
                 }
-                it.description?.let{
+                comicResult.description?.let{
                     binding.tvComicDescription.text = it
                 }
-                it.thumbnail?.let{
+                comicResult.thumbnail?.let{
                     Glide.with(this).load(it).into(binding.ivComicPicture)
+                }
+                comicResult.published?.let{
+                    binding.tvComicPublishedDate.text = it
                 }
             }
         }?: run{
