@@ -42,10 +42,6 @@ class HomeActivity : AppCompatActivity() {
         Firebase.firestore
     }
 
-    private val auth by lazy {
-        Firebase.auth
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityHomeBinding.inflate(layoutInflater)
@@ -133,7 +129,7 @@ class HomeActivity : AppCompatActivity() {
         binding.hmBottomNavigation.setOnNavigationItemSelectedListener {
             when (it.itemId) {
                 R.id.page_1 -> {
-                    auth.currentUser?.let{
+                    firebaseAuth.currentUser?.let{
                         when(it.isAnonymous){
                             true -> {navigationView.menu.findItem(R.id.item1).isEnabled = false
                                      navigationView.menu.findItem(R.id.item2).isEnabled = false
@@ -185,8 +181,8 @@ class HomeActivity : AppCompatActivity() {
                     true
                 }
                 R.id.page_4 -> {
-                    startActivity(Intent(this, HomeActivity::class.java))
-
+                    it.isEnabled = false
+//                    startActivity(Intent(this, HomeActivity::class.java))
                     true
                 }
                 else -> {
@@ -199,7 +195,7 @@ class HomeActivity : AppCompatActivity() {
             // Handle menu item selected
             when (menuItem.itemId){
                 R.id.item1 ->{
-                    auth.currentUser?.let{
+                    firebaseAuth.currentUser?.let{
                         if (!it.isAnonymous){
                             startActivity(Intent(this, RegisterActivity::class.java))
                             drawerLayout.close()
@@ -208,7 +204,7 @@ class HomeActivity : AppCompatActivity() {
                     true
                 }
                 R.id.item2 ->{
-                    auth.currentUser?.let{
+                    firebaseAuth.currentUser?.let{
                         if (!it.isAnonymous){
                             startActivityForResult(Intent(this, PopUpWindow::class.java),100)
                         }
@@ -216,9 +212,9 @@ class HomeActivity : AppCompatActivity() {
                     true
                 }
                 R.id.item3 ->{
-                    auth.currentUser?.let {
+                    firebaseAuth.currentUser?.let {
                         if(!it.isAnonymous ){
-                            auth.signOut()
+                            firebaseAuth.signOut()
                             finishAffinity()
                             startActivity(Intent(this, LoginActivity::class.java))
                             drawerLayout.close()
@@ -227,9 +223,9 @@ class HomeActivity : AppCompatActivity() {
                     true
                 }
                 R.id.item4 ->{
-                    auth.currentUser?.let {
+                    firebaseAuth.currentUser?.let {
                         if(it.isAnonymous ){
-                            auth.signOut()
+                            firebaseAuth.signOut()
                             it.delete()
                             finishAffinity()
                             startActivity(Intent(this, LoginActivity::class.java))
@@ -266,7 +262,7 @@ class HomeActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        auth.currentUser?.let{
+        firebaseAuth.currentUser?.let{
             firebaseFirestore.collection("users").document(it.uid).get()
                 .addOnSuccessListener { snapshot ->
                     val userData = snapshot.data
@@ -293,9 +289,9 @@ class HomeActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        auth.currentUser?.let {
+        firebaseAuth.currentUser?.let {
             if (it.isAnonymous){
-                auth.signOut()
+                firebaseAuth.signOut()
                 it.delete()
             }
         }
