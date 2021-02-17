@@ -43,12 +43,11 @@ class CharacterViewModel(context: Context): ViewModel() {
             val allcomics = repository.getAllComics()
 
             allcomics?.forEach { comic ->
-
                 comic.charactersList?.let { listCharsID ->
                     listCharsID.forEach {
                         if (it == charID){
                             charComics.add(comic)
-                            Log.i("CharacterViewModel", " ADD: ${comic.id} ${comic.name} Comics Total - ${charComics.size}")
+//                            Log.i("CharacterViewModel", " ADD: ${comic.id} ${comic.name} Comics Total - ${charComics.size}")
 
                         }
 

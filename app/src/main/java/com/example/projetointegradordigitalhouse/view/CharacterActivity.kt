@@ -29,10 +29,9 @@ class CharacterActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityCharacterBinding
     private var character : CharacterResult? = null
-    private var characterSeries: List<Long>? = null
+//    private var characterSeries: List<Long>? = null
     private val firebaseAuth by lazy{ Firebase.auth }
     private val viewModel by lazy { CharacterViewModel(this) }
-
 
 
     private val imgsComics = intArrayOf(
@@ -50,8 +49,6 @@ class CharacterActivity : AppCompatActivity() {
             R.drawable.luke_serie
     )
 
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -67,26 +64,24 @@ class CharacterActivity : AppCompatActivity() {
     private fun initComponents() {
 
         firebaseAuth?.let{ auth ->
-            character?.let{
-                viewModel.getCharacterComics(it.id)
-                it.series?.let{
-                    viewModel.getCharacterSeries(it)
+            character?.let{ charResult ->
+                viewModel.getCharacterComics(charResult.id)
+                charResult.series?.let{ seriesListID ->
+                    viewModel.getCharacterSeries(seriesListID)
                 }
-                it.name?.let{
-                    binding.tvCharacterTitle.text = character?.name
+                charResult.name?.let{
+                    binding.tvCharacterTitle.text = it
                 }
-                it.description?.let{
-                    binding.tvCharacterDescription.text = character?.description
+                charResult.description?.let{
+                    binding.tvCharacterDescription.text = it
                 }
-                it.thumbnail?.let{
-                    Glide.with(this).load(character?.thumbnail).into(binding.ivCharacterPicture)
+                charResult.thumbnail?.let{
+                    Glide.with(this).load(it).into(binding.ivCharacterPicture)
                 }
             }
         }?: run{
             startActivity(Intent(this, LoginActivity::class.java))
         }
-
-
 
 
         findViewById<CarouselView>(R.id.cvCharacterComics).pageCount = imgsComics.size
@@ -99,14 +94,14 @@ class CharacterActivity : AppCompatActivity() {
             position, imageView -> imageView.setImageResource(imgsSeries[position])
         }
 
-        findViewById<ImageButton>(R.id.ibCharacterSearch).setOnClickListener {
-            startActivity(Intent(this,ChipSearchActivity::class.java))
-        }
-
-        findViewById<ImageButton>(R.id.ibCharacterFavorite).setOnClickListener {
-            findViewById<ImageButton>(R.id.ibCharacterFavorite).visibility = View.VISIBLE
-            findViewById<ImageButton>(R.id.ibCharacterFavorite).visibility = View.INVISIBLE
-        }
+//        findViewById<ImageButton>(R.id.ibCharacterSearch).setOnClickListener {
+//            startActivity(Intent(this,ChipSearchActivity::class.java))
+//        }
+//
+//        findViewById<ImageButton>(R.id.ibCharacterFavorite).setOnClickListener {
+//            findViewById<ImageButton>(R.id.ibCharacterFavorite).visibility = View.VISIBLE
+//            findViewById<ImageButton>(R.id.ibCharacterFavorite).visibility = View.INVISIBLE
+//        }
 
         findViewById<CarouselView>(R.id.cvCharacterComics).setImageClickListener {
             startActivity(Intent(this,ComicActivity::class.java))
