@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
 import android.provider.MediaStore.Images.Media.insertImage
+import android.util.Log
 import android.view.View
 import android.widget.ImageButton
 import android.widget.ImageView
@@ -16,6 +17,9 @@ import com.bumptech.glide.Glide
 import com.example.projetointegradordigitalhouse.R
 import com.example.projetointegradordigitalhouse.databinding.ActivityCharacterBinding
 import com.example.projetointegradordigitalhouse.model.CharacterResult
+import com.example.projetointegradordigitalhouse.model.ComicResult
+import com.example.projetointegradordigitalhouse.model.GeneralResult
+import com.example.projetointegradordigitalhouse.model.SeriesResult
 import com.example.projetointegradordigitalhouse.util.Constants.Intent.KEY_INTENT_CHARACTER
 import com.example.projetointegradordigitalhouse.viewModel.CharacterViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -79,6 +83,9 @@ class CharacterActivity : AppCompatActivity() {
                     Glide.with(this).load(it).into(binding.ivCharacterPicture)
                 }
             }
+            initSeries()
+            initComics()
+
         }?: run{
             startActivity(Intent(this, LoginActivity::class.java))
         }
@@ -136,6 +143,43 @@ class CharacterActivity : AppCompatActivity() {
             }
         }
     }
+
+    private fun initSeries() {
+        val seriesList = mutableListOf<SeriesResult>()
+
+        viewModel.charSeriesList.observe(
+            this, {
+            seriesList.addAll(it)
+            Log.i("CarouselView", "${seriesList.size} Series")
+            binding.cvCharacterSeries.setImageListener(
+                CarouselListener(
+                    this,
+                    seriesList  as MutableList<GeneralResult>
+                )
+            )
+            binding.cvCharacterSeries.pageCount = seriesList.size
+
+        })
+    }
+
+    private fun initComics() {
+        val comicsList = mutableListOf<ComicResult>()
+
+        viewModel.charComicsList.observe(
+            this, {
+                comicsList.addAll(it)
+                Log.i("CarouselView", "${comicsList.size} Comics")
+                binding.cvCharacterComics.setImageListener(
+                    CarouselListener(
+                        this,
+                        comicsList  as MutableList<GeneralResult>
+                    )
+                )
+                binding.cvCharacterComics.pageCount = comicsList.size
+
+            })
+    }
+
     private fun share(){
         val intent : Intent = Intent(Intent.ACTION_SEND)
         intent.setType("image/png")
