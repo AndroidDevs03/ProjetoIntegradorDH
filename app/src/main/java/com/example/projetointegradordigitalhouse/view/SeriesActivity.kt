@@ -44,21 +44,6 @@ class SeriesActivity : AppCompatActivity() {
     private var charsList = mutableListOf<CharacterResult>()
 
 
-//    private val imgsCharacters = intArrayOf(
-//        R.drawable.black_widow,
-//        R.drawable.iron_man,
-//        R.drawable.captain_marvel,
-//        R.drawable.spider_man,
-//        R.drawable.hero2
-//    )
-//    private val imgsComics = intArrayOf(
-//        R.drawable.comic2,
-//        R.drawable.comic3,
-//        R.drawable.comic4,
-//        R.drawable.comic5,
-//        R.drawable.comic6
-//    )
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivitySeriesBinding.inflate(layoutInflater)
