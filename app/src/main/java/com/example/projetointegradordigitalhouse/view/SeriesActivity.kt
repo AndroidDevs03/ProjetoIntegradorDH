@@ -10,14 +10,32 @@ import android.provider.MediaStore
 import android.view.View
 import android.widget.ImageButton
 import android.widget.TextView
+import com.bumptech.glide.Glide
 import com.example.projetointegradordigitalhouse.R
+import com.example.projetointegradordigitalhouse.databinding.ActivityCharacterBinding
+import com.example.projetointegradordigitalhouse.databinding.ActivitySeriesBinding
+import com.example.projetointegradordigitalhouse.model.CharacterResult
+import com.example.projetointegradordigitalhouse.model.SeriesResult
+import com.example.projetointegradordigitalhouse.util.Constants
+import com.example.projetointegradordigitalhouse.util.Constants.Intent.KEY_INTENT_SERIE
+import com.example.projetointegradordigitalhouse.viewModel.CharacterViewModel
+import com.example.projetointegradordigitalhouse.viewModel.SeriesViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 import com.synnapps.carouselview.CarouselView
 import kotlinx.android.synthetic.main.activity_movie.*
 import kotlinx.android.synthetic.main.activity_series.*
 import java.io.ByteArrayOutputStream
 
 class SeriesActivity : AppCompatActivity() {
+
+    private lateinit var binding: ActivitySeriesBinding
+    private var serie : SeriesResult? = null
+    private var serieComics: List<Long>? = null
+    private val firebaseAuth by lazy{ Firebase.auth }
+    private val viewModel by lazy { SeriesViewModel(this) }
+
 
     private val imgsCharacters = intArrayOf(
         R.drawable.black_widow,
@@ -36,14 +54,39 @@ class SeriesActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_series)
+        binding = ActivitySeriesBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
+        serie = intent.getParcelableExtra(KEY_INTENT_SERIE)
 
         initComponents()
-
-
     }
 
     private fun initComponents() {
+
+        firebaseAuth?.let{ auth ->
+            serie?.let{
+//                viewModel.getCharacterComics(it.id)
+                it.name?.let{
+                    binding.tvSeriesTitle.text = it
+                }
+                it.description?.let{
+                    binding.tvSeriesDescription.text = it
+                }
+                it.thumbnail?.let{
+                    Glide.with(this).load(it).into(binding.ivSeriesPicture)
+                }
+            }
+        }?: run{
+            startActivity(Intent(this, LoginActivity::class.java))
+        }
+
+
+
+
+
+
+
         findViewById<CarouselView>(R.id.cvSeriesCharacters).pageCount = imgsCharacters.size
         findViewById<CarouselView>(R.id.cvSeriesCharacters).setImageListener {
                 position, imageView -> imageView.setImageResource(imgsCharacters[position])

@@ -20,6 +20,7 @@ import com.example.projetointegradordigitalhouse.model.*
 import com.example.projetointegradordigitalhouse.util.Constants.Intent.KEY_INTENT_CHARACTER
 import com.example.projetointegradordigitalhouse.util.Constants.Intent.KEY_INTENT_COMIC
 import com.example.projetointegradordigitalhouse.util.Constants.Intent.KEY_INTENT_SEARCH
+import com.example.projetointegradordigitalhouse.util.Constants.Intent.KEY_INTENT_SERIE
 import com.example.projetointegradordigitalhouse.viewModel.HomeViewModel
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.FirebaseAuth
@@ -221,10 +222,10 @@ class HomeActivity : AppCompatActivity() {
         }
 
         binding.cvSeries.setImageClickListener {
-            startActivity(Intent(this, SeriesActivity::class.java))
-//            val temp = seriesList[it]
-//            intent.putExtra(KEY_INTENT_CHARACTER,temp)
-//            startActivity(intent)
+            val intent = Intent(this, SeriesActivity::class.java)
+            val temp = seriesList[it]
+            intent.putExtra(KEY_INTENT_SERIE,temp)
+            startActivity(intent)
         }
     }
 

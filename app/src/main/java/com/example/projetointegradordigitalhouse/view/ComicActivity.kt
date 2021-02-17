@@ -51,7 +51,7 @@ class ComicActivity : AppCompatActivity() {
 
         binding = ActivityComicBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        KEY_INTENT_COMIC
+
         comic = intent.getParcelableExtra(KEY_INTENT_COMIC)
         initComponents()
 
