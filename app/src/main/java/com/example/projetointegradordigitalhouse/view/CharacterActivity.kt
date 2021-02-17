@@ -41,24 +41,6 @@ class CharacterActivity : AppCompatActivity() {
     private var comicsList = mutableListOf<ComicResult>()
     private var seriesList = mutableListOf<SeriesResult>()
 
-
-
-
-//    private val imgsComics = intArrayOf(
-//            R.drawable.comic2,
-//            R.drawable.comic3,
-//            R.drawable.comic4,
-//            R.drawable.comic5,
-//            R.drawable.comic6
-//    )
-//    private val imgsSeries = intArrayOf(
-//            R.drawable.daredevil_serie,
-//            R.drawable.ironfist_serie,
-//            R.drawable.jessica_serie,
-//            R.drawable.defenders_serie,
-//            R.drawable.luke_serie
-//    )
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -88,10 +70,9 @@ class CharacterActivity : AppCompatActivity() {
                 charResult.thumbnail?.let{
                     Glide.with(this).load(it).into(binding.ivCharacterPicture)
                 }
+                initSeries()
+                initComics()
             }
-            initSeries()
-            initComics()
-
         }?: run{
             startActivity(Intent(this, LoginActivity::class.java))
         }

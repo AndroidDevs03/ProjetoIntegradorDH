@@ -28,8 +28,8 @@ class SeriesViewModel(context: Context):ViewModel() {
             val allCharacters = repository.getAllChars()
 
             allCharacters?.forEach {
-                charactersListID?.forEach { serieID ->
-                    if(serieID == it.id){
+                charactersListID?.forEach { charID ->
+                    if(charID == it.id){
                         serieChars.add(it)
 //                        Log.i("SeriesViewModel", " ADD: ${it.id} ${it.name} Chars Total - ${serieChars.size}")
                     }
@@ -46,19 +46,21 @@ class SeriesViewModel(context: Context):ViewModel() {
         viewModelScope.launch {
             val allcomics = repository.getAllComics()
 
-            allcomics?.forEach { comic ->
-                comic.id?.let{ comicID ->
-                    comicListID.forEach {
-                        if (comicID == it){
-                            seriesComics.add(comic)
-                            Log.i("SeriesViewModel", " ADD: ${comic.id} ${comic.name} Comics Total - ${seriesComics.size}")
+            // Checagem de comics
+            allcomics?.forEach {
+                comicListID?.forEach { comicID ->
+                    if (comicID == it.id){
+                        seriesComics.add(it)
+                        Log.i("SeriesViewModel", " ADD: ${it.id} ${it.name} Comics Total - ${seriesComics.size}")
 
-                        }
                     }
                 }
             }
             seriesComicsList.postValue(seriesComics.toList())
+
         }
+        Log.i("SeriesViewModel", " Comics Total - ${seriesComics.size}")
+
     }
 
 }
