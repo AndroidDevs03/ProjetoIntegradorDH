@@ -29,24 +29,24 @@ class CharacterActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityCharacterBinding
     private var character : CharacterResult? = null
-//    private var characterSeries: List<Long>? = null
+    //    private var characterSeries: List<Long>? = null
     private val firebaseAuth by lazy{ Firebase.auth }
     private val viewModel by lazy { CharacterViewModel(this) }
 
 
     private val imgsComics = intArrayOf(
-            R.drawable.comic2,
-            R.drawable.comic3,
-            R.drawable.comic4,
-            R.drawable.comic5,
-            R.drawable.comic6
+        R.drawable.comic2,
+        R.drawable.comic3,
+        R.drawable.comic4,
+        R.drawable.comic5,
+        R.drawable.comic6
     )
     private val imgsSeries = intArrayOf(
-            R.drawable.daredevil_serie,
-            R.drawable.ironfist_serie,
-            R.drawable.jessica_serie,
-            R.drawable.defenders_serie,
-            R.drawable.luke_serie
+        R.drawable.daredevil_serie,
+        R.drawable.ironfist_serie,
+        R.drawable.jessica_serie,
+        R.drawable.defenders_serie,
+        R.drawable.luke_serie
     )
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -71,6 +71,7 @@ class CharacterActivity : AppCompatActivity() {
                 }
                 charResult.name?.let{
                     binding.tvCharacterTitle.text = it
+                    binding.tvCharacterName.text = it
                 }
                 charResult.description?.let{
                     binding.tvCharacterDescription.text = it
@@ -84,15 +85,15 @@ class CharacterActivity : AppCompatActivity() {
         }
 
 
-        findViewById<CarouselView>(R.id.cvCharacterComics).pageCount = imgsComics.size
-        findViewById<CarouselView>(R.id.cvCharacterComics).setImageListener {
-            position, imageView -> imageView.setImageResource(imgsComics[position])
-        }
-
-        findViewById<CarouselView>(R.id.cvCharacterSeries).pageCount = imgsSeries.size
-        findViewById<CarouselView>(R.id.cvCharacterSeries).setImageListener {
-            position, imageView -> imageView.setImageResource(imgsSeries[position])
-        }
+//        findViewById<CarouselView>(R.id.cvCharacterComics).pageCount = imgsComics.size
+//        findViewById<CarouselView>(R.id.cvCharacterComics).setImageListener {
+//            position, imageView -> imageView.setImageResource(imgsComics[position])
+//        }
+//
+//        findViewById<CarouselView>(R.id.cvCharacterSeries).pageCount = imgsSeries.size
+//        findViewById<CarouselView>(R.id.cvCharacterSeries).setImageListener {
+//            position, imageView -> imageView.setImageResource(imgsSeries[position])
+//        }
 
 //        findViewById<ImageButton>(R.id.ibCharacterSearch).setOnClickListener {
 //            startActivity(Intent(this,ChipSearchActivity::class.java))
@@ -102,13 +103,13 @@ class CharacterActivity : AppCompatActivity() {
 //            findViewById<ImageButton>(R.id.ibCharacterFavorite).visibility = View.VISIBLE
 //            findViewById<ImageButton>(R.id.ibCharacterFavorite).visibility = View.INVISIBLE
 //        }
-
-        findViewById<CarouselView>(R.id.cvCharacterComics).setImageClickListener {
-            startActivity(Intent(this,ComicActivity::class.java))
-        }
-        findViewById<CarouselView>(R.id.cvCharacterSeries).setImageClickListener {
-            startActivity(Intent(this, SeriesActivity::class.java))
-        }
+//
+//        findViewById<CarouselView>(R.id.cvCharacterComics).setImageClickListener {
+//            startActivity(Intent(this,ComicActivity::class.java))
+//        }
+//        findViewById<CarouselView>(R.id.cvCharacterSeries).setImageClickListener {
+//            startActivity(Intent(this, SeriesActivity::class.java))
+//        }
 
         findViewById<ImageButton>(R.id.ibCharacterShare).setOnClickListener {
             share()
