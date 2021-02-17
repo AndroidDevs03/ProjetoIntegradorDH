@@ -18,6 +18,7 @@ import com.example.projetointegradordigitalhouse.R
 import com.example.projetointegradordigitalhouse.databinding.ActivityHomeBinding
 import com.example.projetointegradordigitalhouse.model.*
 import com.example.projetointegradordigitalhouse.util.Constants.Intent.KEY_INTENT_CHARACTER
+import com.example.projetointegradordigitalhouse.util.Constants.Intent.KEY_INTENT_COMIC
 import com.example.projetointegradordigitalhouse.util.Constants.Intent.KEY_INTENT_SEARCH
 import com.example.projetointegradordigitalhouse.viewModel.HomeViewModel
 import com.google.android.material.navigation.NavigationView
@@ -213,11 +214,17 @@ class HomeActivity : AppCompatActivity() {
         }
 
         binding.cvComics.setImageClickListener {
-            startActivity(Intent(this, ComicActivity::class.java))
+            val intent = Intent(this, ComicActivity::class.java)
+            val temp = comicsList[it]
+            intent.putExtra(KEY_INTENT_COMIC,temp)
+            startActivity(intent)
         }
 
         binding.cvSeries.setImageClickListener {
             startActivity(Intent(this, SeriesActivity::class.java))
+//            val temp = seriesList[it]
+//            intent.putExtra(KEY_INTENT_CHARACTER,temp)
+//            startActivity(intent)
         }
     }
 

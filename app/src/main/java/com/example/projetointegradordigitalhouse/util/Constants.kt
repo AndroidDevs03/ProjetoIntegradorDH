@@ -30,6 +30,7 @@ class Constants {
         const val KEY_INTENT_SEARCH = "search"
         const val KEY_INTENT_DATA = "data"
         const val KEY_INTENT_CHARACTER = "character"
+        const val KEY_INTENT_COMIC = "comic"
     }
 
     object Values {

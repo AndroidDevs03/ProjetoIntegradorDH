@@ -34,7 +34,6 @@ class CharacterActivity : AppCompatActivity() {
     private val viewModel by lazy { CharacterViewModel(this) }
 
 
-
     private val imgsComics = intArrayOf(
             R.drawable.comic2,
             R.drawable.comic3,
@@ -49,8 +48,6 @@ class CharacterActivity : AppCompatActivity() {
             R.drawable.defenders_serie,
             R.drawable.luke_serie
     )
-
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -73,20 +70,18 @@ class CharacterActivity : AppCompatActivity() {
                     viewModel.getCharacterSeries(it)
                 }
                 it.name?.let{
-                    binding.tvCharacterTitle.text = character?.name
+                    binding.tvCharacterTitle.text = it
                 }
                 it.description?.let{
-                    binding.tvCharacterDescription.text = character?.description
+                    binding.tvCharacterDescription.text = it
                 }
                 it.thumbnail?.let{
-                    Glide.with(this).load(character?.thumbnail).into(binding.ivCharacterPicture)
+                    Glide.with(this).load(it).into(binding.ivCharacterPicture)
                 }
             }
         }?: run{
             startActivity(Intent(this, LoginActivity::class.java))
         }
-
-
 
 
         findViewById<CarouselView>(R.id.cvCharacterComics).pageCount = imgsComics.size
@@ -99,14 +94,14 @@ class CharacterActivity : AppCompatActivity() {
             position, imageView -> imageView.setImageResource(imgsSeries[position])
         }
 
-        findViewById<ImageButton>(R.id.ibCharacterSearch).setOnClickListener {
-            startActivity(Intent(this,ChipSearchActivity::class.java))
-        }
-
-        findViewById<ImageButton>(R.id.ibCharacterFavorite).setOnClickListener {
-            findViewById<ImageButton>(R.id.ibCharacterFavorite).visibility = View.VISIBLE
-            findViewById<ImageButton>(R.id.ibCharacterFavorite).visibility = View.INVISIBLE
-        }
+//        findViewById<ImageButton>(R.id.ibCharacterSearch).setOnClickListener {
+//            startActivity(Intent(this,ChipSearchActivity::class.java))
+//        }
+//
+//        findViewById<ImageButton>(R.id.ibCharacterFavorite).setOnClickListener {
+//            findViewById<ImageButton>(R.id.ibCharacterFavorite).visibility = View.VISIBLE
+//            findViewById<ImageButton>(R.id.ibCharacterFavorite).visibility = View.INVISIBLE
+//        }
 
         findViewById<CarouselView>(R.id.cvCharacterComics).setImageClickListener {
             startActivity(Intent(this,ComicActivity::class.java))
