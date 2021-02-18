@@ -57,4 +57,10 @@ class CharacterViewModel(context: Context): ViewModel() {
             charComicsList.postValue(charComics.toList())
         }
     }
+    fun addFavorite(result: Any, tabPosition: Int) {
+        viewModelScope.launch { repository.addToFavorites(result, tabPosition) }
+    }
+    fun remFavorite(result: Any, tabPosition: Int) {
+        viewModelScope.launch { repository.removeFromFavorites(result, tabPosition) }
+    }
 }

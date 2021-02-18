@@ -33,14 +33,15 @@ import com.synnapps.carouselview.ImageClickListener
 import com.synnapps.carouselview.ImageListener
 import de.hdodenhof.circleimageview.CircleImageView
 import java.util.*
+
 @Suppress("UNCHECKED_CAST", "SENSELESS_NULL_IN_WHEN")
 class HomeActivity : AppCompatActivity() {
 
     private val viewModel by lazy { HomeViewModel(this) }
-    private val firebaseAuth by lazy{ Firebase.auth }
+    private val firebaseAuth by lazy { Firebase.auth }
     private lateinit var binding: ActivityHomeBinding
     private lateinit var drawerLayout: DrawerLayout
-    private lateinit var navigationView : NavigationView
+    private lateinit var navigationView: NavigationView
 
     private val firebaseFirestore by lazy {
         Firebase.firestore
@@ -66,12 +67,12 @@ class HomeActivity : AppCompatActivity() {
     private fun initComponents() {
         Log.i("HomeActivity", "InitComponents")
 
-        firebaseAuth.currentUser?.let{
+        firebaseAuth.currentUser?.let {
             viewModel.getHomeCharacters()
             viewModel.getHomeSeries()
             viewModel.getHomeComics()
             viewModel.getSearchHistory()
-        }?: run{
+        } ?: run {
             startActivity(Intent(this, LoginActivity::class.java))
         }
     }
@@ -100,7 +101,7 @@ class HomeActivity : AppCompatActivity() {
             binding.cvSeries.setImageListener(
                 CarouselListener(
                     this,
-                    seriesList  as MutableList<GeneralResult>
+                    seriesList as MutableList<GeneralResult>
                 )
             )
             binding.cvSeries.pageCount = seriesList.size
@@ -127,7 +128,13 @@ class HomeActivity : AppCompatActivity() {
         binding.hmSearchField.setEndIconOnClickListener {
             val newtag = binding.hmSearchField.editText?.text.toString().trim()
             if (newtag != "") {
-                viewModel.addSearchToLocalDatabase(Search(newtag, "", Date().toString())) //todo: Arrumar aqui
+                viewModel.addSearchToLocalDatabase(
+                    Search(
+                        newtag,
+                        "",
+                        Date().toString()
+                    )
+                ) //todo: Arrumar aqui
                 val intent = Intent(this@HomeActivity, ChipSearchActivity::class.java)
                 intent.putExtra(KEY_INTENT_SEARCH, newtag)
                 startActivity(intent)
@@ -136,28 +143,30 @@ class HomeActivity : AppCompatActivity() {
         binding.hmBottomNavigation.setOnNavigationItemSelectedListener {
             when (it.itemId) {
                 R.id.page_1 -> {
-                    firebaseAuth.currentUser?.let{
-                        firebaseFirestore.collection("users").document(it.uid).get()
-                            .addOnSuccessListener { snapshot ->
-                                val userData = snapshot.data
-                                val headerView = navigationView.getHeaderView(0)
-                                val namePerfil = headerView.findViewById<TextView>(R.id.tvNamePerfil)
-                                val emailPerfil = headerView.findViewById<TextView>(R.id.tvEmailPerfil)
-                                val imagem = headerView.findViewById<CircleImageView>(R.id.ivAvatar)
-                                val position = userData?.get("avatar_id") as Number
-                                namePerfil.text = userData?.get("name") as String
-                                emailPerfil.text = userData?.get("email") as String
-                                Glide.with(this).load(Avatar.avatar[position.toInt()]).into(imagem)
-                            }
-                            .addOnFailureListener {
-                                Toast.makeText(this, it.localizedMessage, Toast.LENGTH_LONG).show()
-                            }
-                    }?: run {
-
+                    firebaseAuth.currentUser?.let {user ->
+                        if (user.isAnonymous.not()) {
+                            firebaseFirestore.collection("users")
+                                .document(user.uid).get()
+                                .addOnSuccessListener { snapshot ->
+                                    snapshot.data?.let{
+                                        val userData = snapshot.data
+                                        val headerView = navigationView.getHeaderView(0)
+                                        val namePerfil = headerView.findViewById<TextView>(R.id.tvNamePerfil)
+                                        val emailPerfil = headerView.findViewById<TextView>(R.id.tvEmailPerfil)
+                                        val imagem = headerView.findViewById<CircleImageView>(R.id.ivAvatar)
+                                        val position = userData?.get("avatar_id") as Number
+                                        namePerfil.text = userData?.get("name") as String
+                                        emailPerfil.text = userData?.get("email") as String
+                                        Glide.with(this).load(Avatar.avatar[position.toInt()]).into(imagem)
+                                    }
+                                }
+                                .addOnFailureListener {
+                                    Toast.makeText(this, it.localizedMessage, Toast.LENGTH_LONG)
+                                        .show()
+                                }
+                        }
                     }
-
                     drawerLayout.open()
-
                     true
                 }
                 R.id.page_2 -> {
@@ -181,19 +190,19 @@ class HomeActivity : AppCompatActivity() {
 
         navigationView.setNavigationItemSelectedListener { menuItem ->
             // Handle menu item selected
-            when (menuItem.itemId){
-                R.id.item1 ->{
+            when (menuItem.itemId) {
+                R.id.item1 -> {
                     startActivity(Intent(this, RegisterActivity::class.java))
                     drawerLayout.close()
                     true
                 }
-                R.id.item2 ->{
-                    startActivityForResult(Intent(this, PopUpWindow::class.java),100)
+                R.id.item2 -> {
+                    startActivityForResult(Intent(this, PopUpWindow::class.java), 100)
 //                    drawerLayout.close()
                     true
                 }
-                R.id.item3 ->{
-                    if(firebaseAuth.currentUser?.isAnonymous == false){
+                R.id.item3 -> {
+                    if (firebaseAuth.currentUser?.isAnonymous == false) {
                         Firebase.auth.signOut()
                         finishAffinity()
                         startActivity(Intent(this, LoginActivity::class.java))
@@ -208,24 +217,24 @@ class HomeActivity : AppCompatActivity() {
             }
         }
 
-        binding.cvCharacter.setImageClickListener{
+        binding.cvCharacter.setImageClickListener {
             val intent = Intent(this, CharacterActivity::class.java)
             val temp = charsList[it]
-            intent.putExtra(KEY_INTENT_CHARACTER,temp)
+            intent.putExtra(KEY_INTENT_CHARACTER, temp)
             startActivity(intent)
         }
 
         binding.cvComics.setImageClickListener {
             val intent = Intent(this, ComicActivity::class.java)
             val temp = comicsList[it]
-            intent.putExtra(KEY_INTENT_COMIC,temp)
+            intent.putExtra(KEY_INTENT_COMIC, temp)
             startActivity(intent)
         }
 
         binding.cvSeries.setImageClickListener {
             val intent = Intent(this, SeriesActivity::class.java)
             val temp = seriesList[it]
-            intent.putExtra(KEY_INTENT_SERIE,temp)
+            intent.putExtra(KEY_INTENT_SERIE, temp)
             startActivity(intent)
         }
     }
@@ -237,7 +246,7 @@ class HomeActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        firebaseAuth.currentUser?.let{
+        firebaseAuth.currentUser?.let {
             firebaseFirestore.collection("users").document(it.uid).get()
                 .addOnSuccessListener { snapshot ->
                     val userData = snapshot.data
@@ -257,7 +266,7 @@ class HomeActivity : AppCompatActivity() {
                 .addOnFailureListener {
                     Toast.makeText(this, it.localizedMessage, Toast.LENGTH_LONG).show()
                 }
-        }?: run {
+        } ?: run {
 
         }
     }

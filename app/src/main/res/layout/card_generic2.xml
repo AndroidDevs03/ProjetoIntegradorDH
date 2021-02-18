@@ -43,6 +43,7 @@
             app:layout_constraintTop_toTopOf="parent" />
         <ImageButton
             android:clickable="true"
+
             android:id="@+id/cv_character_favorite"
             android:layout_width="30dp"
             android:layout_height="30dp"
@@ -56,7 +57,7 @@
             android:scaleType="fitCenter"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            android:focusable="true" />
+            android:focusable="true"/>
         <ImageButton
             android:clickable="true"
             android:id="@+id/cv_character_search"

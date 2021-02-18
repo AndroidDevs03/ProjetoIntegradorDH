@@ -8,12 +8,11 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
-import android.view.View
 import android.widget.ImageButton
 import android.widget.TextView
+import android.widget.Toast
 import com.bumptech.glide.Glide
 import com.example.projetointegradordigitalhouse.R
-import com.example.projetointegradordigitalhouse.databinding.ActivityCharacterBinding
 import com.example.projetointegradordigitalhouse.databinding.ActivitySeriesBinding
 import com.example.projetointegradordigitalhouse.model.CharacterResult
 import com.example.projetointegradordigitalhouse.model.ComicResult
@@ -21,7 +20,6 @@ import com.example.projetointegradordigitalhouse.model.GeneralResult
 import com.example.projetointegradordigitalhouse.model.SeriesResult
 import com.example.projetointegradordigitalhouse.util.Constants
 import com.example.projetointegradordigitalhouse.util.Constants.Intent.KEY_INTENT_SERIE
-import com.example.projetointegradordigitalhouse.viewModel.CharacterViewModel
 import com.example.projetointegradordigitalhouse.viewModel.SeriesViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.ktx.auth
@@ -34,7 +32,7 @@ import java.io.ByteArrayOutputStream
 class SeriesActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivitySeriesBinding
-    private var serie : SeriesResult? = null
+    private var series : SeriesResult? = null
 //    private var serieComics: List<Long>? = null
 //    private var serieChars: List<Long>? = null
     private val firebaseAuth by lazy{ Firebase.auth }
@@ -49,15 +47,15 @@ class SeriesActivity : AppCompatActivity() {
         binding = ActivitySeriesBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        serie = intent.getParcelableExtra(KEY_INTENT_SERIE)
+        series = intent.getParcelableExtra(KEY_INTENT_SERIE)
 
         initComponents()
     }
 
     private fun initComponents() {
 
-        firebaseAuth?.let{ auth ->
-            serie?.let{ serieResult ->
+//        firebaseAuth?.let{ auth ->
+            series?.let{ serieResult ->
 
                 serieResult.charactersList?.let{
                     viewModel.getSeriesCharacters(it)
@@ -76,12 +74,32 @@ class SeriesActivity : AppCompatActivity() {
                 serieResult.thumbnail?.let{
                     Glide.with(this).load(it).into(binding.ivSeriesPicture)
                 }
+                if (firebaseAuth.currentUser?.isAnonymous?.not() == true){
+                    Log.i("RecyclerView", "Usuário identificado")
+                    binding.ibSeriesFavorite.isSelected = serieResult.favoriteTagFlag
+                    binding.ibSeriesFavorite.setOnClickListener {
+                        if (binding.ibSeriesFavorite.isSelected){
+                            favoriteClicked(false) // true = adicionar, false = remover
+                            binding.ibSeriesFavorite.isSelected = false
+                        } else {
+                            favoriteClicked(true) // true = adicionar, false = remover
+                            binding.ibSeriesFavorite.isSelected = true
+                        }
+                    }
+                    binding.ibSeriesFavorite.isEnabled = true
+                }else{
+                    Log.i("RecyclerView", "Usuário anônimo")
+                    binding.ibSeriesFavorite.isActivated = false
+                    binding.ibSeriesFavorite.setOnClickListener {
+                        Toast.makeText(binding.ibSeriesFavorite.context, "Favorite is not allowed for unregistered users. Please sign in.", Toast.LENGTH_LONG).show()
+                    }
+                }
                 initCharacters()
                 initComics()
             }
-        }?: run{
-            startActivity(Intent(this, LoginActivity::class.java))
-        }
+//        }?: run{
+//            startActivity(Intent(this, LoginActivity::class.java))
+//        }
 
  //        findViewById<ImageButton>(R.id.ibSeriesSearch).setOnClickListener {
 //            startActivity(Intent(this,ChipSearchActivity::class.java))
@@ -149,6 +167,10 @@ class SeriesActivity : AppCompatActivity() {
 
             }
         )
+    }
+    private fun favoriteClicked(add: Boolean) {
+        if (add){ series?.let { viewModel.addFavorite(it,1) } }
+        else { series?.let { viewModel.remFavorite(it,1) } }
     }
 
     private fun initCharacters() {

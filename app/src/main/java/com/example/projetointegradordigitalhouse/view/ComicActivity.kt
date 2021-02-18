@@ -11,6 +11,7 @@ import android.util.Log
 import android.view.View
 import android.widget.ImageButton
 import android.widget.TextView
+import android.widget.Toast
 import com.bumptech.glide.Glide
 import com.example.projetointegradordigitalhouse.R
 import com.example.projetointegradordigitalhouse.databinding.ActivityComicBinding
@@ -63,7 +64,7 @@ class ComicActivity : AppCompatActivity() {
 
     private fun initComponents() {
 
-        firebaseAuth?.let{ auth ->
+//        firebaseAuth?.let{ auth ->
             comic?.let{ comicResult ->
                 comicResult.charactersList?.let { charactersListID ->
                   viewModel.getComicCharacters(charactersListID)
@@ -80,12 +81,32 @@ class ComicActivity : AppCompatActivity() {
                 comicResult.published?.let{
                     binding.tvComicPublishedDate.text = it
                 }
+                if (firebaseAuth.currentUser?.isAnonymous?.not() == true){
+                    Log.i("RecyclerView", "Usuário identificado")
+                    binding.ibComicFavorite.isSelected = comicResult.favoriteTagFlag
+                    binding.ibComicFavorite.setOnClickListener {
+                        if (binding.ibComicFavorite.isSelected){
+                            favoriteClicked(false) // true = adicionar, false = remover
+                            binding.ibComicFavorite.isSelected = false
+                        } else {
+                            favoriteClicked(true) // true = adicionar, false = remover
+                            binding.ibComicFavorite.isSelected = true
+                        }
+                    }
+                    binding.ibComicFavorite.isEnabled = true
+                }else{
+                    Log.i("RecyclerView", "Usuário anônimo")
+                    binding.ibComicFavorite.isActivated = false
+                    binding.ibComicFavorite.setOnClickListener {
+                        Toast.makeText(binding.ibComicFavorite.context, "Favorite is not allowed for unregistered users. Please sign in.", Toast.LENGTH_LONG).show()
+                    }
+                }
                 initCharacters()
 
             }
-        }?: run{
-            startActivity(Intent(this, LoginActivity::class.java))
-        }
+//        }?: run{
+//            startActivity(Intent(this, LoginActivity::class.java))
+//        }
 
 //        findViewById<ImageButton>(R.id.ibComicSearch).setOnClickListener {
 //            startActivity(Intent(this,ChipSearchActivity::class.java))
@@ -160,6 +181,10 @@ class ComicActivity : AppCompatActivity() {
         intent.putExtra(Intent.EXTRA_STREAM,uri)
         intent.putExtra(Intent.EXTRA_TEXT, description)
         startActivity(Intent.createChooser(intent,"Compartilhar nas redes sociais"))
+    }
+    private fun favoriteClicked(add: Boolean) {
+        if (add){ comic?.let { viewModel.addFavorite(it,1) } }
+        else { comic?.let { viewModel.remFavorite(it,1) } }
     }
 
 }

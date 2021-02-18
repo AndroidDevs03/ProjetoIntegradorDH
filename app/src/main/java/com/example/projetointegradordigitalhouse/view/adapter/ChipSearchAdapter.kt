@@ -1,5 +1,6 @@
 package com.example.projetointegradordigitalhouse.view.adapter
 
+import android.content.Context
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -7,12 +8,15 @@ import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
+import androidx.core.view.isInvisible
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.projetointegradordigitalhouse.R
 import com.example.projetointegradordigitalhouse.model.GeneralResult
 import com.example.projetointegradordigitalhouse.util.Constants
 import com.example.projetointegradordigitalhouse.util.Constants.SharedPreferences.PREFIX_CHAR
+import com.example.projetointegradordigitalhouse.view.ChipSearchActivity
 import com.example.projetointegradordigitalhouse.viewModel.ChipSearchViewModel
 import com.google.android.material.card.MaterialCardView
 import com.google.firebase.auth.ktx.auth
@@ -58,7 +62,7 @@ class ChipSearchAdapter(
                     holder.cardSearch.isSelected = true
                 }
              }
-            firebaseAuth.currentUser?.let{
+            if (firebaseAuth.currentUser?.isAnonymous?.not() == true){
                 Log.i("RecyclerView", "Usuário identificado")
                 holder.cardFavorite.isSelected = genResult.favoriteTagFlag
                 holder.cardFavorite.setOnClickListener {
@@ -70,10 +74,13 @@ class ChipSearchAdapter(
                         holder.cardFavorite.isSelected = true
                     }
                 }
-                holder.cardFavorite.isEnabled = true
-            }?: run{
+                holder.cardFavorite.isActivated = true
+            }else{
                 Log.i("RecyclerView", "Usuário anônimo")
-                holder.cardFavorite.isEnabled = false
+                holder.cardFavorite.isActivated = false
+                holder.cardFavorite.setOnClickListener {
+                    Toast.makeText(holder.cardFavorite.context, "Favorite is not allowed for unregistered users. Please sign in.", Toast.LENGTH_LONG).show()
+                }
             }
 
             Log.i("RecyclerView", "View ${position} criada")

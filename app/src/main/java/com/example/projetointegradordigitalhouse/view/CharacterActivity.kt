@@ -13,6 +13,7 @@ import android.view.View
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import com.bumptech.glide.Glide
 import com.example.projetointegradordigitalhouse.R
 import com.example.projetointegradordigitalhouse.databinding.ActivityCharacterBinding
@@ -55,7 +56,7 @@ class CharacterActivity : AppCompatActivity() {
 
     private fun initComponents() {
 
-        firebaseAuth?.let{ auth ->
+        //firebaseAuth?.let{ auth ->
             character?.let{ charResult ->
                 viewModel.getCharacterComics(charResult.id)
                 charResult.series?.let{ seriesListID ->
@@ -70,12 +71,33 @@ class CharacterActivity : AppCompatActivity() {
                 charResult.thumbnail?.let{
                     Glide.with(this).load(it).into(binding.ivCharacterPicture)
                 }
+                if (firebaseAuth.currentUser?.isAnonymous?.not() == true){
+                    Log.i("RecyclerView", "Usuário identificado")
+                    binding.ibCharacterFavorite.isSelected = charResult.favoriteTagFlag
+                    binding.ibCharacterFavorite.setOnClickListener {
+                        if (binding.ibCharacterFavorite.isSelected){
+                            favoriteClicked(false) // true = adicionar, false = remover
+                            binding.ibCharacterFavorite.isSelected = false
+                        } else {
+                            favoriteClicked(true) // true = adicionar, false = remover
+                            binding.ibCharacterFavorite.isSelected = true
+                        }
+                    }
+                    binding.ibCharacterFavorite.isEnabled = true
+                }else{
+                    Log.i("RecyclerView", "Usuário anônimo")
+                    binding.ibCharacterFavorite.isActivated = false
+                    binding.ibCharacterFavorite.setOnClickListener {
+                        Toast.makeText(binding.ibCharacterFavorite.context, "Favorite is not allowed for unregistered users. Please sign in.", Toast.LENGTH_LONG).show()
+                    }
+                }
+
                 initSeries()
                 initComics()
             }
-        }?: run{
-            startActivity(Intent(this, LoginActivity::class.java))
-        }
+        //}?: run{
+            //startActivity(Intent(this, LoginActivity::class.java))
+        //}
 
         binding.cvCharacterComics.setImageClickListener {
             val intent = Intent(this, ComicActivity::class.java)
@@ -90,6 +112,7 @@ class CharacterActivity : AppCompatActivity() {
             intent.putExtra(Constants.Intent.KEY_INTENT_SERIE,temp)
             startActivity(intent)
         }
+
 
 //        findViewById<ImageButton>(R.id.ibCharacterFavorite).setOnClickListener {
 //            findViewById<ImageButton>(R.id.ibCharacterFavorite).visibility = View.VISIBLE
@@ -121,6 +144,11 @@ class CharacterActivity : AppCompatActivity() {
                 else -> {false}
             }
         }
+    }
+
+    private fun favoriteClicked(add: Boolean) {
+        if (add){ character?.let { viewModel.addFavorite(it,0) } }
+        else { character?.let { viewModel.remFavorite(it,0) } }
     }
 
     private fun initSeries() {
