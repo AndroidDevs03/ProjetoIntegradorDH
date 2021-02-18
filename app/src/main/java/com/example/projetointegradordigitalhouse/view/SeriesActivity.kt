@@ -86,7 +86,7 @@ class SeriesActivity : AppCompatActivity() {
                             binding.ibSeriesFavorite.isSelected = true
                         }
                     }
-                    binding.ibSeriesFavorite.isEnabled = true
+                    binding.ibSeriesFavorite.isActivated = true
                 }else{
                     Log.i("RecyclerView", "Usuário anônimo")
                     binding.ibSeriesFavorite.isActivated = false

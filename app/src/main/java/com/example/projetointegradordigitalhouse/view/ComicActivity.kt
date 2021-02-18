@@ -93,7 +93,7 @@ class ComicActivity : AppCompatActivity() {
                             binding.ibComicFavorite.isSelected = true
                         }
                     }
-                    binding.ibComicFavorite.isEnabled = true
+                    binding.ibComicFavorite.isActivated = true
                 }else{
                     Log.i("RecyclerView", "Usuário anônimo")
                     binding.ibComicFavorite.isActivated = false

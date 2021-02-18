@@ -83,7 +83,7 @@ class CharacterActivity : AppCompatActivity() {
                             binding.ibCharacterFavorite.isSelected = true
                         }
                     }
-                    binding.ibCharacterFavorite.isEnabled = true
+                    binding.ibCharacterFavorite.isActivated = true
                 }else{
                     Log.i("RecyclerView", "Usuário anônimo")
                     binding.ibCharacterFavorite.isActivated = false

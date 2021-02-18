@@ -66,12 +66,15 @@
         <!--Favorite 'Yes' Button            -->
         <ImageButton
             android:id="@+id/ibCharacterFavorite"
-            style="@style/favorite_button_NO"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:src="@drawable/favorite_selector"
             android:background="@color/redBackground"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/ibCharacterSearch"
             android:contentDescription="TODO"
-            android:visibility="visible" />
+            android:clickable="true"
+            android:focusable="true"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/ibCharacterSearch" />
 
         <!--Share Button            -->
         <ImageButton
