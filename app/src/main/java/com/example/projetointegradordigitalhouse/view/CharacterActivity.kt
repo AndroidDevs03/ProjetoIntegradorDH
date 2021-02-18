@@ -7,11 +7,8 @@ import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
-import android.provider.MediaStore.Images.Media.insertImage
 import android.util.Log
-import android.view.View
 import android.widget.ImageButton
-import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import com.bumptech.glide.Glide
@@ -27,7 +24,6 @@ import com.example.projetointegradordigitalhouse.viewModel.CharacterViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
-import com.synnapps.carouselview.CarouselView
 import kotlinx.android.synthetic.main.activity_character.*
 import java.io.ByteArrayOutputStream
 
@@ -71,6 +67,7 @@ class CharacterActivity : AppCompatActivity() {
                 charResult.thumbnail?.let{
                     Glide.with(this).load(it).into(binding.ivCharacterPicture)
                 }
+                //Configurando o botão de Favoritos
                 if (firebaseAuth.currentUser?.isAnonymous?.not() == true){
                     Log.i("RecyclerView", "Usuário identificado")
                     binding.ibCharacterFavorite.isSelected = charResult.favoriteTagFlag
@@ -91,6 +88,7 @@ class CharacterActivity : AppCompatActivity() {
                         Toast.makeText(binding.ibCharacterFavorite.context, "Favorite is not allowed for unregistered users. Please sign in.", Toast.LENGTH_LONG).show()
                     }
                 }
+                //Configurando o botão de Search
 
                 initSeries()
                 initComics()
@@ -109,7 +107,7 @@ class CharacterActivity : AppCompatActivity() {
         binding.cvCharacterSeries.setImageClickListener {
             val intent = Intent(this, SeriesActivity::class.java)
             val temp = seriesList[it]
-            intent.putExtra(Constants.Intent.KEY_INTENT_SERIE,temp)
+            intent.putExtra(Constants.Intent.KEY_INTENT_SERIES,temp)
             startActivity(intent)
         }
 

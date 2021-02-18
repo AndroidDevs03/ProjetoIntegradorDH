@@ -2,19 +2,14 @@ package com.example.projetointegradordigitalhouse.view
 
 import android.annotation.SuppressLint
 import android.app.Activity
-import android.app.Dialog
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import android.view.MenuItem
-import android.view.View
 import android.widget.*
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.view.menu.MenuItemImpl
-import androidx.core.view.isVisible
 import androidx.drawerlayout.widget.DrawerLayout
 import com.bumptech.glide.Glide
 import com.example.projetointegradordigitalhouse.R
@@ -23,13 +18,12 @@ import com.example.projetointegradordigitalhouse.model.*
 import com.example.projetointegradordigitalhouse.util.Constants.Intent.KEY_INTENT_CHARACTER
 import com.example.projetointegradordigitalhouse.util.Constants.Intent.KEY_INTENT_COMIC
 import com.example.projetointegradordigitalhouse.util.Constants.Intent.KEY_INTENT_SEARCH
-import com.example.projetointegradordigitalhouse.util.Constants.Intent.KEY_INTENT_SERIE
+import com.example.projetointegradordigitalhouse.util.Constants.Intent.KEY_INTENT_SERIES
 import com.example.projetointegradordigitalhouse.viewModel.HomeViewModel
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import com.synnapps.carouselview.ImageClickListener
 import com.synnapps.carouselview.ImageListener
 import de.hdodenhof.circleimageview.CircleImageView
 import java.util.*
@@ -269,7 +263,7 @@ class HomeActivity : AppCompatActivity() {
         binding.cvSeries.setImageClickListener {
             val intent = Intent(this, SeriesActivity::class.java)
             val temp = seriesList[it]
-            intent.putExtra(KEY_INTENT_SERIE, temp)
+            intent.putExtra(KEY_INTENT_SERIES, temp)
             startActivity(intent)
         }
     }

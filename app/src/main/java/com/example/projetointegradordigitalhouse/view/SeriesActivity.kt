@@ -19,13 +19,12 @@ import com.example.projetointegradordigitalhouse.model.ComicResult
 import com.example.projetointegradordigitalhouse.model.GeneralResult
 import com.example.projetointegradordigitalhouse.model.SeriesResult
 import com.example.projetointegradordigitalhouse.util.Constants
-import com.example.projetointegradordigitalhouse.util.Constants.Intent.KEY_INTENT_SERIE
+import com.example.projetointegradordigitalhouse.util.Constants.Intent.KEY_INTENT_SERIES
 import com.example.projetointegradordigitalhouse.viewModel.SeriesViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.synnapps.carouselview.CarouselView
-import kotlinx.android.synthetic.main.activity_movie.*
 import kotlinx.android.synthetic.main.activity_series.*
 import java.io.ByteArrayOutputStream
 
@@ -47,7 +46,7 @@ class SeriesActivity : AppCompatActivity() {
         binding = ActivitySeriesBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        series = intent.getParcelableExtra(KEY_INTENT_SERIE)
+        series = intent.getParcelableExtra(KEY_INTENT_SERIES)
 
         initComponents()
     }
