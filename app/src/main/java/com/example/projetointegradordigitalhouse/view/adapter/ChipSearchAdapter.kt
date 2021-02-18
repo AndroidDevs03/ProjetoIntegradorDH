@@ -50,7 +50,7 @@ class ChipSearchAdapter(
             holder.cardBackground.setOnClickListener { itemClicked(position) }
             holder.cardSearch.isSelected = genResult.searchTagFlag
             holder.cardSearch.setOnClickListener {
-                if (holder.cardFavorite.isSelected){
+                if (holder.cardSearch.isSelected){
                     searchClicked(false, position) // true = adicionar, false = remover
                     holder.cardSearch.isSelected = false
                 } else {

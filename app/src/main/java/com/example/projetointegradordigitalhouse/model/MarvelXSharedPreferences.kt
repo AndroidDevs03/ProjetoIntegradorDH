@@ -11,11 +11,13 @@ class MarvelXSharedPreferences(context: Context) {
     private val sharedPreferences: SharedPreferences by lazy { context.getSharedPreferences(NAME_SP_DBNAME, MODE_PRIVATE) }
 
     fun updateTags(searchTags: MutableSet<String>) {
-        val jejeje = searchTags
+        searchTags.removeAll{it == ""}
         sharedPreferences.edit {putStringSet(NAME_SP_CURRENT_SEARCH, searchTags)}
 
     }
     fun getTags(): MutableSet<String>? {
-        return sharedPreferences.getStringSet(NAME_SP_CURRENT_SEARCH, mutableSetOf(""))
+        val tempTags = sharedPreferences.getStringSet(NAME_SP_CURRENT_SEARCH, mutableSetOf(""))
+        tempTags?.removeAll{it == ""}
+        return tempTags
     }
 }

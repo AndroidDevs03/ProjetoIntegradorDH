@@ -36,8 +36,6 @@ class MarvelXRepository(context: Context) {
     suspend fun searchByName(tag: String, limit: Int = 10, offset: Int = 0): Pair<MutableList<CharacterResult> , MutableList<SeriesResult>> {
         var tempCharList = mutableListOf<CharacterResult>()
         var tempSeriesList = mutableListOf<SeriesResult>()
-        val favoriteCharacters = firebaseFirestore.getFavoriteCharacters()
-        val favoriteSeries = firebaseFirestore.getFavoriteSeries()
         // Primeiro, verifica se essa busca já foi feita no histórico do Firebase. Caso positivo, verifica se foi há mais de dois dias.
         if (firebaseFirestore.lastSearchNeedsUpdate(tag)) {
             // Se foi há mais de dois dias, refaz a busca na api da Marvel e atualiza o Firebase
