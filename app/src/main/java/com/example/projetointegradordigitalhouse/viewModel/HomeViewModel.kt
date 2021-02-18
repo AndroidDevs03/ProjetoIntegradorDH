@@ -66,6 +66,7 @@ internal class HomeViewModel(
             tempList.forEach {
                 it.checkSearchTag(searchTagList)
                 it.checkFavoriteTag(favoriteSeriesList)
+//                repository.updateComicsBySeriesID(it.id)
             }
             homeSeriesList.postValue(tempList)
         }

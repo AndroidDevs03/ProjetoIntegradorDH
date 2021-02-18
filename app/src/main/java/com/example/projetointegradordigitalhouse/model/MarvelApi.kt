@@ -83,6 +83,10 @@ interface MarvelApiQueries {
         suspend fun seriesByCharacterID(@Path("characterId") charID: Long,  @Query("limit")limit: Int = 40, @Query("orderBy")orderBy: String = "-modified"): Response<SeriesResponse>
 
         @GET("comics/{comicId}")
-        suspend fun comicsBySeriesID(@Path("comicId")comicID: Long): Response<ComicResponse>
+        suspend fun comicsByComicID(@Path("comicId")comicID: Long): Response<ComicResponse>
+
+        @GET("series/{seriesId}/comics")
+        suspend fun comicsBySerieID(@Path("seriesId")comicID: Long): Response<ComicResponse>
+
 
 }

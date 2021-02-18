@@ -39,29 +39,18 @@ class SeriesViewModel(context: Context):ViewModel() {
         }
     }
 
-    fun getSeriesComics(comicListID: List<Long>){
+    fun getSeriesComics(serieID: Long){
         var  seriesComics = mutableListOf<ComicResult>()
 
         Log.i("SeriesViewModel", "Comic List")
         viewModelScope.launch {
-            val allcomics = repository.getAllComics()
-
-            // Checagem de comics
-            allcomics?.forEach {
-                comicListID?.forEach { comicID ->
-                    if (comicID == it.id){
-                        seriesComics.add(it)
-                        Log.i("SeriesViewModel", " ADD: ${it.id} ${it.name} Comics Total - ${seriesComics.size}")
-
-                    }
-                }
-            }
+            seriesComics = repository.getComicsBySerieID(serieID)
             seriesComicsList.postValue(seriesComics.toList())
-
         }
         Log.i("SeriesViewModel", " Comics Total - ${seriesComics.size}")
 
     }
+
     fun addFavorite(result: Any, tabPosition: Int) {
         viewModelScope.launch { repository.addToFavorites(result, tabPosition) }
     }
