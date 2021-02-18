@@ -67,20 +67,20 @@ class ChipSearchActivity : AppCompatActivity() {
         setupObservables()
         setupListeners()
     }
-    override fun onResume() {
-        super.onResume()
-        updateChipList()
-    }
+//    override fun onResume() {
+//        super.onResume()
+//        updateChipList()
+//    }
 
 
-    @SuppressLint("SetTextI18n")
-    private fun setupObservables() {
-        viewModel.lastSearchHistory.observe(this, {
-            it?.let { searchTags ->
-                val adapter = ArrayAdapter(this@ChipSearchActivity, R.layout.list_item, searchTags)
-                (binding.csSearchField.editText as? AutoCompleteTextView)?.setAdapter(adapter)
-            }
-        })
+//    @SuppressLint("SetTextI18n")
+//    private fun setupObservables() {
+//        viewModel.lastSearchHistory.observe(this, {
+//            it?.let { searchTags ->
+//                val adapter = ArrayAdapter(this@ChipSearchActivity, R.layout.list_item, searchTags)
+//                (binding.csSearchField.editText as? AutoCompleteTextView)?.setAdapter(adapter)
+//            }
+//        })
 
     private fun setupListeners() {
 
@@ -400,6 +400,7 @@ class ChipSearchActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
+        updateChipList()
         firebaseAuth.currentUser?.let{
             firebaseFirestore.collection("users").document(it.uid).get()
                 .addOnSuccessListener { snapshot ->
