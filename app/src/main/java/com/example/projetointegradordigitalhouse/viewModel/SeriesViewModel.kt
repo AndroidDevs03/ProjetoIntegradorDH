@@ -62,5 +62,11 @@ class SeriesViewModel(context: Context):ViewModel() {
         Log.i("SeriesViewModel", " Comics Total - ${seriesComics.size}")
 
     }
+    fun addFavorite(result: Any, tabPosition: Int) {
+        viewModelScope.launch { repository.addToFavorites(result, tabPosition) }
+    }
+    fun remFavorite(result: Any, tabPosition: Int) {
+        viewModelScope.launch { repository.removeFromFavorites(result, tabPosition) }
+    }
 
 }

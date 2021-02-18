@@ -54,31 +54,23 @@
             android:contentDescription="TODO"
             app:layout_constraintTop_toBottomOf="@+id/tilSeriesSearch"
             app:layout_constraintBottom_toTopOf="@id/ivSeriesPicture"
-            app:layout_constraintEnd_toStartOf="@id/ibSeriesFavoriteYes"
+            app:layout_constraintEnd_toStartOf="@id/ibSeriesFavorite"
             android:background="@color/blueBackground"/>
 
         <!--Favorite 'Yes' Button            -->
         <ImageButton
-            android:id="@+id/ibSeriesFavoriteYes"
-            style="@style/favorite_button_YES"
+            android:id="@+id/ibSeriesFavorite"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:src="@drawable/favorite_selector"
+            android:background="@drawable/ic_baseline_star_outline_24_"
             android:contentDescription="TODO"
-            android:visibility="invisible"
+            android:clickable="true"
+            android:focusable="true"
             app:layout_constraintTop_toBottomOf="@+id/tilSeriesSearch"
             app:layout_constraintBottom_toTopOf="@id/ivSeriesPicture"
             app:layout_constraintStart_toEndOf="@id/ibSeriesSearch"
-            android:background="@color/blueBackground"/>
-
-        <!--Favorite 'No' Button            -->
-        <ImageButton
-            android:id="@+id/ibSeriesFavoriteNO"
-            style="@style/favorite_button_NO"
-            android:contentDescription="TODO"
-            android:visibility="visible"
-            app:layout_constraintTop_toBottomOf="@+id/tilSeriesSearch"
-            app:layout_constraintBottom_toTopOf="@id/ivSeriesPicture"
-            app:layout_constraintEnd_toStartOf="@id/ibSeriesShare"
-            app:layout_constraintStart_toEndOf="@id/ibSeriesSearch"
-            android:background="@color/blueBackground"/>
+            />
 
         <!--Share Button            -->
         <ImageButton
@@ -88,7 +80,7 @@
             app:layout_constraintTop_toBottomOf="@+id/tilSeriesSearch"
             app:layout_constraintBottom_toTopOf="@id/ivSeriesPicture"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/ibSeriesFavoriteNO"
+            app:layout_constraintStart_toEndOf="@id/ibSeriesFavorite"
             android:background="@color/blueBackground"/>
 
         <!-- Series's Picture        -->

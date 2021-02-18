@@ -249,11 +249,11 @@ class MarvelXRepository(context: Context) {
     }
     suspend fun removeFromFavorites(result: Any, tabPosition: Int) {
         val userID = firebaseAuth.currentUser?.uid ?: ""
-        // 1) Adiciona o favorito na database local
+        // 1) Remove o favorito na database local
         when (tabPosition) {
-            0 -> { localDatabaseFavorite.insertChar(convertResultToFavoriteChar(result as CharacterResult)) }
-            1 -> { localDatabaseFavorite.insertSeries(convertResultToFavoriteSeries(result as SeriesResult)) }
-            2 -> { localDatabaseFavorite.insertComic(convertResultToFavoriteComic(result as ComicResult)) }
+            0 -> { localDatabaseFavorite.delete(convertResultToFavoriteChar(result as CharacterResult)) }
+            1 -> { localDatabaseFavorite.delete(convertResultToFavoriteSeries(result as SeriesResult)) }
+            2 -> { localDatabaseFavorite.delete(convertResultToFavoriteComic(result as ComicResult)) }
         }
 
         // 2) Decrementa o item no Firebase

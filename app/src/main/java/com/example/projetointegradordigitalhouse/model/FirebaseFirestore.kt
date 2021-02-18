@@ -163,7 +163,7 @@ class FirebaseFirestore {
         } else {
             firebaseAuth.currentUser?.uid?.let {
                 firebaseDatabase.collection(NAME_USERS_DATABASE).document(it).get().addOnSuccessListener { document ->
-                    ret.resume(document[NAME_FAVORITE_CHARACTER_LIST] as MutableList<Long>)
+                    ret.resume((document[NAME_FAVORITE_CHARACTER_LIST]?: mutableListOf<Long>()) as MutableList<Long>)
                 }
             }
         }
@@ -174,7 +174,7 @@ class FirebaseFirestore {
         } else {
             firebaseAuth.currentUser?.uid?.let {
                 firebaseDatabase.collection(NAME_USERS_DATABASE).document(it).get().addOnSuccessListener { document ->
-                    ret.resume(document[NAME_FAVORITE_SERIES_LIST] as MutableList<Long>)
+                    ret.resume((document[NAME_FAVORITE_SERIES_LIST]?: mutableListOf<Long>()) as MutableList<Long>)
                 }
             }
         }
@@ -185,7 +185,7 @@ class FirebaseFirestore {
         } else {
             firebaseAuth.currentUser?.uid?.let {
                 firebaseDatabase.collection(NAME_USERS_DATABASE).document(it).get().addOnSuccessListener { document ->
-                    ret.resume(document[NAME_FAVORITE_COMIC_LIST] as MutableList<Long>)
+                    ret.resume((document[NAME_FAVORITE_COMIC_LIST]?: mutableListOf<Long>()) as MutableList<Long>)
                 }
             }
         }
