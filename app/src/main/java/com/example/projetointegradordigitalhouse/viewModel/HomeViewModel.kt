@@ -45,49 +45,46 @@ internal class HomeViewModel(
         }
     }
     fun getHomeCharacters() {
-//    1009664 Thor
-//    1009610 Spider-Man
-//    1009268 Deadpool
-//    1009368 Iron Man
-//    1009351 Hulk
-//    1009718 Wolverine
-//    1009282 Doctor Strange
-//    1009220 Captain America
-//    1010743 Groot
-//    1009187 Black Panther
-//    1009562 Scarlet Witch
-//    Ant-Man (não teve retorno)
-//    1010744 Rocket Raccoon
-//    1009189 Black Widow
-//    1009515 Punisher
-//    Ghost Rider (não teve retorno)
-//    1009592 Silver Surfer
-//    Star-Lord (não teve retorno)
-//    1009697 Vision
-//    Phoenix (não teve retorno)
-//    1009338 Hawkeye
-//    1009313 Gambit
-//    1009472 Nightcrawler
-//    Ms. Marvel (não teve retorno)
-//    1009504 Professor X
         viewModelScope.launch {
+            val searchTagList = repository.getSearchTags()
+            val favoriteCharactersList = repository.getFavoriteCharacters()
             val tempList = repository.getMostPopularCharacters(5)
             Log.i("HomeViewModel", "Character List com ${tempList.size} elementos")
+            tempList.forEach {
+                it.checkSearchTag(searchTagList)
+                it.checkFavoriteTag(favoriteCharactersList)
+            }
             homeCharList.postValue(tempList)
         }
     }
     fun getHomeSeries() {
         Log.i("HomeViewModel", "Series List")
         viewModelScope.launch {
+            val searchTagList = repository.getSearchTags()
+            val favoriteSeriesList = repository.getFavoriteSeries()
             val tempList = repository.getMostPopularSeries(5)
+            tempList.forEach {
+                it.checkSearchTag(searchTagList)
+                it.checkFavoriteTag(favoriteSeriesList)
+            }
             homeSeriesList.postValue(tempList)
         }
     }
     fun getHomeComics() {
         Log.i("HomeViewModel", "Comic List")
         viewModelScope.launch {
+            val searchTagList = repository.getSearchTags()
+            val favoriteComicList = repository.getFavoriteComics()
             val tempList = repository.getMostPopularComics(5)
+            tempList.forEach {
+                it.checkSearchTag(searchTagList)
+                it.checkFavoriteTag(favoriteComicList)
+            }
             homeComicsList.postValue(tempList)
         }
+    }
+
+    fun removeAllChips() {
+        repository.removeAllChips()
     }
 }

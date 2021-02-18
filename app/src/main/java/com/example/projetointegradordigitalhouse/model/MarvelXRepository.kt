@@ -6,14 +6,13 @@ import com.example.projetointegradordigitalhouse.model.*
 import com.example.projetointegradordigitalhouse.model.characters.CharacterResponse
 import com.example.projetointegradordigitalhouse.model.comics.ComicResponse
 import com.example.projetointegradordigitalhouse.model.series.SeriesResponse
-import com.example.projetointegradordigitalhouse.util.Constants.FirebaseNames.NAME_CHARACTER_DATABASE
-import com.example.projetointegradordigitalhouse.util.Constants.FirebaseNames.NAME_COMICS_DATABASE
-import com.example.projetointegradordigitalhouse.util.Constants.FirebaseNames.NAME_SERIES_DATABASE
-import com.example.projetointegradordigitalhouse.util.Constants.FirebaseNames.NAME_USER_ID
+import com.example.projetointegradordigitalhouse.util.Constants.SharedPreferences.PREFIX_ALL
+import com.example.projetointegradordigitalhouse.util.Constants.SharedPreferences.PREFIX_CHAR
+import com.example.projetointegradordigitalhouse.util.Constants.SharedPreferences.PREFIX_COMIC
+import com.example.projetointegradordigitalhouse.util.Constants.SharedPreferences.PREFIX_SERIES
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import java.lang.Exception
-import java.time.LocalDate.now
 import java.time.LocalDateTime
 
 class MarvelXRepository(context: Context) {
@@ -22,28 +21,19 @@ class MarvelXRepository(context: Context) {
     private val firebaseAuth by lazy { Firebase.auth }
     private val localDatabaseSearch: SearchDao by lazy { LocalDatabase.getDatabase(context).searchDao() }
     private val localDatabaseFavorite: FavoriteDao by lazy { LocalDatabase.getDatabase(context).favoriteDao() }
+    private val sharedPreferences: MarvelXSharedPreferences by lazy { MarvelXSharedPreferences(context) }
     private val marvelApi = MarvelApi.commands
-    private lateinit var allChars: MutableList<CharacterResult>
-    private lateinit var allSeries: MutableList<SeriesResult>
-    private lateinit var allComics: MutableList<ComicResult>
 
     suspend fun getMostPopularCharacters(limit: Long): MutableList<CharacterResult> {
         return firebaseFirestore.getMostPopularCharacters(limit)
     }
-
     suspend fun getMostPopularSeries(limit: Long): MutableList<SeriesResult> {
         return firebaseFirestore.getMostPopularSeries(limit)
     }
-
     suspend fun getMostPopularComics(limit: Long): MutableList<ComicResult> {
         return firebaseFirestore.getMostPopularComics(limit)
     }
-
-    suspend fun searchByName(
-        tag: String,
-        limit: Int = 10,
-        offset: Int = 0
-    ): Pair<MutableList<CharacterResult> , MutableList<SeriesResult>> {
+    suspend fun searchByName(tag: String, limit: Int = 10, offset: Int = 0): Pair<MutableList<CharacterResult> , MutableList<SeriesResult>> {
         var tempCharList = mutableListOf<CharacterResult>()
         var tempSeriesList = mutableListOf<SeriesResult>()
         // Primeiro, verifica se essa busca já foi feita no histórico do Firebase. Caso positivo, verifica se foi há mais de dois dias.
@@ -65,18 +55,27 @@ class MarvelXRepository(context: Context) {
             }
             Log.i("Repository", "${tag} Search Tag updated to Firebase")
             firebaseFirestore.insertSearchTag(tag)
+
             return Pair(tempCharList,tempSeriesList)
         } else {
             // Se foi há menos de dois dias, busca os dados no Firebase.
-            allChars = firebaseFirestore.getAllChars()
-            allSeries = firebaseFirestore.getAllSeries()
+            val allChars = getAllChars()
+            val allSeries = getAllSeries()
             tempCharList = allChars.filter { it.name.contains(tag) } as MutableList<CharacterResult>
             tempSeriesList = allSeries.filter { it.name.contains(tag) } as MutableList<SeriesResult>
         }
         return Pair(tempCharList,tempSeriesList)
     }
-
-    suspend fun updateSeriesByCharacterID(charID: Int) {
+    suspend fun getAllChars(): MutableList<CharacterResult>{
+        return firebaseFirestore.getAllChars()
+    }
+    suspend fun getAllSeries(): MutableList<SeriesResult>{
+        return firebaseFirestore.getAllSeries()
+    }
+    suspend fun getAllComics(): MutableList<ComicResult>{
+        return firebaseFirestore.getAllComics()
+    }
+    suspend fun updateSeriesByCharacterID(charID: Long) {
         val response = marvelApi.seriesByCharacterID(charID)
         if (response.isSuccessful) {
             val tempSeries = convertResponseToSeriesList(response.body())
@@ -84,8 +83,7 @@ class MarvelXRepository(context: Context) {
             Log.i("Repository", "${tempSeries.size} Series updated to Firebase")
         }
     }
-
-    suspend fun updateComicsBySeriesID(seriesId: Int) {
+    suspend fun updateComicsBySeriesID(seriesId: Long) {
         val response = marvelApi.comicsBySeriesID(seriesId)
         if (response.isSuccessful) {
             val tempComics = convertResponseToComicList(response.body())
@@ -93,12 +91,7 @@ class MarvelXRepository(context: Context) {
             Log.i("Repository", "${tempComics.size} Comics updated to Firebase")
         }
     }
-
-    suspend fun getSeriesByName(
-        tag: String,
-        limit: Int = 10,
-        offset: Int = 0
-    ): MutableList<SeriesResult> {
+    suspend fun getSeriesByName(tag: String, limit: Int = 10, offset: Int = 0): MutableList<SeriesResult> {
         var tempSeriesList = mutableListOf<SeriesResult>()
         // Primeiro, verifica se essa busca já foi feita no histórico do Firebase. Caso positivo, verifica se foi há mais de dois dias.
         if (firebaseFirestore.lastSearchNeedsUpdate(tag)) {
@@ -114,7 +107,7 @@ class MarvelXRepository(context: Context) {
             }
         } else {
             // Se foi há menos de dois dias, busca os dados no Firebase.
-            allSeries = firebaseFirestore.getAllSeries()
+            val allSeries = getAllSeries()
             tempSeriesList = allSeries.filter {
                 it.name.contains(tag)
             } as MutableList<SeriesResult>
@@ -122,33 +115,6 @@ class MarvelXRepository(context: Context) {
         firebaseFirestore.insertSearchTag(tag)
         return tempSeriesList
     }
-
-    suspend fun getComicsByName(
-        tag: String,
-        limit: Int = 10,
-        offset: Int = 0
-    ): MutableList<ComicResult> {
-        var tempComicList = mutableListOf<ComicResult>()
-        // Primeiro, verifica se essa busca já foi feita no histórico do Firebase. Caso positivo, verifica se foi há mais de dois dias.
-        if (firebaseFirestore.lastSearchNeedsUpdate(tag)) {
-            // Se foi há mais de dois dias, refaz a busca na api da Marvel e atualiza o Firebase
-            val response = marvelApi.comicsByName(tag, limit, offset)
-            if (response.isSuccessful) {
-                tempComicList = convertResponseToComicList(response.body())
-                tempComicList.forEach { firebaseFirestore.insertComic(it) }
-                return tempComicList
-            }
-        } else {
-            // Se foi há menos de dois dias, busca os dados no Firebase.
-            allComics = firebaseFirestore.getAllComics()
-            tempComicList = allComics.filter {
-                it.name.contains(tag)
-            } as MutableList<ComicResult>
-        }
-        firebaseFirestore.insertSearchTag(tag)
-        return tempComicList
-    }
-
     private fun convertResponseToCharList(body: CharacterResponse?): MutableList<CharacterResult> {
         val data =
             body?.data?.results as List<com.example.projetointegradordigitalhouse.model.characters.Result>
@@ -162,7 +128,7 @@ class MarvelXRepository(context: Context) {
                 it.description = it.description ?: "Description not found"
                 tempList.add(
                     CharacterResult(
-                        it.id,
+                        it.id.toLong(),
                         it.name,
                         it.thumbnail.getThumb(),
                         it.description,
@@ -176,7 +142,6 @@ class MarvelXRepository(context: Context) {
         }
         return tempList
     }
-
     private fun convertResponseToSeriesList(body: SeriesResponse?): MutableList<SeriesResult> {
         val data =
             body?.data?.results as List<com.example.projetointegradordigitalhouse.model.series.Result>
@@ -194,7 +159,7 @@ class MarvelXRepository(context: Context) {
                 it.description = it.description ?: "Description not found"
                 tempList.add(
                     SeriesResult(
-                        it.id,
+                        it.id.toLong(),
                         it.title,
                         it.thumbnail.getThumb(),
                         it.description.toString(),
@@ -210,7 +175,6 @@ class MarvelXRepository(context: Context) {
         }
         return tempList
     }
-
     private fun convertResponseToComicList(body: ComicResponse?): MutableList<ComicResult> {
         val data =
             body?.data?.results as List<com.example.projetointegradordigitalhouse.model.comics.Result>
@@ -224,7 +188,7 @@ class MarvelXRepository(context: Context) {
                 it.description = it.description ?: "Description not found"
 
                 val tempComic = ComicResult(
-                    it.id,
+                    it.id.toLong(),
                     it.title,
                     it.thumbnail.getThumb(),
                     it.description,
@@ -243,8 +207,7 @@ class MarvelXRepository(context: Context) {
         }
         return tempList
     }
-
-    suspend fun getCharactersByID(id: Int): ResponseApi {
+    suspend fun getCharactersByID(id: Long): ResponseApi {
         return try {
             val response = marvelApi.charactersByID(id)
 
@@ -261,7 +224,6 @@ class MarvelXRepository(context: Context) {
             ResponseApi.Error("Erro ao carregar os dados")
         }
     }
-
     suspend fun addToFavorites(result: Any, tabPosition: Int) {
         val userID = firebaseAuth.currentUser?.uid ?: ""
         // 1) Adiciona o favorito na database local
@@ -276,7 +238,7 @@ class MarvelXRepository(context: Context) {
 
         // 3) Atualiza a lista de favoritos do Firebase
         // 3.1) Recupera a lista atualizada da database local
-        val newFavoriteList = mutableListOf<Int>()
+        val newFavoriteList = mutableListOf<Long>()
         when (tabPosition) {
             0 -> { localDatabaseFavorite.getAllFavoriteCharacters(userID).forEach { newFavoriteList.add(it.id) } }
             1 -> { localDatabaseFavorite.getAllFavoriteSeries(userID).forEach { newFavoriteList.add(it.id) } }
@@ -285,14 +247,13 @@ class MarvelXRepository(context: Context) {
         // 3.2) atualiza a lista no firebase
         firebaseFirestore.updateFavoriteList(newFavoriteList, tabPosition)
     }
-
     suspend fun removeFromFavorites(result: Any, tabPosition: Int) {
         val userID = firebaseAuth.currentUser?.uid ?: ""
-        // 1) Adiciona o favorito na database local
+        // 1) Remove o favorito na database local
         when (tabPosition) {
-            0 -> { localDatabaseFavorite.insertChar(convertResultToFavoriteChar(result as CharacterResult)) }
-            1 -> { localDatabaseFavorite.insertSeries(convertResultToFavoriteSeries(result as SeriesResult)) }
-            2 -> { localDatabaseFavorite.insertComic(convertResultToFavoriteComic(result as ComicResult)) }
+            0 -> { localDatabaseFavorite.delete(convertResultToFavoriteChar(result as CharacterResult)) }
+            1 -> { localDatabaseFavorite.delete(convertResultToFavoriteSeries(result as SeriesResult)) }
+            2 -> { localDatabaseFavorite.delete(convertResultToFavoriteComic(result as ComicResult)) }
         }
 
         // 2) Decrementa o item no Firebase
@@ -300,7 +261,7 @@ class MarvelXRepository(context: Context) {
 
         // 3) Atualiza a lista de favoritos do Firebase
         // 3.1) Recupera a lista atualizada da database local
-        val newFavoriteList = mutableListOf<Int>()
+        val newFavoriteList = mutableListOf<Long>()
         when (tabPosition) {
             0 -> { localDatabaseFavorite.getAllFavoriteCharacters(userID).forEach { newFavoriteList.add(it.id) } }
             1 -> { localDatabaseFavorite.getAllFavoriteSeries(userID).forEach { newFavoriteList.add(it.id) } }
@@ -342,13 +303,58 @@ class MarvelXRepository(context: Context) {
             result.favoriteTagFlag
         )
     }
-
-        suspend fun setUser(user: User) {
+    suspend fun setUser(user: User) {
             try {
                 firebaseFirestore.insertUser(user)
             } catch (exception: Exception) {
 //            todo
             }
         }
+    suspend fun getSearchHistory():MutableList<String>{
+        return localDatabaseSearch.getLastSearchResults() as MutableList<String>
     }
+    suspend fun insertSearchHistory(tag: String){
+        val userID = firebaseAuth.currentUser?.uid ?: ""
+        val search = Search(tag, userID, LocalDateTime.now().toString())
+        localDatabaseSearch.insert(search)
+    }
+    suspend fun getSearchTags(): MutableSet<String>{
+        return sharedPreferences.getTags()?: mutableSetOf()
+    }
+    suspend fun addSearchTags(tag: String, tabPosition: Int){
+        val newList = getSearchTags()
+        val prefix = when (tabPosition) {
+            0 -> PREFIX_CHAR
+            1 -> PREFIX_SERIES
+            2 -> PREFIX_COMIC
+            else -> PREFIX_ALL
+        }
+        newList.add("${prefix}_$tag")
+        sharedPreferences.updateTags(newList)
+    }
+    suspend fun removeSearchTags(tag: String, tabPosition: Int){
+        val newList = getSearchTags()
+        val prefix = when (tabPosition) {
+            0 -> PREFIX_CHAR
+            1 -> PREFIX_SERIES
+            2 -> PREFIX_COMIC
+            else -> PREFIX_ALL
+        }
+        newList.remove("${prefix}_$tag")
+        sharedPreferences.updateTags(newList)
+    }
+    suspend fun getFavoriteCharacters(): MutableList<Long>{
+        return firebaseFirestore.getFavoriteCharacters()
+    }
+    suspend fun getFavoriteSeries(): MutableList<Long>{
+        return firebaseFirestore.getFavoriteSeries()
+    }
+    suspend fun getFavoriteComics(): MutableList<Long>{
+        return firebaseFirestore.getFavoriteComics()
+    }
+    fun removeAllChips() {
+        val newList = mutableSetOf<String>()
+        sharedPreferences.updateTags(newList)
+    }
+}
 

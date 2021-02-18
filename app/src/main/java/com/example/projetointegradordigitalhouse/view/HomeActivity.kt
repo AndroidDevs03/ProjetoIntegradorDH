@@ -20,23 +20,28 @@ import com.bumptech.glide.Glide
 import com.example.projetointegradordigitalhouse.R
 import com.example.projetointegradordigitalhouse.databinding.ActivityHomeBinding
 import com.example.projetointegradordigitalhouse.model.*
+import com.example.projetointegradordigitalhouse.util.Constants.Intent.KEY_INTENT_CHARACTER
+import com.example.projetointegradordigitalhouse.util.Constants.Intent.KEY_INTENT_COMIC
 import com.example.projetointegradordigitalhouse.util.Constants.Intent.KEY_INTENT_SEARCH
+import com.example.projetointegradordigitalhouse.util.Constants.Intent.KEY_INTENT_SERIE
 import com.example.projetointegradordigitalhouse.viewModel.HomeViewModel
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.synnapps.carouselview.ImageClickListener
 import com.synnapps.carouselview.ImageListener
 import de.hdodenhof.circleimageview.CircleImageView
 import java.util.*
+
 @Suppress("UNCHECKED_CAST", "SENSELESS_NULL_IN_WHEN")
 class HomeActivity : AppCompatActivity() {
 
     private val viewModel by lazy { HomeViewModel(this) }
-    private val firebaseAuth by lazy{ Firebase.auth }
+    private val firebaseAuth by lazy { Firebase.auth }
     private lateinit var binding: ActivityHomeBinding
     private lateinit var drawerLayout: DrawerLayout
-    private lateinit var navigationView : NavigationView
+    private lateinit var navigationView: NavigationView
 
     private val firebaseFirestore by lazy {
         Firebase.firestore
@@ -58,12 +63,12 @@ class HomeActivity : AppCompatActivity() {
     private fun initComponents() {
         Log.i("HomeActivity", "InitComponents")
 
-        firebaseAuth.currentUser?.let{
+        firebaseAuth.currentUser?.let {
             viewModel.getHomeCharacters()
             viewModel.getHomeSeries()
             viewModel.getHomeComics()
             viewModel.getSearchHistory()
-        }?: run{
+        } ?: run {
             startActivity(Intent(this, LoginActivity::class.java))
         }
     }
@@ -93,7 +98,7 @@ class HomeActivity : AppCompatActivity() {
             binding.cvSeries.setImageListener(
                 CarouselListener(
                     this,
-                    seriesList  as MutableList<GeneralResult>
+                    seriesList as MutableList<GeneralResult>
                 )
             )
             binding.cvSeries.pageCount = seriesList.size
@@ -120,7 +125,13 @@ class HomeActivity : AppCompatActivity() {
         binding.hmSearchField.setEndIconOnClickListener {
             val newtag = binding.hmSearchField.editText?.text.toString().trim()
             if (newtag != "") {
-                viewModel.addSearchToLocalDatabase(Search(newtag, "", Date().toString())) //todo: Arrumar aqui
+                viewModel.addSearchToLocalDatabase(
+                    Search(
+                        newtag,
+                        "",
+                        Date().toString()
+                    )
+                ) //todo: Arrumar aqui
                 val intent = Intent(this@HomeActivity, ChipSearchActivity::class.java)
                 intent.putExtra(KEY_INTENT_SEARCH, newtag)
                 startActivity(intent)
@@ -169,7 +180,6 @@ class HomeActivity : AppCompatActivity() {
 
                     }
                     drawerLayout.open()
-
                     true
                 }
                 R.id.page_2 -> {
@@ -231,6 +241,8 @@ class HomeActivity : AppCompatActivity() {
                             startActivity(Intent(this, LoginActivity::class.java))
                             drawerLayout.close()
                         }
+
+
                     }
                     true
                 }
@@ -240,18 +252,25 @@ class HomeActivity : AppCompatActivity() {
             }
         }
 
-        binding.cvCharacter.setImageClickListener{
+        binding.cvCharacter.setImageClickListener {
             val intent = Intent(this, CharacterActivity::class.java)
-            intent.putExtra("blablabla", charsList[it].id)
+            val temp = charsList[it]
+            intent.putExtra(KEY_INTENT_CHARACTER, temp)
             startActivity(intent)
         }
 
         binding.cvComics.setImageClickListener {
-            startActivity(Intent(this, ComicActivity::class.java))
+            val intent = Intent(this, ComicActivity::class.java)
+            val temp = comicsList[it]
+            intent.putExtra(KEY_INTENT_COMIC, temp)
+            startActivity(intent)
         }
 
         binding.cvSeries.setImageClickListener {
-            startActivity(Intent(this, SeriesActivity::class.java))
+            val intent = Intent(this, SeriesActivity::class.java)
+            val temp = seriesList[it]
+            intent.putExtra(KEY_INTENT_SERIE, temp)
+            startActivity(intent)
         }
     }
 
@@ -282,7 +301,7 @@ class HomeActivity : AppCompatActivity() {
                 .addOnFailureListener {
                     Toast.makeText(this, it.localizedMessage, Toast.LENGTH_LONG).show()
                 }
-        }?: run {
+        } ?: run {
 
         }
     }
@@ -295,6 +314,7 @@ class HomeActivity : AppCompatActivity() {
                 it.delete()
             }
         }
+        viewModel.removeAllChips()
     }
 }
 
