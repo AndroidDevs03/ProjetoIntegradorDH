@@ -28,6 +28,7 @@ class CharacterViewModel(context: Context): ViewModel() {
                 charSeriesID?.forEach { serieID ->
                     if(serieID == it.id){
                         charSeries.add(it)
+//                        repository.updateComicsBySeriesID(serieID)
 //                        Log.i("CharacterViewModel", " ADD: ${it.id} ${it.name} Series Total - ${charSeries.size}")
                     }
                 }

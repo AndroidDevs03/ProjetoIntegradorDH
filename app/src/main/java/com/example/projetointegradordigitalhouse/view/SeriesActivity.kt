@@ -60,7 +60,7 @@ class SeriesActivity : AppCompatActivity() {
                 serieResult.charactersList?.let{
                     viewModel.getSeriesCharacters(it)
                 }
-                serieResult.comicsList?.let{
+                serieResult.id?.let{
                     viewModel.getSeriesComics(it)
                     val check = viewModel.seriesComicsList
 

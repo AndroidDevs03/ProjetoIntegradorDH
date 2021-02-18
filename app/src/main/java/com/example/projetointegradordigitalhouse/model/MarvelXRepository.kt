@@ -75,6 +75,21 @@ class MarvelXRepository(context: Context) {
     suspend fun getAllComics(): MutableList<ComicResult>{
         return firebaseFirestore.getAllComics()
     }
+    suspend fun getComicsBySerieID(seriesId: Long): MutableList<ComicResult>{
+        var  seriesComics = mutableListOf<ComicResult>()
+
+        val response = marvelApi.comicsBySerieID(seriesId)
+        if (response.isSuccessful) {
+            val tempComics = convertResponseToComicList(response.body())
+            tempComics.forEach {
+                firebaseFirestore.insertComic(it)
+                seriesComics.add(it)
+            }
+            Log.i("Repository", "${tempComics.size} Comics updated to Firebase")
+        }
+        return seriesComics
+    }
+
     suspend fun updateSeriesByCharacterID(charID: Long) {
         val response = marvelApi.seriesByCharacterID(charID)
         if (response.isSuccessful) {
@@ -84,7 +99,7 @@ class MarvelXRepository(context: Context) {
         }
     }
     suspend fun updateComicsBySeriesID(seriesId: Long) {
-        val response = marvelApi.comicsBySeriesID(seriesId)
+        val response = marvelApi.comicsBySerieID(seriesId)
         if (response.isSuccessful) {
             val tempComics = convertResponseToComicList(response.body())
             tempComics.forEach { firebaseFirestore.insertComic(it) }
