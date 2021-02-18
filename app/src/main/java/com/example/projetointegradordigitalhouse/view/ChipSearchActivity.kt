@@ -1,12 +1,15 @@
 package com.example.projetointegradordigitalhouse.view
 
 import android.content.Intent
+import android.content.res.ColorStateList
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.KeyEvent
 import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.projetointegradordigitalhouse.R
 import com.example.projetointegradordigitalhouse.databinding.ActivityChipSearchBinding
@@ -29,7 +32,7 @@ class ChipSearchActivity : AppCompatActivity() {
     private lateinit var binding: ActivityChipSearchBinding
     private val viewModel by lazy { ChipSearchViewModel(this) }
     private val incomingSearch: String? by lazy { intent.getStringExtra(Constants.Intent.KEY_INTENT_SEARCH) }
-    lateinit var searchTags: MutableSet<String>
+    var searchTags: MutableSet<String> = mutableSetOf()
     var tabPosition: Int = 0
     private var specialSearchActivated: Boolean = false
     private lateinit var activeSearch: String
@@ -55,15 +58,21 @@ class ChipSearchActivity : AppCompatActivity() {
         binding.csSearchField.setEndIconOnClickListener {
             executeSearch(binding.csSearchField.editText?.text.toString().trim())
         }
+        binding.csSearchField.editText?.setOnKeyListener { v, keyCode, event ->
+            if (keyCode == KeyEvent.KEYCODE_ENTER) {
+                executeSearch(binding.csSearchField.editText?.text.toString().trim())
+            }
+            false
+        }
         binding.csSearchField.setEndIconOnLongClickListener(View.OnLongClickListener {
-            changeSearchMode()
+            viewModel.addSearchTag("0_${binding.csSearchField.editText?.text.toString().trim()}",4)
+            true
         })
         binding.csTabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {
                 tabPosition = tab?.position ?: 0
                 viewModel.searchResultList.value?.let { updateRecyclerView(tabPosition, it) }
-                Toast.makeText(this@ChipSearchActivity, "Busca ${tab?.text}", Toast.LENGTH_LONG)
-                    .show()
+                //Toast.makeText(this@ChipSearchActivity, "${tab?.text} Search", Toast.LENGTH_LONG).show()
             }
 
             override fun onTabUnselected(tab: TabLayout.Tab?) {
@@ -123,8 +132,12 @@ class ChipSearchActivity : AppCompatActivity() {
         viewModel.tagList.observe(this,{
             it?.let{
                 if (it.size > 0) {
-                    specialSearchActivated
+                    specialSearchActivated = true
                     searchTags = it
+                    updateChipList()
+                } else {
+                    specialSearchActivated = false
+                    searchTags.removeAll { true }
                     updateChipList()
                 }
             }
@@ -145,8 +158,6 @@ class ChipSearchActivity : AppCompatActivity() {
         activeSearch = search
         if (search != "") {
             viewModel.addSearchToLocalDatabase(search)
-            if (specialSearchActivated) {viewModel.addSearchTag("0_$search",4)}
-            updateChipList()
             viewModel.searchByName(search)
         }
     }
@@ -155,23 +166,47 @@ class ChipSearchActivity : AppCompatActivity() {
         if (specialSearchActivated) {
             searchTags.forEach { search ->
                 val chipInfo = search.split("_")
-                val tab = when (chipInfo[0]) {
-                    PREFIX_CHAR -> 0
-                    PREFIX_SERIES -> 1
-                    PREFIX_COMIC -> 2
-                    else -> 4
+                if (chipInfo.size == 3) {
+                    val tab = when (chipInfo[0]) {
+                        PREFIX_CHAR -> 0
+                        PREFIX_SERIES -> 1
+                        PREFIX_COMIC -> 2
+                        else -> 4
+                    }
+                    val chipDrawable = Chip(this)
+                    chipDrawable.text = chipInfo[2].take(11)
+                    chipDrawable.isCloseIconVisible = true
+                    if (tab == 0) {
+                        chipDrawable.chipBackgroundColor = ColorStateList.valueOf(
+                            ContextCompat.getColor(
+                                this,
+                                R.color.characterChipBackground
+                            )
+                        )
+                    } else if (tab == 1) {
+                        chipDrawable.chipBackgroundColor = ColorStateList.valueOf(
+                            ContextCompat.getColor(
+                                this,
+                                R.color.seriesChipBackground
+                            )
+                        )
+                    } else if (tab == 4) {
+                        chipDrawable.chipBackgroundColor = ColorStateList.valueOf(
+                            ContextCompat.getColor(
+                                this,
+                                R.color.descriptionChipBackground
+                            )
+                        )
+                    }
+                    chipDrawable.setOnCloseIconClickListener {
+                        binding.csChipGroup.removeView(chipDrawable)
+                        viewModel.removeSearchTag("${chipInfo[1]}_${chipInfo[2]}", tab)
+                    }
+                    binding.csChipGroup.addView(chipDrawable)
+                    binding.csSearchField.editText?.text?.clear()
                 }
-                val chipDrawable = Chip(this)
-                chipDrawable.text = chipInfo[2].take(10)
-                chipDrawable.isCloseIconVisible = true
-                //chipDrawable.chipBackgroundColor = ColorStateList.valueOf(ContextCompat.getColor(this, R.color.redChipBackground))
-                chipDrawable.setOnCloseIconClickListener {
-                    binding.csChipGroup.removeView(chipDrawable)
-                    viewModel.removeSearchTag("${chipInfo[1]}_${chipInfo[2]}",tab)
-                }
-                binding.csChipGroup.addView(chipDrawable)
-                binding.csSearchField.editText?.text?.clear()
             }
+            viewModel.filter(searchTags)
         }
     }
     private fun updateRecyclerView(tab: Int, resultLists: Pair<MutableList<CharacterResult>, MutableList<SeriesResult>>) {

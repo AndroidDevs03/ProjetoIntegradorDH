@@ -5,10 +5,10 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.projetointegradordigitalhouse.model.*
+import com.example.projetointegradordigitalhouse.util.Constants.SharedPreferences.PREFIX_CHAR
+import com.example.projetointegradordigitalhouse.util.Constants.SharedPreferences.PREFIX_SERIES
 import com.example.projetointegradordigitalhouse.util.Constants.Values.CONST_MAX_SEARCH_HISTORY
 import com.github.cesar1287.desafiopicpayandroid.model.home.MarvelXRepository
-import com.google.firebase.auth.ktx.auth
-import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.launch
 
 class ChipSearchViewModel(
@@ -20,6 +20,8 @@ class ChipSearchViewModel(
     var searchSeriesList: MutableLiveData<MutableList<SeriesResult>> = MutableLiveData()
     var lastSearchHistory: MutableLiveData<MutableList<String>> = MutableLiveData()
     var tagList: MutableLiveData<MutableSet<String>> = MutableLiveData()
+    private var fullCharactersList: MutableList<CharacterResult> = mutableListOf()
+    private var fullSeriesList: MutableList<SeriesResult> = mutableListOf()
 
     fun searchByName(name: String) {
         viewModelScope.launch {
@@ -38,6 +40,56 @@ class ChipSearchViewModel(
             searchResultList.postValue(tempResult)
         }
     }
+    fun filter(taglist: MutableSet<String>){
+        viewModelScope.launch {
+            val fullCharacterSearch = repository.getAllChars()
+            val fullSeriesSearch = repository.getAllSeries()
+            val searchTagList = repository.getSearchTags()
+            val favoriteCharactersList = repository.getFavoriteCharacters()
+            val favoriteSeriesList = repository.getFavoriteSeries()
+            val tempIncrementalNewCharacterList = mutableListOf<CharacterResult>()
+            val tempIncrementalNewSeriesList = mutableListOf<SeriesResult>()
+            var tempDecrementalNewCharacterList = mutableListOf<CharacterResult>()
+            var tempDecrementalNewSeriesList = mutableListOf<SeriesResult>()
+            tempDecrementalNewCharacterList.addAll(fullCharacterSearch)
+            tempDecrementalNewSeriesList.addAll(fullSeriesSearch)
+//            searchResultList.value?.let { tempNewCharacterList.addAll(it.first) }
+//            searchResultList.value?.let { tempNewSeriesList.addAll(it.second) }
+            var qtyCharTags = 0
+            var qtySeriesTags = 0
+            taglist.forEach { itTag ->
+                val decodedTag = itTag.split("_")
+                when {
+                    decodedTag[0]== PREFIX_CHAR -> {
+                        qtyCharTags++
+                        tempIncrementalNewCharacterList.addAll(fullCharacterSearch.filter { itChar -> itChar.id == decodedTag[1].toLong() })
+                        tempDecrementalNewSeriesList = tempDecrementalNewSeriesList.filter { itSeries -> itSeries.charactersList.contains(decodedTag[1].toLong())} as MutableList<SeriesResult>
+                    }
+                    decodedTag[0] == PREFIX_SERIES -> {
+                        qtySeriesTags++
+                        tempDecrementalNewCharacterList = tempDecrementalNewCharacterList.filter { itChar -> itChar.series.contains(decodedTag[1].toLong())} as MutableList<CharacterResult>
+                        tempIncrementalNewSeriesList.addAll(fullSeriesSearch.filter { itSeries -> itSeries.id == decodedTag[1].toLong() })
+                    }
+                    else -> {
+                        tempDecrementalNewCharacterList = tempDecrementalNewCharacterList.filter { itChar -> itChar.description.contains(decodedTag[2], true) } as MutableList<CharacterResult>
+                        //tempNewSeriesList.addAll(fullSeriesSearch.filter { itSeries -> itSeries.description.contains(decodedTag[2], true) })
+                    }
+                }
+                if (qtySeriesTags>0){tempIncrementalNewCharacterList.addAll(tempDecrementalNewCharacterList)}
+                if (qtyCharTags>0){tempIncrementalNewSeriesList.addAll(tempDecrementalNewSeriesList)}
+                tempIncrementalNewCharacterList.forEach {
+                    it.checkSearchTag(searchTagList)
+                    it.checkFavoriteTag(favoriteCharactersList)
+                }
+                tempIncrementalNewSeriesList.forEach {
+                    it.checkSearchTag(searchTagList)
+                    it.checkFavoriteTag(favoriteSeriesList)
+                }
+                searchResultList.postValue(Pair(tempIncrementalNewCharacterList,tempIncrementalNewSeriesList))
+            }
+        }
+    }
+
     fun updateSeriesByCharacterId(charId: Long) {
         viewModelScope.launch { repository.updateSeriesByCharacterID(charId) }
     }

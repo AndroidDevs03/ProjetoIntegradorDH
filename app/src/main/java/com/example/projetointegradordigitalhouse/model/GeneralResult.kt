@@ -19,7 +19,8 @@ open class GeneralResult(
         return LocalDateTime.parse(lastUpdate).isBefore(LocalDateTime.now().minusDays(2L))
     }
     fun checkSearchTag(searchTagList: MutableSet<String>){
-        searchTagFlag = searchTagList.contains(id)
+        searchTagFlag = false
+        searchTagList.forEach { if (it.split("_")[1].equals(id.toString())) {searchTagFlag = true }}
     }
     fun checkFavoriteTag(favoriteTagList: MutableList<Long>){
         favoriteTagFlag = favoriteTagList.contains(id)
