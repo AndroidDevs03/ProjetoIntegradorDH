@@ -2,13 +2,10 @@ package com.example.projetointegradordigitalhouse.view
 
 import android.app.Activity
 import android.os.Bundle
-import android.util.DisplayMetrics
-import android.view.Gravity
-import android.view.WindowManager
 import androidx.recyclerview.widget.GridLayoutManager
-import com.example.projetointegradordigitalhouse.R
 import com.example.projetointegradordigitalhouse.databinding.ActivityPopUpWindowBinding
 import com.example.projetointegradordigitalhouse.model.Avatar
+import com.example.projetointegradordigitalhouse.view.adapter.AvatarAdapter
 
 
 @Suppress("DEPRECATION")

@@ -7,26 +7,36 @@ import android.os.Bundle
 import android.widget.TextView
 import android.widget.Toast
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.recyclerview.widget.GridLayoutManager
 import com.bumptech.glide.Glide
 import com.example.projetointegradordigitalhouse.R
 import com.example.projetointegradordigitalhouse.databinding.ActivityFavoritesBinding
-import com.example.projetointegradordigitalhouse.databinding.ActivityHomeBinding
 import com.example.projetointegradordigitalhouse.model.Avatar
-import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.example.projetointegradordigitalhouse.model.CharacterResult
+import com.example.projetointegradordigitalhouse.util.Constants
+import com.example.projetointegradordigitalhouse.viewModel.FavoritesViewModel
+import com.github.cesar1287.desafiopicpayandroid.model.home.MarvelXRepository
 import com.google.android.material.navigation.NavigationView
+import com.google.android.material.tabs.TabLayout
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import de.hdodenhof.circleimageview.CircleImageView
+import java.text.FieldPosition
 
-class FavoritesActivity : AppCompatActivity() {
+class FavoritesActivity  : AppCompatActivity() {
     private val firebaseAuth by lazy{ Firebase.auth }
     private lateinit var drawerLayout: DrawerLayout
     private lateinit var navigationView : NavigationView
+    private val viewModel by lazy { FavoritesViewModel(this) }
 
     private val firebaseFirestore by lazy {
         Firebase.firestore
     }
+    var tabPosition: Int = 0
+
+    private var character : CharacterResult? = null
+
     private lateinit var binding: ActivityFavoritesBinding
     @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -36,6 +46,36 @@ class FavoritesActivity : AppCompatActivity() {
 
         drawerLayout = binding.dlPerfil
         navigationView = binding.nvPerfil
+
+        val listChar = viewModel.charList as MutableList<CharacterResult>
+        listChar.size
+        updateRecyclerView(tabPosition,listChar)
+
+        setupListeners()
+        initComponents()
+    }
+
+    private fun initComponents() {
+        binding.fvTabLayout.addTab(binding.fvTabLayout.newTab().setText("Characters"))
+        binding.fvTabLayout.addTab(binding.fvTabLayout.newTab().setText("Series"))
+        binding.fvTabLayout.addTab(binding.fvTabLayout.newTab().setText("Comics"))
+    }
+
+    private fun setupListeners() {
+
+        binding.fvTabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+            override fun onTabSelected(tab: TabLayout.Tab?) {
+                tabPosition = tab?.position ?: 0
+//                viewModel.searchResultList.value?.let { updateRecyclerView(tabPosition, it) }
+                //Toast.makeText(this@ChipSearchActivity, "${tab?.text} Search", Toast.LENGTH_LONG).show()
+            }
+
+            override fun onTabUnselected(tab: TabLayout.Tab?) {
+            }
+
+            override fun onTabReselected(tab: TabLayout.Tab?) {
+            }
+        })
 
         binding.fvBottomNavigation.menu.getItem(1).setChecked(true).setEnabled(false)
 
@@ -150,6 +190,15 @@ class FavoritesActivity : AppCompatActivity() {
                 else -> {
                     false
                 }
+            }
+        }
+    }
+
+    private fun updateRecyclerView(tab: Int, character: MutableList<CharacterResult>){
+        if (tab == 0){
+            binding.fvRecyclerView.apply {
+                layoutManager = GridLayoutManager(this@FavoritesActivity, 2)
+                adapter = CharacterAdapter(character)
             }
         }
     }
