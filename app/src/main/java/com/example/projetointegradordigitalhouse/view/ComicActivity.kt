@@ -28,6 +28,9 @@ import com.synnapps.carouselview.CarouselView
 import kotlinx.android.synthetic.main.activity_character.*
 import kotlinx.android.synthetic.main.activity_comic.*
 import java.io.ByteArrayOutputStream
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 import java.util.*
 
 class ComicActivity : AppCompatActivity() {
@@ -104,8 +107,19 @@ class ComicActivity : AppCompatActivity() {
                 comicResult.thumbnail?.let{
                     Glide.with(this).load(it).into(binding.ivComicPicture)
                 }
-                comicResult.published?.let{
-                    binding.tvComicPublishedDate.text = it
+//                comicResult.published?.let{
+//                    val localDateTime = LocalDateTime.parse(it);
+//                    val formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
+//                    val date = formatter.format(localDateTime);
+////                    val formatter = DateTimeFormatter.ofPattern("MMMM d, yyyy", Locale.ENGLISH)
+////                    val date = LocalDate.parse(it, DateTimeFormatter.ISO_LOCAL_DATE)
+//                    binding.tvComicPublishedDate.text = date.toString()
+//                }
+                comicResult.pageCount?.let{
+                    binding.tvComicPageNumber.text = it
+                }
+                comicResult.price?.let{
+                    binding.tvComicPrice.text = "$ ${it}"
                 }
                 if (firebaseAuth.currentUser?.isAnonymous?.not() == true){
                     Log.i("RecyclerView", "Usuário identificado")
