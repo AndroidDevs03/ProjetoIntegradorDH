@@ -8,16 +8,11 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
-import android.widget.ImageButton
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import com.bumptech.glide.Glide
 import com.example.projetointegradordigitalhouse.R
 import com.example.projetointegradordigitalhouse.databinding.ActivitySeriesBinding
-import com.example.projetointegradordigitalhouse.model.CharacterResult
-import com.example.projetointegradordigitalhouse.model.ComicResult
-import com.example.projetointegradordigitalhouse.model.GeneralResult
-import com.example.projetointegradordigitalhouse.model.SeriesResult
+import com.example.projetointegradordigitalhouse.model.*
 import com.example.projetointegradordigitalhouse.util.Constants
 import com.example.projetointegradordigitalhouse.util.Constants.Intent.KEY_INTENT_SERIES
 import com.example.projetointegradordigitalhouse.viewModel.SeriesViewModel
@@ -27,6 +22,7 @@ import com.google.firebase.ktx.Firebase
 import com.synnapps.carouselview.CarouselView
 import kotlinx.android.synthetic.main.activity_series.*
 import java.io.ByteArrayOutputStream
+import java.util.*
 
 class SeriesActivity : AppCompatActivity() {
 
@@ -49,33 +45,60 @@ class SeriesActivity : AppCompatActivity() {
         series = intent.getParcelableExtra(KEY_INTENT_SERIES)
 
         initComponents()
+        setupObservables()
+    }
+
+    private fun setupObservables() {
+        viewModel.lastSearchHistory.observe(this, {
+            it?.let { searchTags ->
+                val adapter = ArrayAdapter(this@SeriesActivity, R.layout.list_item, searchTags)
+                (binding.sdSearchField.editText as? AutoCompleteTextView)?.setAdapter(adapter)
+            }
+        })
+        binding.sdSearchField.setEndIconOnClickListener {
+            val newtag = binding.sdSearchField.editText?.text.toString().trim()
+            if (newtag != "") {
+                viewModel.addSearchToLocalDatabase(
+                    Search(
+                        newtag,
+                        "",
+                        Date().toString()
+                    )
+                )
+                val intent = Intent(this@SeriesActivity, ChipSearchActivity::class.java)
+                intent.putExtra(Constants.Intent.KEY_INTENT_SEARCH, newtag)
+                startActivity(intent)
+            }
+        }
     }
 
     private fun initComponents() {
+        viewModel.getSearchHistory()
 
 //        firebaseAuth?.let{ auth ->
-            series?.let{ serieResult ->
+            series?.let{ seriesResult ->
 
-                serieResult.charactersList?.let{
+                seriesResult.charactersList?.let{
                     viewModel.getSeriesCharacters(it)
                 }
-                serieResult.id?.let{
+                seriesResult.id?.let{
                     viewModel.getSeriesComics(it)
                     val check = viewModel.seriesComicsList
 
                 }
-                serieResult.name?.let{
+                seriesResult.name?.let{
                     binding.tvSeriesTitle.text = it
                 }
-                serieResult.description?.let{
+                seriesResult.description?.let{
                     binding.tvSeriesDescription.text = it
                 }
-                serieResult.thumbnail?.let{
+                seriesResult.thumbnail?.let{
                     Glide.with(this).load(it).into(binding.ivSeriesPicture)
                 }
+                //Configurando botão de Favoritar
                 if (firebaseAuth.currentUser?.isAnonymous?.not() == true){
                     Log.i("RecyclerView", "Usuário identificado")
-                    binding.ibSeriesFavorite.isSelected = serieResult.favoriteTagFlag
+                    binding.ibSeriesFavorite.isSelected = seriesResult.favoriteTagFlag
                     binding.ibSeriesFavorite.setOnClickListener {
                         if (binding.ibSeriesFavorite.isSelected){
                             favoriteClicked(false) // true = adicionar, false = remover
@@ -91,6 +114,17 @@ class SeriesActivity : AppCompatActivity() {
                     binding.ibSeriesFavorite.isActivated = false
                     binding.ibSeriesFavorite.setOnClickListener {
                         Toast.makeText(binding.ibSeriesFavorite.context, "Favorite is not allowed for unregistered users. Please sign in.", Toast.LENGTH_LONG).show()
+                    }
+                }
+                //Configurando botão de chipSearch
+                binding.ibSeriesSearch.isSelected = seriesResult.searchTagFlag
+                binding.ibSeriesSearch.setOnClickListener {
+                    if (binding.ibSeriesSearch.isSelected){
+                        searchClicked(false) // true = adicionar, false = remover
+                        binding.ibSeriesSearch.isSelected = false
+                    } else {
+                        searchClicked(true) // true = adicionar, false = remover
+                        binding.ibSeriesSearch.isSelected = true
                     }
                 }
                 initCharacters()
@@ -170,6 +204,10 @@ class SeriesActivity : AppCompatActivity() {
     private fun favoriteClicked(add: Boolean) {
         if (add){ series?.let { viewModel.addFavorite(it,1) } }
         else { series?.let { viewModel.remFavorite(it,1) } }
+    }
+    private fun searchClicked(add: Boolean) {
+        if (add){ series?.let { viewModel.addSearchTag("${it.id}_${it.name}",1) }}
+        else { series?.let {viewModel.removeSearchTag("${it.id}_${it.name}",1) }}
     }
 
     private fun initCharacters() {

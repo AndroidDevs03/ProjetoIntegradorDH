@@ -125,7 +125,7 @@ class HomeActivity : AppCompatActivity() {
                         "",
                         Date().toString()
                     )
-                ) //todo: Arrumar aqui
+                )
                 val intent = Intent(this@HomeActivity, ChipSearchActivity::class.java)
                 intent.putExtra(KEY_INTENT_SEARCH, newtag)
                 startActivity(intent)

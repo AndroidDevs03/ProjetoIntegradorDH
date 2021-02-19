@@ -8,27 +8,28 @@
     tools:context=".view.CharacterActivity">
     <!--   Search Bar -->
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/tilCharacterSearch"
+        android:id="@+id/chd_search_field"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu"
         android:theme="@style/search_field"
-        app:endIconTint="@color/white"
+        app:boxStrokeColor="@color/white"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <com.google.android.material.textfield.TextInputEditText
+        app:layout_constraintEnd_toEndOf="parent">
+        <AutoCompleteTextView
+            android:id="@+id/chd_auto_complete"
             style="@style/search_input"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/redBackgroundBar"
-            android:text="Search" />
+            />
     </com.google.android.material.textfield.TextInputLayout>
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintBottom_toTopOf="@+id/bnvCharacter"
-        app:layout_constraintTop_toBottomOf="@+id/tilCharacterSearch"
+        app:layout_constraintTop_toBottomOf="@+id/chd_search_field"
         app:layout_constraintStart_toStartOf="parent">
         <!--  Character Title   -->
         <LinearLayout
@@ -57,8 +58,14 @@
         <!--Search Button            -->
         <ImageButton
             android:id="@+id/ibCharacterSearch"
-            style="@style/search_button"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:scaleY=".6"
+            android:scaleX=".6"
+            android:src="@drawable/search_selector"
             android:background="@color/redBackground"
+            android:clickable="true"
+            android:focusable="true"
             app:layout_constraintEnd_toStartOf="@id/ibCharacterFavorite"
             app:layout_constraintTop_toTopOf="parent"
             android:contentDescription="TODO" />
@@ -68,6 +75,8 @@
             android:id="@+id/ibCharacterFavorite"
             android:layout_width="64dp"
             android:layout_height="64dp"
+            android:scaleY="1.2"
+            android:scaleX="1.2"
             android:src="@drawable/favorite_selector"
             android:background="@color/redBackground"
             android:contentDescription="TODO"

@@ -8,16 +8,11 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
-import android.widget.ImageButton
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import com.bumptech.glide.Glide
 import com.example.projetointegradordigitalhouse.R
 import com.example.projetointegradordigitalhouse.databinding.ActivityCharacterBinding
-import com.example.projetointegradordigitalhouse.model.CharacterResult
-import com.example.projetointegradordigitalhouse.model.ComicResult
-import com.example.projetointegradordigitalhouse.model.GeneralResult
-import com.example.projetointegradordigitalhouse.model.SeriesResult
+import com.example.projetointegradordigitalhouse.model.*
 import com.example.projetointegradordigitalhouse.util.Constants
 import com.example.projetointegradordigitalhouse.util.Constants.Intent.KEY_INTENT_CHARACTER
 import com.example.projetointegradordigitalhouse.viewModel.CharacterViewModel
@@ -26,6 +21,7 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.activity_character.*
 import java.io.ByteArrayOutputStream
+import java.util.*
 
 class CharacterActivity : AppCompatActivity() {
 
@@ -47,10 +43,36 @@ class CharacterActivity : AppCompatActivity() {
         character = intent.getParcelableExtra(KEY_INTENT_CHARACTER)
 
         initComponents()
+        setupObservables()
 
     }
 
+    private fun setupObservables() {
+        viewModel.lastSearchHistory.observe(this, {
+            it?.let { searchTags ->
+                val adapter = ArrayAdapter(this@CharacterActivity, R.layout.list_item, searchTags)
+                (binding.chdSearchField.editText as? AutoCompleteTextView)?.setAdapter(adapter)
+            }
+        })
+        binding.chdSearchField.setEndIconOnClickListener {
+            val newtag = binding.chdSearchField.editText?.text.toString().trim()
+            if (newtag != "") {
+                viewModel.addSearchToLocalDatabase(
+                    Search(
+                        newtag,
+                        "",
+                        Date().toString()
+                    )
+                )
+                val intent = Intent(this@CharacterActivity, ChipSearchActivity::class.java)
+                intent.putExtra(Constants.Intent.KEY_INTENT_SEARCH, newtag)
+                startActivity(intent)
+            }
+        }
+    }
+
     private fun initComponents() {
+        viewModel.getSearchHistory()
 
         //firebaseAuth?.let{ auth ->
             character?.let{ charResult ->
@@ -89,7 +111,16 @@ class CharacterActivity : AppCompatActivity() {
                     }
                 }
                 //Configurando o botão de Search
-
+                binding.ibCharacterSearch.isSelected = charResult.searchTagFlag
+                binding.ibCharacterSearch.setOnClickListener {
+                    if (binding.ibCharacterSearch.isSelected){
+                        searchClicked(false) // true = adicionar, false = remover
+                        binding.ibCharacterSearch.isSelected = false
+                    } else {
+                        searchClicked(true) // true = adicionar, false = remover
+                        binding.ibCharacterSearch.isSelected = true
+                    }
+                }
                 initSeries()
                 initComics()
             }
@@ -142,6 +173,11 @@ class CharacterActivity : AppCompatActivity() {
                 else -> {false}
             }
         }
+    }
+
+    private fun searchClicked(add: Boolean) {
+        if (add){ character?.let { viewModel.addSearchTag("${it.id}_${it.name}",0) }}
+        else { character?.let {viewModel.removeSearchTag("${it.id}_${it.name}",0) }}
     }
 
     private fun favoriteClicked(add: Boolean) {

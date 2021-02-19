@@ -43,7 +43,6 @@
             app:layout_constraintTop_toTopOf="parent" />
         <ImageButton
             android:clickable="true"
-
             android:id="@+id/cv_character_favorite"
             android:layout_width="30dp"
             android:layout_height="30dp"
@@ -51,8 +50,7 @@
             android:layout_marginEnd="5dp"
             android:layout_marginRight="5dp"
             android:src="@drawable/favorite_selector"
-            android:background="@drawable/ic_baseline_star_outline_24_"
-            android:elevation="10dp"
+            android:background="@color/redBackground"
             android:outlineAmbientShadowColor="@color/black"
             android:scaleType="fitCenter"
             app:layout_constraintEnd_toEndOf="parent"
@@ -67,8 +65,7 @@
             android:layout_marginEnd="5dp"
             android:layout_marginRight="5dp"
             android:src="@drawable/search_selector"
-            android:background="@drawable/ic_mjolnifier"
-            android:elevation="10dp"
+            android:background="@color/redBackground"
             android:outlineAmbientShadowColor="@color/black"
             android:scaleType="fitCenter"
             app:layout_constraintEnd_toStartOf="@id/cv_character_favorite"

@@ -15,19 +15,21 @@
 
         <!--   Search Bar -->
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/tilComicSearch"
-            android:theme="@style/search_field"
+            android:id="@+id/cod_search_field"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:endIconTint="@color/white"
+            style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu"
+            android:theme="@style/search_field"
+            app:boxStrokeColor="@color/white"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent">
-            <com.google.android.material.textfield.TextInputEditText
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
+            <AutoCompleteTextView
+                android:id="@+id/cod_auto_complete"
+                style="@style/search_input"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                style="@style/search_input"
-                android:background="@color/yellowBackground"
-                android:text="Search" />
+                />
         </com.google.android.material.textfield.TextInputLayout>
 
         <!--  Comic Title   -->
@@ -44,7 +46,7 @@
             android:layout_marginStart="10dp"
             app:layout_constraintEnd_toStartOf="@id/ibComicSearch"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tilComicSearch"
+            app:layout_constraintTop_toBottomOf="@id/cod_search_field"
             tools:ignore="RtlCompat" />
 
         <!--Search Button            -->

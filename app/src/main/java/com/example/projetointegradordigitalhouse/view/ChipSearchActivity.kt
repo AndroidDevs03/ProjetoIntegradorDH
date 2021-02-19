@@ -22,6 +22,7 @@ import com.example.projetointegradordigitalhouse.model.CharacterResult
 import com.example.projetointegradordigitalhouse.model.GeneralResult
 import com.example.projetointegradordigitalhouse.model.SeriesResult
 import com.example.projetointegradordigitalhouse.util.Constants
+import com.example.projetointegradordigitalhouse.util.Constants.Intent.KEY_INTENT_CHARACTER
 import com.example.projetointegradordigitalhouse.util.Constants.Intent.KEY_INTENT_COMIC
 import com.example.projetointegradordigitalhouse.util.Constants.Intent.KEY_INTENT_DATA
 import com.example.projetointegradordigitalhouse.util.Constants.Intent.KEY_INTENT_SERIES
@@ -232,6 +233,7 @@ class ChipSearchActivity : AppCompatActivity() {
     private fun loadContent() {
         // Carregando histórico de busca feito no aplicativo
         viewModel.getSearchHistory()
+        viewModel.getSearchTags()
     }
     private fun initComponents() {
         incomingSearch?.let {
@@ -345,7 +347,7 @@ class ChipSearchActivity : AppCompatActivity() {
                     // função para entrar na página
                     { position ->
                         val intent = Intent(this@ChipSearchActivity, CharacterActivity::class.java)
-                        intent.putExtra(KEY_INTENT_COMIC, charList[position])
+                        intent.putExtra(KEY_INTENT_CHARACTER, charList[position])
                         startActivity(intent)
                     },
                     // função para botão de busca

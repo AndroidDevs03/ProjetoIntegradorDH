@@ -9,15 +9,14 @@ import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
 import android.view.View
-import android.widget.ImageButton
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import com.bumptech.glide.Glide
 import com.example.projetointegradordigitalhouse.R
 import com.example.projetointegradordigitalhouse.databinding.ActivityComicBinding
 import com.example.projetointegradordigitalhouse.model.CharacterResult
 import com.example.projetointegradordigitalhouse.model.ComicResult
 import com.example.projetointegradordigitalhouse.model.GeneralResult
+import com.example.projetointegradordigitalhouse.model.Search
 import com.example.projetointegradordigitalhouse.util.Constants
 import com.example.projetointegradordigitalhouse.util.Constants.Intent.KEY_INTENT_COMIC
 import com.example.projetointegradordigitalhouse.viewModel.CharacterViewModel
@@ -29,6 +28,7 @@ import com.synnapps.carouselview.CarouselView
 import kotlinx.android.synthetic.main.activity_character.*
 import kotlinx.android.synthetic.main.activity_comic.*
 import java.io.ByteArrayOutputStream
+import java.util.*
 
 class ComicActivity : AppCompatActivity() {
 
@@ -59,10 +59,36 @@ class ComicActivity : AppCompatActivity() {
 
         comic = intent.getParcelableExtra(KEY_INTENT_COMIC)
         initComponents()
+        setupObservables()
 
     }
 
+    private fun setupObservables() {
+        viewModel.lastSearchHistory.observe(this, {
+            it?.let { searchTags ->
+                val adapter = ArrayAdapter(this@ComicActivity, R.layout.list_item, searchTags)
+                (binding.codSearchField.editText as? AutoCompleteTextView)?.setAdapter(adapter)
+            }
+        })
+        binding.codSearchField.setEndIconOnClickListener {
+            val newtag = binding.codSearchField.editText?.text.toString().trim()
+            if (newtag != "") {
+                viewModel.addSearchToLocalDatabase(
+                    Search(
+                        newtag,
+                        "",
+                        Date().toString()
+                    )
+                )
+                val intent = Intent(this@ComicActivity, ChipSearchActivity::class.java)
+                intent.putExtra(Constants.Intent.KEY_INTENT_SEARCH, newtag)
+                startActivity(intent)
+            }
+        }
+    }
+
     private fun initComponents() {
+        viewModel.getSearchHistory()
 
 //        firebaseAuth?.let{ auth ->
             comic?.let{ comicResult ->
