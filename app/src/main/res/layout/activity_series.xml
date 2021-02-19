@@ -1,176 +1,194 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
+<androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/blueBackground"
-    android:orientation="vertical"
     tools:context=".view.SeriesActivity">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <!--   Search Bar -->
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/sd_search_field"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <!--   Search Bar -->
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/sd_search_field"
+        android:layout_height="wrap_content"
+        style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu"
+        android:theme="@style/search_field"
+        app:boxStrokeColor="@color/white"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+        <AutoCompleteTextView
+            android:id="@+id/sd_auto_complete"
+            style="@style/search_input"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu"
-            android:theme="@style/search_field"
-            app:boxStrokeColor="@color/white"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent">
-            <AutoCompleteTextView
-                android:id="@+id/sd_auto_complete"
-                style="@style/search_input"
+            />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toBottomOf="@+id/sd_search_field"
+        app:layout_constraintBottom_toTopOf="@+id/bnvSeries"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <!--  Series Title   -->
+            <TextView
+                android:id="@+id/tvSeriesTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                />
-        </com.google.android.material.textfield.TextInputLayout>
+                android:gravity="center_horizontal"
+                android:text="@string/series_text_title"
+                android:textAlignment="center"
+                style="@style/title_field"
+                android:layout_marginHorizontal="15dp"
+                android:layout_marginTop="15dp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintBottom_toTopOf="@id/layoutButtons"
+                tools:ignore="RtlCompat" />
 
-        <!--  Series Title   -->
-        <TextView
-            android:id="@+id/tvSeriesTitle"
-            android:layout_width="match_parent"
-            android:layout_height="64dp"
-            android:gravity="center_vertical"
-            android:text="@string/series_text_title"
-            android:textAlignment="viewStart"
-            android:textColor="@color/white"
-            android:textSize="28sp"
-            android:textStyle="bold"
-            android:layout_marginStart="10dp"
-            app:layout_constraintEnd_toStartOf="@id/ibSeriesSearch"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/sd_search_field"
-            tools:ignore="RtlCompat" />
+            <LinearLayout
+                android:id="@+id/layoutButtons"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintTop_toBottomOf="@id/tvSeriesTitle"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent">
 
-        <!--Search Button            -->
-        <ImageButton
-            android:id="@+id/ibSeriesSearch"
-            style="@style/search_button"
-            android:contentDescription="TODO"
-            app:layout_constraintTop_toBottomOf="@+id/tilSeriesSearch"
-            app:layout_constraintBottom_toTopOf="@id/ivSeriesPicture"
-            app:layout_constraintEnd_toStartOf="@id/ibSeriesFavorite"
-            android:background="@color/blueBackground"/>
+                <ImageButton
+                    android:id="@+id/ibSeriesShare"
+                    style="@style/share_button"
+                    android:contentDescription="TODO"
+                    android:background="@color/blueBackground"/>
 
-        <!--Favorite 'Yes' Button            -->
-        <ImageButton
-            android:id="@+id/ibSeriesFavorite"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:src="@drawable/favorite_selector"
-            android:background="@drawable/ic_baseline_star_outline_24_"
-            android:contentDescription="TODO"
-            android:clickable="true"
-            android:focusable="true"
-            app:layout_constraintTop_toBottomOf="@+id/tilSeriesSearch"
-            app:layout_constraintBottom_toTopOf="@id/ivSeriesPicture"
-            app:layout_constraintStart_toEndOf="@id/ibSeriesSearch"
-            />
+                <!--Favorite 'Yes' Button            -->
+                <ImageButton
+                    android:id="@+id/ibSeriesFavorite"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_margin="10dp"
+                    android:background="@drawable/ic_baseline_star_outline_24_"
+                    android:clickable="true"
+                    android:contentDescription="TODO"
+                    android:focusable="true"
+                    android:src="@drawable/favorite_selector" />
 
-        <!--Share Button            -->
-        <ImageButton
-            android:id="@+id/ibSeriesShare"
-            style="@style/share_button"
-            android:contentDescription="TODO"
-            app:layout_constraintTop_toBottomOf="@+id/tilSeriesSearch"
-            app:layout_constraintBottom_toTopOf="@id/ivSeriesPicture"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/ibSeriesFavorite"
-            android:background="@color/blueBackground"/>
+                <!--Search Button            -->
+                <ImageButton
+                    android:id="@+id/ibSeriesSearch"
+                    style="@style/search_button"
+                    android:contentDescription="TODO"
+                    android:background="@color/blueBackground"/>
 
-        <!-- Series's Picture        -->
-        <ImageView
-            android:id="@+id/ivSeriesPicture"
-            android:layout_width="360dp"
-            android:layout_height="300dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:scaleType="centerCrop"
-            android:src="@drawable/serie_ax"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tvSeriesTitle" />
+            </LinearLayout>
 
-        <!-- Series's Desciption        -->
-        <TextView
-            android:id="@+id/tvSeriesDescription"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="25dp"
-            android:layout_marginRight="25dp"
-            android:layout_marginTop="10dp"
-            android:autoSizeTextType="uniform"
-            android:text="@string/series_text_description"
-            android:textColor="@color/white"
-            android:textSize="14sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/ivSeriesPicture" />
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cardSeries"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/layoutButtons"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginHorizontal="15dp"
+                app:cardCornerRadius="10dp">
 
-        <!-- Label Character's list            -->
-        <TextView
-            android:id="@+id/tvSeriesCharactersList"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="25dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginRight="25dp"
-            android:text="@string/label_text_characters"
-            android:textColor="@color/white"
-            android:textSize="20sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="@id/tvSeriesTitle"
-            app:layout_constraintTop_toBottomOf="@id/tvSeriesDescription" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
 
-        <!-- Character List            -->
-        <com.synnapps.carouselview.CarouselView
-            android:id="@+id/cvSeriesCharacters"
-            android:layout_width="match_parent"
-            android:layout_height="180dp"
-            android:layout_marginLeft="25dp"
-            android:layout_marginTop="5dp"
-            android:layout_marginRight="25dp"
-            app:disableAutoPlayOnUserInteraction="true"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tvSeriesCharactersList"
-            app:pageTransformer="depth" />
+                    <!-- Series's Picture        -->
+                    <ImageView
+                        android:id="@+id/ivSeriesPicture"
+                        android:layout_width="match_parent"
+                        android:layout_height="300dp"
+                        android:scaleType="fitXY"
+                        android:src="@drawable/serie_ax"/>
 
-        <!-- Label Comics list            -->
-        <TextView
-            android:id="@+id/tvSeriesComicList"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="25dp"
-            android:layout_marginTop="15dp"
-            android:layout_marginRight="25dp"
-            android:text="@string/label_comics_list"
-            android:textColor="@color/white"
-            android:textSize="20sp"
-            app:layout_constraintEnd_toEndOf="@id/tvSeriesDescription"
-            app:layout_constraintStart_toStartOf="@id/tvSeriesDescription"
-            app:layout_constraintTop_toBottomOf="@id/cvSeriesCharacters" />
+                    <!-- Series's Desciption        -->
+                    <TextView
+                        android:id="@+id/tvSeriesDescription"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginVertical="10dp"
+                        android:layout_marginHorizontal="15dp"
+                        android:autoSizeTextType="uniform"
+                        android:justificationMode="inter_word"
+                        android:text="@string/series_text_description"
+                        style="@style/description_field"/>
+                </LinearLayout>
 
-        <!-- Comics List            -->
-        <com.synnapps.carouselview.CarouselView
-            android:id="@+id/cvSeriesComics"
-            android:layout_width="match_parent"
-            android:layout_height="180dp"
-            android:layout_marginLeft="25dp"
-            android:layout_marginTop="5dp"
-            android:layout_marginRight="25dp"
-            app:disableAutoPlayOnUserInteraction="true"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tvSeriesComicList"
-            app:pageTransformer="depth" />
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Label Character's list            -->
+            <TextView
+                android:id="@+id/tvSeriesCharactersList"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:layout_marginHorizontal="15dp"
+                android:text="@string/label_text_characters"
+                style="@style/subtitle_field"
+                android:gravity="center_horizontal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/cardSeries" />
+
+            <!-- Character List            -->
+            <com.synnapps.carouselview.CarouselView
+                android:id="@+id/cvSeriesCharacters"
+                android:layout_width="match_parent"
+                android:layout_height="180dp"
+                android:layout_marginLeft="15dp"
+                android:layout_marginVertical="5dp"
+                android:layout_marginRight="15dp"
+                app:disableAutoPlayOnUserInteraction="true"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvSeriesCharactersList"
+                app:pageTransformer="depth" />
+
+            <!-- Label Comics list            -->
+            <TextView
+                android:id="@+id/tvSeriesComicList"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="15dp"
+                android:text="@string/label_comics_list"
+                style="@style/subtitle_field"
+                android:gravity="center_horizontal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/cvSeriesCharacters" />
+
+            <!-- Comics List            -->
+            <com.synnapps.carouselview.CarouselView
+                android:id="@+id/cvSeriesComics"
+                android:layout_width="match_parent"
+                android:layout_height="180dp"
+                android:layout_marginLeft="15dp"
+                android:layout_marginVertical="10dp"
+                android:layout_marginRight="15dp"
+                app:disableAutoPlayOnUserInteraction="true"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvSeriesComicList"
+                app:pageTransformer="depth" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </ScrollView>
 
         <!--  Menu - Bottom Navigation       -->
         <com.google.android.material.bottomnavigation.BottomNavigationView
@@ -179,13 +197,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="25dp"
-            app:layout_constraintTop_toBottomOf="@+id/cvSeriesComics"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent" />
 
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-</ScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>
