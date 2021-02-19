@@ -7,15 +7,27 @@ import android.os.Handler
 import android.os.Looper
 import com.example.projetointegradordigitalhouse.R
 import com.example.projetointegradordigitalhouse.viewModel.HomeViewModel
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 
 
 class SplashActivity : AppCompatActivity() {
 
     private val viewModel by lazy { HomeViewModel(this) }
 
+    private val firebaseAuth by lazy { Firebase.auth }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash)
+
+        //delete anonymous firebase
+        firebaseAuth.currentUser?.let {
+            if (it.isAnonymous){
+                firebaseAuth.signOut()
+                it.delete()
+            }
+        }
 
         viewModel.removeAllChips()
 
