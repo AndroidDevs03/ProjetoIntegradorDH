@@ -18,17 +18,19 @@
         <activity android:name=".view.PopUpWindow"
             android:theme="@style/Theme.PopMe">
         </activity>
-        <activity android:name=".view.NameSearchActivity" />
         <activity android:name=".view.FavoritesActivity" />
         <activity android:name=".view.RegisterSplash" />
         <activity android:name=".view.RegisterActivity" />
         <activity android:name=".view.LoginActivity" />
         <activity android:name=".view.MovieActivity" />
-        <activity android:name=".view.SeriesActivity" />
-        <activity android:name=".view.ComicActivity" />
-        <activity android:name=".view.CharacterActivity" />
+        <activity android:name=".view.SeriesActivity"
+            android:theme="@style/FirebaseTheme"/>
+        <activity android:name=".view.ComicActivity"
+            android:theme="@style/FirebaseTheme"/>
+        <activity android:name=".view.CharacterActivity"
+            android:theme="@style/FirebaseTheme"/>
         <activity android:name=".view.ChipSearchActivity"
-            android:theme="@style/Theme.MaterialComponents.DayNight.NoActionBar" >
+            android:theme="@style/FirebaseTheme" >
         </activity>
         <activity android:name=".view.SplashActivity">
             <intent-filter>
@@ -39,7 +41,7 @@
         </activity>
         <activity
             android:name=".view.HomeActivity"
-            android:theme="@style/Theme.MaterialComponents.DayNight.NoActionBar" />
+            android:theme="@style/FirebaseTheme" />
 
         <meta-data
             android:name="preloaded_fonts"
