@@ -26,31 +26,22 @@ class LoginViewModel(
 //    var homeLoginUser: MutableLiveData<List<User>> = MutableLiveData()
 
 
-
-
     fun registerUser(firebaseUser: FirebaseUser?) {
         Log.i("HomeViewModel", "Registro de usuário")
         firebaseUser?.let {
-            if (!it.isAnonymous) {
-                Firebase.firestore.collection("users").document(it.uid).get().addOnSuccessListener { snapshot ->
-                    val userData = snapshot.data
-                    val position = userData?.get("avatar_id") as Number
-                    val tempUser = User(
-                    firebaseUser.uid,
-                    position,
-                    it.displayName.toString(),
-                    it.email.toString(),
-                    null,
-                    "Data"
-                )
-                    viewModelScope.launch {
-                    repository.setUser(tempUser)
+            viewModelScope.launch {
+                        val tempUser = User(
+                            it.uid,
+                            0,
+                            it.displayName.toString(),
+                            it.email.toString(),
+                            null,
+                            "Data"
+                        )
+                        repository.setUser(tempUser)
 //                    homeLoginUser.postValue(tempList)
-                }
-                }
-                    .addOnFailureListener {
-
                     }
+            }
 //                val tempUser = User(
 //                    firebaseUser.uid,
 //                    ,
@@ -63,7 +54,5 @@ class LoginViewModel(
 //                    repository.setUser(tempUser)
 ////                    homeLoginUser.postValue(tempList)
 //                }
-            }
         }
     }
-}

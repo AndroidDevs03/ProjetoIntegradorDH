@@ -57,7 +57,8 @@ class ChipSearchViewModel(
 //            searchResultList.value?.let { tempNewSeriesList.addAll(it.second) }
             var qtyCharTags = 0
             var qtySeriesTags = 0
-            taglist.forEach { itTag ->
+            val orderedTagList = taglist.sortedDescending()
+            orderedTagList.forEach { itTag ->
                 val decodedTag = itTag.split("_")
                 if (decodedTag[0] == PREFIX_CHAR) {
                     qtyCharTags++
@@ -69,8 +70,8 @@ class ChipSearchViewModel(
                         tempDecrementalNewCharacterList.filter { itChar -> itChar.series.contains(decodedTag[1].toLong()) } as MutableList<CharacterResult>
                     tempIncrementalNewSeriesList.addAll(fullSeriesSearch.filter { itSeries -> itSeries.id == decodedTag[1].toLong() })
                 } else { tempIncrementalNewCharacterList.addAll(fullCharacterSearch.filter { itChar ->
-                            itChar.description.contains(decodedTag[2], true) } as MutableList<CharacterResult>)
-                    //tempNewSeriesList.addAll(fullSeriesSearch.filter { itSeries -> itSeries.description.contains(decodedTag[2], true) })
+                    itChar.description.contains(decodedTag[2], true) } as MutableList<CharacterResult>)
+                    tempDecrementalNewSeriesList = tempDecrementalNewSeriesList.filter { itSeries -> itSeries.description.contains(decodedTag[2], true) } as MutableList<SeriesResult>
                 }
             }
                 if (qtySeriesTags>0){tempIncrementalNewCharacterList.addAll(tempDecrementalNewCharacterList)}

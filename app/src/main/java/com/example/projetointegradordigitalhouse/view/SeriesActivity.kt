@@ -1,14 +1,15 @@
 package com.example.projetointegradordigitalhouse.view
 
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.drawable.BitmapDrawable
 import android.net.Uri
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
 import android.widget.*
+import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
 import com.example.projetointegradordigitalhouse.R
 import com.example.projetointegradordigitalhouse.databinding.ActivitySeriesBinding
@@ -22,7 +23,9 @@ import com.google.firebase.ktx.Firebase
 import com.synnapps.carouselview.CarouselView
 import kotlinx.android.synthetic.main.activity_series.*
 import java.io.ByteArrayOutputStream
+import java.security.MessageDigest
 import java.util.*
+
 
 class SeriesActivity : AppCompatActivity() {
 
@@ -113,7 +116,11 @@ class SeriesActivity : AppCompatActivity() {
                     Log.i("RecyclerView", "Usuário anônimo")
                     binding.ibSeriesFavorite.isActivated = false
                     binding.ibSeriesFavorite.setOnClickListener {
-                        Toast.makeText(binding.ibSeriesFavorite.context, "Favorite is not allowed for unregistered users. Please sign in.", Toast.LENGTH_LONG).show()
+                        Toast.makeText(
+                            binding.ibSeriesFavorite.context,
+                            "Favorite is not allowed for unregistered users. Please sign in.",
+                            Toast.LENGTH_LONG
+                        ).show()
                     }
                 }
                 //Configurando botão de chipSearch
@@ -154,27 +161,27 @@ class SeriesActivity : AppCompatActivity() {
         findViewById<CarouselView>(R.id.cvSeriesCharacters).setImageClickListener {
             val intent = Intent(this, CharacterActivity::class.java)
             val temp = charsList[it]
-            intent.putExtra(Constants.Intent.KEY_INTENT_CHARACTER,temp)
+            intent.putExtra(Constants.Intent.KEY_INTENT_CHARACTER, temp)
             startActivity(intent)
         }
 
         findViewById<CarouselView>(R.id.cvSeriesComics).setImageClickListener {
             val intent = Intent(this, ComicActivity::class.java)
             val temp = comicsList[it]
-            intent.putExtra(Constants.Intent.KEY_INTENT_COMIC,temp)
+            intent.putExtra(Constants.Intent.KEY_INTENT_COMIC, temp)
             startActivity(intent)
         }
 
         BottomNavigationView.OnNavigationItemReselectedListener {
             when (it.itemId){
                 R.id.page_1 -> {
-                    startActivity(Intent(this,HomeActivity::class.java))
+                    startActivity(Intent(this, HomeActivity::class.java))
                 }
                 R.id.page_2 -> {
                     startActivity(Intent(this, FavoritesActivity::class.java))
                 }
-                R.id.page_3 ->{
-                    startActivity(Intent(this,ChipSearchActivity::class.java))
+                R.id.page_3 -> {
+                    startActivity(Intent(this, ChipSearchActivity::class.java))
                 }
                 R.id.page_4 -> {
                     startActivity(Intent(this, LoginActivity::class.java))
@@ -193,7 +200,7 @@ class SeriesActivity : AppCompatActivity() {
                 binding.cvSeriesComics.setImageListener(
                     CarouselListener(
                         this,
-                        comicsList  as MutableList<GeneralResult>
+                        comicsList as MutableList<GeneralResult>
                     )
                 )
                 binding.cvSeriesComics.pageCount = comicsList.size
@@ -202,12 +209,12 @@ class SeriesActivity : AppCompatActivity() {
         )
     }
     private fun favoriteClicked(add: Boolean) {
-        if (add){ series?.let { viewModel.addFavorite(it,1) } }
-        else { series?.let { viewModel.remFavorite(it,1) } }
+        if (add){ series?.let { viewModel.addFavorite(it, 1) } }
+        else { series?.let { viewModel.remFavorite(it, 1) } }
     }
     private fun searchClicked(add: Boolean) {
-        if (add){ series?.let { viewModel.addSearchTag("${it.id}_${it.name}",1) }}
-        else { series?.let {viewModel.removeSearchTag("${it.id}_${it.name}",1) }}
+        if (add){ series?.let { viewModel.addSearchTag("${it.id}_${it.name}", 1) }}
+        else { series?.let {viewModel.removeSearchTag("${it.id}_${it.name}", 1) }}
     }
 
     private fun initCharacters() {
@@ -218,7 +225,7 @@ class SeriesActivity : AppCompatActivity() {
                 binding.cvSeriesCharacters.setImageListener(
                     CarouselListener(
                         this,
-                        charsList  as MutableList<GeneralResult>
+                        charsList as MutableList<GeneralResult>
                     )
                 )
                 binding.cvSeriesCharacters.pageCount = charsList.size
@@ -234,12 +241,17 @@ class SeriesActivity : AppCompatActivity() {
         val bitmap = drawable.bitmap
         val bytes : ByteArrayOutputStream = ByteArrayOutputStream()
         val description : String = findViewById<TextView>(R.id.tvSeriesDescription).text.toString()
-        bitmap.compress(Bitmap.CompressFormat.PNG,100,bytes)
-        val path : String = MediaStore.Images.Media.insertImage(contentResolver,bitmap,"Favorite Character",null)
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, bytes)
+        val path : String = MediaStore.Images.Media.insertImage(
+            contentResolver,
+            bitmap,
+            "Favorite Character",
+            null
+        )
         val uri : Uri = Uri.parse(path)
         intent.putExtra(Intent.EXTRA_COMPONENT_NAME, "Introducing content previews")
-        intent.putExtra(Intent.EXTRA_STREAM,uri)
+        intent.putExtra(Intent.EXTRA_STREAM, uri)
         intent.putExtra(Intent.EXTRA_TEXT, description)
-        startActivity(Intent.createChooser(intent,"Compartilhar nas redes sociais"))
+        startActivity(Intent.createChooser(intent, "Compartilhar nas redes sociais"))
     }
 }

@@ -330,27 +330,32 @@ class FirebaseFirestore {
         }
     }
     suspend fun insertUser(user: User){
+        firebaseAuth.currentUser?.let {
+            firebaseDatabase.collection(NAME_USERS_DATABASE).document(it.uid).get().addOnSuccessListener { snapshot ->
+               //if (snapshot == null) {
+                   val dataTemp: HashMap<String, Any> = HashMap()
+                   Log.i("Firebase", "Usuário 1. ")
 
-        val dataTemp: HashMap<String, Any> = HashMap()
-        Log.i("Firebase", "Usuário 1. ")
-
-        dataTemp[NAME_USER_ID] = user.id
-        Log.i("Firebase", "Usuário 2. ")
-        dataTemp[NAME_AVATAR] = user.avatarId
-        dataTemp[NAME_NAME] = user.name
-        dataTemp[NAME_EMAIL]= user.email
-        dataTemp[NAME_FAVORITE_CHARACTER_LIST] = listOf<Long>()
-        dataTemp[NAME_FAVORITE_SERIES_LIST] = listOf<Long>()
-        dataTemp[NAME_FAVORITE_COMIC_LIST] = listOf<Long>()
-        user.favoritesItens?.let{
-            dataTemp[NAME_FAVORITE_CHARACTER_LIST] = it
+                   dataTemp[NAME_USER_ID] = user.id
+                   Log.i("Firebase", "Usuário 2. ")
+                   dataTemp[NAME_AVATAR] = user.avatarId
+                   dataTemp[NAME_NAME] = user.name
+                   dataTemp[NAME_EMAIL]= user.email
+                   dataTemp[NAME_FAVORITE_CHARACTER_LIST] = listOf<Long>()
+                   dataTemp[NAME_FAVORITE_SERIES_LIST] = listOf<Long>()
+                   dataTemp[NAME_FAVORITE_COMIC_LIST] = listOf<Long>()
+                   user.favoritesItens?.let{
+                       dataTemp[NAME_FAVORITE_CHARACTER_LIST] = it
+                   }
+                   firebaseDatabase.collection(NAME_USERS_DATABASE)
+                       .document(user.id)
+                       .set(dataTemp, SetOptions.merge())
+                   Log.i("Firebase", "Usuário registrado. ")
+              // }
+            }.addOnFailureListener {
+                Log.i("Firebase", "problema. ")
+            }
         }
-        firebaseDatabase.collection(NAME_USERS_DATABASE)
-//            .document(user.id)
-            .document(dataTemp[NAME_USER_ID].toString())
-            .set(dataTemp, SetOptions.merge())
-        Log.i("Firebase", "Usuário registrado. ")
-
     }
     suspend fun updateUser(){
     }
