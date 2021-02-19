@@ -58,6 +58,9 @@ class SeriesActivity : AppCompatActivity() {
 
         series = intent.getParcelableExtra(KEY_INTENT_SERIES)
 
+        drawerLayout = binding.dlPerfil
+        navigationView = binding.nvPerfil
+
         initComponents()
         setupObservables()
     }

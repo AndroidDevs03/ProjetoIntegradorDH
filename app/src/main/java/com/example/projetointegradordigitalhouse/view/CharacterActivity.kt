@@ -51,6 +51,9 @@ class CharacterActivity : AppCompatActivity() {
         binding = ActivityCharacterBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        drawerLayout = binding.dlPerfil
+        navigationView = binding.nvPerfil
+
         character = intent.getParcelableExtra(KEY_INTENT_CHARACTER)
 
         initComponents()

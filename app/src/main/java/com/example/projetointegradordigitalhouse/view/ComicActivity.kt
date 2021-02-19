@@ -68,6 +68,9 @@ class ComicActivity : AppCompatActivity() {
         binding = ActivityComicBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        drawerLayout = binding.dlPerfil
+        navigationView = binding.nvPerfil
+
         comic = intent.getParcelableExtra(KEY_INTENT_COMIC)
         initComponents()
         setupObservables()

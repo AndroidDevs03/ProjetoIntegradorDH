@@ -50,6 +50,9 @@ class MovieActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_movie)
 
+        drawerLayout = findViewById(R.id.dlPerfil)
+        navigationView = findViewById(R.id.nvPerfil)
+
         initComponents()
     }
 
