@@ -156,7 +156,7 @@
                     android:layout_marginEnd="24dp"
                     android:layout_marginBottom="24dp"
                     android:fontFamily="@font/marvel"
-                    android:text="Anonimous" />
+                    android:text="Anonymous" />
 
             </LinearLayout>
         </ScrollView>

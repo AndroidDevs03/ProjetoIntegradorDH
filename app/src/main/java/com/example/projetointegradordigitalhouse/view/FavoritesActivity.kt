@@ -4,6 +4,8 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.ArrayAdapter
+import android.widget.AutoCompleteTextView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.drawerlayout.widget.DrawerLayout
@@ -47,18 +49,24 @@ class FavoritesActivity  : AppCompatActivity() {
         drawerLayout = binding.dlPerfil
         navigationView = binding.nvPerfil
 
-        val listChar = viewModel.charList as MutableList<CharacterResult>
-        listChar.size
-        updateRecyclerView(tabPosition,listChar)
-
         setupListeners()
         initComponents()
+        setupObservables()
+    }
+
+    private fun setupObservables() {
+        viewModel.charList.observe(this, {
+            it?.let { favorites ->
+                updateRecyclerView(tabPosition,favorites as MutableList<CharacterResult>)
+            }
+        })
     }
 
     private fun initComponents() {
         binding.fvTabLayout.addTab(binding.fvTabLayout.newTab().setText("Characters"))
         binding.fvTabLayout.addTab(binding.fvTabLayout.newTab().setText("Series"))
         binding.fvTabLayout.addTab(binding.fvTabLayout.newTab().setText("Comics"))
+        viewModel.getCharacterFav()
     }
 
     private fun setupListeners() {

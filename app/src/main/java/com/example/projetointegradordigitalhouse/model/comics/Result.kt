@@ -6,7 +6,7 @@ data class Result(
     val dates: List<Date>,
     var description: String,
     val id: Int,
-    val issueNumber: Int,
+    val issueNumber: String,
     val pageCount: Int,
     val prices: List<Price>,
     val series: Series,
