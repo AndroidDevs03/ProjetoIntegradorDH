@@ -182,7 +182,7 @@ class ComicActivity : AppCompatActivity() {
             share()
         }
 
-        BottomNavigationView.OnNavigationItemReselectedListener {
+        findViewById<BottomNavigationView>(R.id.bnvComic).setOnNavigationItemSelectedListener {
             when (it.itemId) {
                 R.id.page_1 -> {
                     firebaseAuth.currentUser?.let{
@@ -329,8 +329,8 @@ class ComicActivity : AppCompatActivity() {
         startActivity(Intent.createChooser(intent,"Compartilhar nas redes sociais"))
     }
     private fun favoriteClicked(add: Boolean) {
-        if (add){ comic?.let { viewModel.addFavorite(it,1) } }
-        else { comic?.let { viewModel.remFavorite(it,1) } }
+        if (add){ comic?.let { viewModel.addFavorite(it,2) } }
+        else { comic?.let { viewModel.remFavorite(it,2) } }
     }
 
 }
