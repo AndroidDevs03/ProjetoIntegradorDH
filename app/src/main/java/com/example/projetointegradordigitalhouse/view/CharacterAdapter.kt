@@ -9,8 +9,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.projetointegradordigitalhouse.R
 import com.example.projetointegradordigitalhouse.model.CharacterResult
+import com.example.projetointegradordigitalhouse.viewModel.FavoritesViewModel
 
-class CharacterAdapter(var character: MutableList<CharacterResult>) : RecyclerView.Adapter<CharacterAdapter.CharacterViewholder>() {
+class CharacterAdapter(
+    val viewModel: FavoritesViewModel,
+    var character: List<CharacterResult>?) : RecyclerView.Adapter<CharacterAdapter.CharacterViewholder>() {
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CharacterAdapter.CharacterViewholder {
@@ -18,12 +21,12 @@ class CharacterAdapter(var character: MutableList<CharacterResult>) : RecyclerVi
     }
 
     override fun onBindViewHolder(holder: CharacterViewholder, position: Int) {
-        holder.title.text = character[position].name
-        Glide.with(holder.itemView).load(character[position].thumbnail).into(holder.image)
+        holder.title.text = character?.get(position)?.name ?: ""
+        Glide.with(holder.itemView).load(character?.get(position)?.thumbnail).into(holder.image)
     }
 
     override fun getItemCount(): Int {
-        return character.size
+        return character?.size ?: 0
     }
     class CharacterViewholder (itemview: View): RecyclerView.ViewHolder(itemview) {
         val image : ImageView = itemview.findViewById(R.id.cv_character_thumb)
