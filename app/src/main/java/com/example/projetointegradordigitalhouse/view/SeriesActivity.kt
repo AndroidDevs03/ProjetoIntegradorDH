@@ -186,7 +186,7 @@ class SeriesActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-        BottomNavigationView.OnNavigationItemReselectedListener {
+        findViewById<BottomNavigationView>(R.id.bnvSeries).setOnNavigationItemSelectedListener {
             when (it.itemId) {
                 R.id.page_1 -> {
                     firebaseAuth.currentUser?.let{
