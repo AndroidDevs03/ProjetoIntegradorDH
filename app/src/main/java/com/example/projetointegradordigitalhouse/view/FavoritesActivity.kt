@@ -13,9 +13,10 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.bumptech.glide.Glide
 import com.example.projetointegradordigitalhouse.R
 import com.example.projetointegradordigitalhouse.databinding.ActivityFavoritesBinding
-import com.example.projetointegradordigitalhouse.model.Avatar
-import com.example.projetointegradordigitalhouse.model.CharacterResult
+import com.example.projetointegradordigitalhouse.model.*
 import com.example.projetointegradordigitalhouse.util.Constants
+import com.example.projetointegradordigitalhouse.view.adapter.ComicAdapter
+import com.example.projetointegradordigitalhouse.view.adapter.SerieAdapter
 import com.example.projetointegradordigitalhouse.viewModel.FavoritesViewModel
 import com.github.cesar1287.desafiopicpayandroid.model.home.MarvelXRepository
 import com.google.android.material.navigation.NavigationView
@@ -37,9 +38,12 @@ class FavoritesActivity  : AppCompatActivity() {
     }
     var tabPosition: Int = 0
 
-    private var character : CharacterResult? = null
+    var character = listOf<CharacterResult>()
+    var serie = listOf<SeriesResult>()
+    var comic = listOf<ComicResult>()
 
     private lateinit var binding: ActivityFavoritesBinding
+
     @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,22 +55,46 @@ class FavoritesActivity  : AppCompatActivity() {
 
         setupListeners()
         initComponents()
+//        updateRecyclerView(tabPosition,Triple(character,comic,serie))
         setupObservables()
     }
 
-    private fun setupObservables() {
-        viewModel.charList.observe(this, {
-            it?.let { favorites ->
-                updateRecyclerView(tabPosition,favorites as MutableList<CharacterResult>)
+//    private fun setupObservables() {
+//
+//        viewModel.charList.observe(this, {
+//            it?.let { favorites ->
+//                updateRecyclerView(tabPosition,favorites as Triple<MutableList<CharacterResult>, MutableList<ComicResult>, MutableList<SeriesResult>>)
+//            }
+//        })
+//    }
+    private fun setupObservables(){
+        viewModel.charList.observe(this,{
+            it?.let {
+                character = it
+                updateRecyclerView(tabPosition,Triple(character,comic,serie))
+            }
+        })
+        viewModel.seriesList.observe(this,{
+            it?.let {
+                serie = it
+                updateRecyclerView(tabPosition,Triple(character,comic,serie))
+            }
+        })
+        viewModel.comicsList.observe(this,{
+            it?.let {
+                comic = it
+                updateRecyclerView(tabPosition,Triple(character,comic,serie))
             }
         })
     }
 
     private fun initComponents() {
         binding.fvTabLayout.addTab(binding.fvTabLayout.newTab().setText("Characters"))
-        binding.fvTabLayout.addTab(binding.fvTabLayout.newTab().setText("Series"))
         binding.fvTabLayout.addTab(binding.fvTabLayout.newTab().setText("Comics"))
+        binding.fvTabLayout.addTab(binding.fvTabLayout.newTab().setText("Series"))
         viewModel.getCharacterFav()
+        viewModel.getComicsFav()
+        viewModel.getSeriesFav()
     }
 
     private fun setupListeners() {
@@ -74,8 +102,20 @@ class FavoritesActivity  : AppCompatActivity() {
         binding.fvTabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {
                 tabPosition = tab?.position ?: 0
-//                viewModel.searchResultList.value?.let { updateRecyclerView(tabPosition, it) }
-                //Toast.makeText(this@ChipSearchActivity, "${tab?.text} Search", Toast.LENGTH_LONG).show()
+                viewModel.apply {
+                    charList.value?.let {
+                        character = it
+                        updateRecyclerView(tabPosition,Triple(character,comic,serie))
+                    }
+                    seriesList.value?.let {
+                        serie = it
+                        updateRecyclerView(tabPosition,Triple(character,comic,serie))
+                    }
+                    comicsList.value?.let {
+                        comic = it
+                        updateRecyclerView(tabPosition,Triple(character,comic,serie))
+                    }
+                }
             }
 
             override fun onTabUnselected(tab: TabLayout.Tab?) {
@@ -202,11 +242,25 @@ class FavoritesActivity  : AppCompatActivity() {
         }
     }
 
-    private fun updateRecyclerView(tab: Int, character: MutableList<CharacterResult>){
-        if (tab == 0){
-            binding.fvRecyclerView.apply {
-                layoutManager = GridLayoutManager(this@FavoritesActivity, 2)
-                adapter = CharacterAdapter(character)
+    private fun updateRecyclerView(tab: Int,resultLists : Triple<List<CharacterResult>?, List<ComicResult>?, List<SeriesResult>?>){
+        when (tab){
+            0 -> {
+                binding.fvRecyclerView.apply {
+                    layoutManager = GridLayoutManager(this@FavoritesActivity, 2)
+                    adapter = CharacterAdapter(viewModel, resultLists.first)
+                }
+            }
+            1 -> {
+                binding.fvRecyclerView.apply {
+                    layoutManager = GridLayoutManager(this@FavoritesActivity, 2)
+                    adapter = ComicAdapter(viewModel,resultLists.second)
+                }
+            }
+            2 -> {
+                binding.fvRecyclerView.apply {
+                    layoutManager = GridLayoutManager(this@FavoritesActivity, 2)
+                    adapter = SerieAdapter(viewModel,resultLists.third)
+                }
             }
         }
     }
